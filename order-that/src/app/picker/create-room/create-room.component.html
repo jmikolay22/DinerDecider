@@ -13,6 +13,9 @@
 	    <button (click)="createRoom()" type="button" [disabled]="!roomId" class="btn btn-primary btn-lg btn-block btn-list">
 				Enter Your Room
 			</button>
+			<button [routerLink]="['..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+			Cancel
+		</button>
 		</div>
 	</div>
 </div>

@@ -1,7 +1,13 @@
 <div class="card">
 	<h2 class="card-header bg-primary text-white">Room: {{ roomId }}</h2>
 	<div class="card-block">
-		<div class="col-12" *ngIf="needsPassword">
+		<div class="col-12" *ngIf="!isValidRoom">
+			<h3>This room does not exist</h3>
+			<button [routerLink]="['../..']" type="button" class="btn btn-primary btn-lg btn-block btn-list">
+				Join/Create Room
+			</button>
+		</div>
+		<div class="col-12" *ngIf="needsPassword && isValidRoom">
 			<label><h3>Enter Room Password:</h3></label>
 			<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
 			<div [hidden]="!invalidPasswordChecked" class="alert alert-danger">
@@ -11,7 +17,7 @@
 				Enter Room
 			</button>
 		</div>
-		<div class="col-12" *ngIf="!needsPassword">
+		<div class="col-12" *ngIf="!needsPassword && isValidRoom">
 			Correct Password
 		</div>
 	</div>

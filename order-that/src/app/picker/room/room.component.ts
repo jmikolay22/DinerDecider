@@ -15,7 +15,7 @@ export class RoomComponent implements OnInit {
 	roomId: string;
 	uid: string;
 	password: string;
-	invalidRoom: boolean = true;
+	isValidRoom: boolean = false;
 	needsPassword: boolean = true;
 	invalidPasswordChecked: boolean = false;
 	room: Object;
@@ -28,8 +28,11 @@ export class RoomComponent implements OnInit {
 	  	roomQuery.subscribe(data => {
 	  		// If data is not null, we have found a valid room.
 	  		if(data !== null){
-	  			this.invalidRoom = false;
+	  			this.isValidRoom = true;
 	  			this.room = data;
+	  		}else{
+	  			//Room is invalid so we can stop here.
+	  			return;
 	  		}
 
 	  		// Check if user is the owner of the room.
