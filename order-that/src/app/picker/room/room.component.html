@@ -19,32 +19,56 @@
 			</button>
 		</div>
 		<div class="col-12" *ngIf="!needsPassword">
-			<div class="progress" *ngIf="showLoading">
-			  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-			</div>
-			<div *ngIf="showCategories">
-				<label><h3>What kind of food are you craving?</h3></label>
-				<div *ngFor="let item of categories; let i = index">
-					<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}" (click)="onCategoryClick(item.categories.id)">
-						{{ item.categories.name }}
-					</button>		
+			<div class="row">
+				<div class="col-sm-4 text-left">
+					<label><h3>Totals</h3></label>
+					<ng-container *ngFor="let order of orders; let i = index">
+						<div class="restaurant-card" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
+							<div class="row">
+								<div class="col-9">
+									{{ order.restaurantName }} 
+								</div>
+								<div class="col-3">
+									{{ order.balance }}
+								</div>
+							</div>
+						</div>
+					</ng-container>
 				</div>
-			</div>
-			<div *ngIf="showRestaurants">
-				<div *ngFor="let item of restaurants; let i = index">
-					<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
-						<div>
-							<h4>{{ item.restaurant.name }}</h4>
-							<p>{{ item.restaurant.user_rating.aggregate_rating }} ({{ item.restaurant.user_rating.votes }})</p>
-							<p *ngFor="let dollar of getDollarSigns(item.restaurant.price_range)" class="inline">{{ dollar }} </p>
-							<p class="inline">· {{ item.restaurant.cuisines }} · {{ item.restaurant.location.address }}</p>
+				<div class="col-sm-8" *ngIf="showLoading">
+					<div class="progress">
+					  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+					</div>
+				</div>
+				<div *ngIf="showCategories" class="col-sm-8">
+					<label><h3>What kind of food are you craving?</h3></label>
+					<div *ngFor="let item of categories; let i = index">
+						<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}" (click)="onCategoryClick(item.categories.id)">
+							{{ item.categories.name }}
+						</button>		
+					</div>
+				</div>
+				<div *ngIf="showRestaurants" class="col-sm-8">
+					<label><h3>Results</h3></label>
+					<div class="row restaurant-card" *ngFor="let item of restaurants; let i = index" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
+						<div class="col-8">
+							<div>
+								<h4>{{ item.restaurant.name }}</h4>
+								<p>{{ item.restaurant.user_rating.aggregate_rating }} ({{ item.restaurant.user_rating.votes }})</p>
+								<p *ngFor="let dollar of getDollarSigns(item.restaurant.price_range)" class="inline">{{ dollar }} </p>
+								<p class="inline">· {{ item.restaurant.cuisines }} · {{ item.restaurant.location.address }}</p>
+							</div>
 						</div>
-						<div>
-							<button (click)="spendHungerBuck(item.restaurant.id)"><i class="fa fa-plus" aria-hidden="true"></i></button>
-							{{restaurantToHungerBucks[item.restaurant.id]}}
-							<button (click)="refundHungerBuck(item.restaurant.id)"><i class="fa fa-minus" aria-hidden="true"></i></button>
-						</div>
-					</button>		
+						<div class="col-4">
+							<button (click)="spendHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus" aria-hidden="true"></i></button>
+							<ng-container>
+							<div class="text-center">
+								{{ getRestaurantHungerBucksTotal(item.restaurant.id) }}
+							</div>
+							</ng-container>
+							<button (click)="refundHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus" aria-hidden="true"></i></button>
+						</div>		
+					</div>
 				</div>
 			</div>
 		</div>

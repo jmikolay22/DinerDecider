@@ -20,6 +20,8 @@ import { PickerComponent } from './picker/picker.component';
 import { CreateRoomComponent } from './picker/create-room/create-room.component';
 import { RoomComponent } from './picker/room/room.component';
 import { DropDropdownDirective } from './navigation/drop-dropdown.directive';
+import { KeysPipe } from './keys.pipe';
+import { MapKeysPipe } from './map-keys.pipe';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxWgj8AXlnz3C5z0jmJxs3dDd4oiogFmw",
@@ -40,7 +42,9 @@ export const firebaseConfig = {
     PickerComponent,
     CreateRoomComponent,
     RoomComponent,
-    DropDropdownDirective
+    DropDropdownDirective,
+    KeysPipe,
+    MapKeysPipe
   ],
   imports: [
     BrowserModule,

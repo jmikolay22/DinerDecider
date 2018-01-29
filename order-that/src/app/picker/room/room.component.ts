@@ -28,7 +28,7 @@ export class RoomComponent implements OnInit {
 	room: Object;
 	categories: any[];
 	restaurants: any[];
-	restaurantToHungerBucks: Map<number, number>;
+	orders: any[] = [];
 
   constructor(private _zomatoService: ZomatoService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
@@ -38,7 +38,6 @@ export class RoomComponent implements OnInit {
 
   	// Check if user is authorized to enter room
   	this.checkIfUserHasRoomPermissions();
-  	this.restaurantToHungerBucks = new Map<number, number>();
   }
 
   ngOnInit() {
@@ -147,28 +146,47 @@ export class RoomComponent implements OnInit {
 		return dollarSigns;
 	}
 
-	spendHungerBuck(restaurantId: number) {
-		// Initialize restaurant to 0 if it hasn't been set yet.
-		if(this.restaurantToHungerBucks[restaurantId] == null){
-			this.restaurantToHungerBucks[restaurantId] = 0;
-		// Return early if user is out of hunger bucks to spend.
-		}else if(this.hungerBucksRemaining == 0){
+	spendHungerBuck(restaurant: Object) {
+		if(this.hungerBucksRemaining === 0){
 			return;
 		}
-		this.restaurantToHungerBucks[restaurantId]++;
-		this.hungerBucksRemaining--;
+
+		for(var i = 0; i < this.orders.length; i++){
+			if(this.orders[i].restaurantId === restaurant['id']){
+				this.orders[i].balance++;
+				this.hungerBucksRemaining--;
+				return;
+			}
+		}
+
+		this.orders.push({
+			restaurantId: restaurant['id'],
+			restaurantName: restaurant['name'],
+			balance: 1
+		})
 	}
 
-	refundHungerBuck(restaurantId: number) {
-		// Initialize restaurant to 0 if it hasn't been set yet.
-		if(this.restaurantToHungerBucks[restaurantId] == null){
-			this.restaurantToHungerBucks[restaurantId] = 0;	
+	refundHungerBuck(restaurant: Object) {
+		for(var i = 0; i < this.orders.length; i++) {
+			if(this.orders[i].restaurantId === restaurant['id']) {
+				this.orders[i].balance--;
+				this.hungerBucksRemaining++;
+				if(this.orders[i].balance === 0) {
+					this.orders.splice(i, 1);
+				}
+				return;
+			}
 		}
-		// Return early if the restaurant has not hunger bucks to refund.
-		if(this.restaurantToHungerBucks[restaurantId] == 0){
-			return;
+
+		return;
+	}
+
+	getRestaurantHungerBucksTotal(id: number) {
+		for(var i = 0; i < this.orders.length; i++) {
+			if(this.orders[i].restaurantId === id) {
+				return this.orders[i].balance;
+			}
 		}
-		this.restaurantToHungerBucks[restaurantId]--;
-		this.hungerBucksRemaining++;
+		return 0;
 	}
 }
