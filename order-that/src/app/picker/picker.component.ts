@@ -28,7 +28,6 @@ export class PickerComponent implements OnInit {
   	const room = this.db.object('rooms/' + this.roomId).valueChanges();
   	room.subscribe(data => {
   		if(data !== null){
-	  		console.log(data);
 	  		this.router.navigate(['picker/room/' + this.roomId]);
 	  	}else{
 	  		this.isValidRoom = false;
@@ -39,6 +38,11 @@ export class PickerComponent implements OnInit {
   cancel() {
   	this.showJoinRoom = false;
   	this.roomId = '';
+  	this.isValidRoom = true;
+  }
+
+  resetValidation() {
+  	this.isValidRoom = true;
   }
 
 }

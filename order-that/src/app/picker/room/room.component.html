@@ -1,3 +1,18 @@
-<p>
-  room works!
-</p>
+<div class="card">
+	<h2 class="card-header bg-primary text-white">Room: {{ roomId }}</h2>
+	<div class="card-block">
+		<div class="col-12" *ngIf="needsPassword">
+			<label><h3>Enter Room Password:</h3></label>
+			<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
+			<div [hidden]="!invalidPasswordChecked" class="alert alert-danger">
+	      Invalid password.
+	    </div>
+	    <button (click)="checkPassword()" type="button" [disabled]="!password" class="btn btn-primary btn-lg btn-block btn-list">
+				Enter Room
+			</button>
+		</div>
+		<div class="col-12" *ngIf="!needsPassword">
+			Correct Password
+		</div>
+	</div>
+</div>

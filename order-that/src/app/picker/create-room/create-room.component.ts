@@ -16,15 +16,22 @@ export class CreateRoomComponent implements OnInit {
 	roomPassword: string;
 	roomPasswordRequired: false;
 	rooms: Observable<any>;
+	uid: string;
 
-  constructor(public db: AngularFireDatabase, private router: Router) {}
+  constructor(public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
+  	const user = afAuth.authState;
+  	user.subscribe(data => {
+  		this.uid = data.uid;
+  	});
+  }
 
   ngOnInit() {}
 
   createRoom() {
   	const itemRef = this.db.object('rooms');
 		itemRef.update({ [this.roomId]: {
-				password: this.roomPassword
+				password: this.roomPassword,
+				owner: this.uid
 			} 
 		});
 		this.router.navigate(['/picker/room/' + this.roomId]);

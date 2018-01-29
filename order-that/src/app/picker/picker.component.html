@@ -8,7 +8,7 @@
 </div>
 <div *ngIf="showJoinRoom">
 	<div class="form-group">
-		<input [(ngModel)]="roomId" class="form-control" type="text" placeholder="Enter room id">
+		<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text" placeholder="Enter room id">
 		<div [hidden]="isValidRoom" class="alert alert-danger">
       The room entered does not exist.
     </div>
