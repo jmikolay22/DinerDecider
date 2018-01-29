@@ -10,6 +10,7 @@ import * as firebase from 'firebase/app';
 })
 export class NavigationComponent implements OnInit {
 	user: Observable<firebase.User>;
+	isActive: boolean = false;
 
   constructor(public afAuth: AngularFireAuth) {
   	this.user = afAuth.authState;

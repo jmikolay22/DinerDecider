@@ -19,6 +19,7 @@ import { LocationService } from './location.service';
 import { PickerComponent } from './picker/picker.component';
 import { CreateRoomComponent } from './picker/create-room/create-room.component';
 import { RoomComponent } from './picker/room/room.component';
+import { DropDropdownDirective } from './navigation/drop-dropdown.directive';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxWgj8AXlnz3C5z0jmJxs3dDd4oiogFmw",
@@ -38,7 +39,8 @@ export const firebaseConfig = {
     NavigationComponent,
     PickerComponent,
     CreateRoomComponent,
-    RoomComponent
+    RoomComponent,
+    DropDropdownDirective
   ],
   imports: [
     BrowserModule,
