@@ -6,12 +6,18 @@
 			<input [(ngModel)]="roomId" class="form-control" type="text">
 			<label><h3>Enter Room Password:</h3></label>
 			<input [(ngModel)]="roomPassword" class="form-control" type="text">
+			<label><h3>Hunger Bucks Per Person:</h3></label>
+			<div class="col-1 no-pad">
+			<input [(ngModel)]="hungerBucks" class="form-control" type="number" min="0">
+			</div>
+			<label><h3>Restaurant Radius (Miles):</h3></label>
+			<div class="col-1 no-pad">
+				<input [(ngModel)]="radius" class="form-control" type="number" min="0" max="50">
+			</div>
 			<div *ngIf="roomId">
-				<label><h3>Room Link:</h3></label>
+				<label><h3>Shareable Room Link:</h3></label>
 				<input [placeholder]="'localhost:4200/picker/room/' + roomId" class="form-control" type="text" readonly="readonly">
 			</div>
-			<label><h3>Hunger Bucks Per Person:</h3></label>
-			<input [(ngModel)]="hungerBucks" class="form-control" type="number">
 	    <button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">
 				Enter Your Room
 			</button>

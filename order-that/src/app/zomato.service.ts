@@ -23,7 +23,11 @@ export class ZomatoService {
     search(query: Array<Object>): Observable<object> {
     	var url = 'https://developers.zomato.com/api/v2.1/search';
     	for(var i = 0; i < query.length; i++){
-    		url += '?' + query[i]['id'] + '=' + query[i]['value'];
+    		if(i !== 0){
+    			url += '&' + query[i]['id'] + '=' + query[i]['value'];
+    		}else{
+	    		url += '?' + query[i]['id'] + '=' + query[i]['value'];
+	    	}
     	}
       return this.http.get(url, httpOptions);
     }

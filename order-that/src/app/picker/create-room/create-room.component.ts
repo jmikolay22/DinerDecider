@@ -22,6 +22,7 @@ export class CreateRoomComponent implements OnInit {
 	lat: number = null;
 	long: number = null;
 	hungerBucks: number = null;
+	radius: number = null;
 
   constructor(private _locationService: LocationService, private _zomatoService: ZomatoService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
@@ -45,7 +46,8 @@ export class CreateRoomComponent implements OnInit {
 					owner: this.uid,
 					lat: this.lat,
 					long: this.long,
-					hungerBucks: this.hungerBucks
+					hungerBucks: this.hungerBucks,
+					radiusMeters: this.convertMilesToMeters(this.radius)
 				}
 			});
   	}else{
@@ -54,7 +56,8 @@ export class CreateRoomComponent implements OnInit {
 					owner: this.uid,
 					lat: this.lat,
 					long: this.long,
-					hungerBucks: this.hungerBucks
+					hungerBucks: this.hungerBucks,
+					radiusMeters: this.convertMilesToMeters(this.radius)
 				}
 			});
   	}
@@ -62,12 +65,17 @@ export class CreateRoomComponent implements OnInit {
 		this.router.navigate(['/picker/room/' + this.roomId]);
   }
 
-  canCreateRoom(){
+  canCreateRoom() {
   	if(this.roomId !== null && this.lat !== null && this.long !== null
-  		&& this.hungerBucks !== null){
+  		&& this.hungerBucks !== null && this.radius !== null){
   		return true;
   	}else{
   		return false;
   	}
+  }
+
+  convertMilesToMeters(miles: number) {
+  	let metersPerMile: number = 1609.344;
+  	return miles * metersPerMile;
   }
 }

@@ -59,7 +59,7 @@ export class HomeComponent implements OnInit {
   onCategoryClick(i: number) {
   	this.showCategories = false;
   	this.showLoading = true;
-  	this._zomatoService.search([{'category': i}]).subscribe(	
+  	this._zomatoService.search([{ id: 'category', value: i }]).subscribe(	
   		data => { 
   			this.restaurants = data['restaurants'];
   			this.showRestaurants = true;

@@ -62,8 +62,6 @@ export class RoomComponent implements OnInit {
   }
 
   checkPassword() {
-  	console.log(this.room);
-  	console.log(this.password);
   	if(this.password === this.room['password']){
   		this.needsPassword = false;
   		this.invalidPasswordChecked = false;
@@ -91,8 +89,13 @@ export class RoomComponent implements OnInit {
   onCategoryClick(i: number) {
   	this.showCategories = false;
   	this.showLoading = true;
-  	console.log(i);
-  	this._zomatoService.search([{'category': i}]).subscribe(	
+
+  	this._zomatoService.search([
+  		{ id: 'category', value: i },
+  		{ id: 'lat', value: this.room['lat'] },
+  		{ id: 'lon', value: this.room['long'] },
+  		{ id: 'radius', value: this.room['radiusMeters'] }
+  	]).subscribe(	
   		data => { 
   			this.restaurants = data['restaurants'];
   			this.showRestaurants = true;
@@ -106,4 +109,26 @@ export class RoomComponent implements OnInit {
   	this.showCategories = true;
   	this.showRestaurants = false;
   }
+
+  getDistance(lat1, lon1, lat2, lon2, unit) {
+		var radlat1 = Math.PI * lat1/180
+		var radlat2 = Math.PI * lat2/180
+		var theta = lon1-lon2
+		var radtheta = Math.PI * theta/180
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		dist = Math.acos(dist)
+		dist = dist * 180/Math.PI
+		dist = dist * 60 * 1.1515
+		if (unit=="K") { dist = dist * 1.609344 }
+		if (unit=="N") { dist = dist * 0.8684 }
+		return dist.toFixed(2)
+	}
+
+	getDollarSigns(total: number) {
+		var dollarSigns = [];
+		for(var i = 0; i < total; i++) {
+			dollarSigns.push('$');
+		}
+		return dollarSigns;
+	}
 }
