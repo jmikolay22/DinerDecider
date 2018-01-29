@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PlatformLocation } from '@angular/common';
 import {Router} from '@angular/router';
 
 import { AngularFireDatabase, AngularFireList  } from 'angularfire2/database';
@@ -24,10 +25,12 @@ export class CreateRoomComponent implements OnInit {
 	hungerBucks: number = null;
 	radius: number = null;
 	roomAlreadyExists: boolean = false;
+	href: string = null;
 
-  constructor(private _locationService: LocationService, private _zomatoService: ZomatoService,
+  constructor(private platformLocation: PlatformLocation, private _locationService: LocationService, private _zomatoService: ZomatoService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
   	const user = afAuth.authState;
+  	this.href = (platformLocation as any).location.origin;
   	user.subscribe(data => {
   		this.uid = data.uid;
   	});

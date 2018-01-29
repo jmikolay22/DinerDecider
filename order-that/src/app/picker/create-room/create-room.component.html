@@ -19,7 +19,7 @@
 			</div>
 			<div *ngIf="roomId">
 				<label><h3>Shareable Room Link:</h3></label>
-				<input [placeholder]="'localhost:4200/picker/room/' + roomId" class="form-control" type="text" readonly="readonly">
+				<input [(ngModel)]="href + '/picker/room/' + roomId" class="form-control" type="text" readonly="readonly">
 			</div>
 	    <button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">
 				Enter Your Room
