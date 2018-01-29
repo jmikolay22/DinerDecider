@@ -106,5 +106,4 @@ export class RoomComponent implements OnInit {
   	this.showCategories = true;
   	this.showRestaurants = false;
   }
-
 }

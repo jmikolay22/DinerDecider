@@ -10,7 +10,9 @@
 				<label><h3>Room Link:</h3></label>
 				<input [placeholder]="'localhost:4200/picker/room/' + roomId" class="form-control" type="text" readonly="readonly">
 			</div>
-	    <button (click)="createRoom()" type="button" [disabled]="!roomId" class="btn btn-primary btn-lg btn-block btn-list">
+			<label><h3>Hunger Bucks Per Person:</h3></label>
+			<input [(ngModel)]="hungerBucks" class="form-control" type="number">
+	    <button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">
 				Enter Your Room
 			</button>
 			<button [routerLink]="['..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">

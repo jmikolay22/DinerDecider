@@ -15,6 +15,7 @@ import { AboutComponent } from './about/about.component';
 import { NavigationComponent } from './navigation/navigation.component';
 
 import { ZomatoService } from './zomato.service';
+import { LocationService } from './location.service';
 import { PickerComponent } from './picker/picker.component';
 import { CreateRoomComponent } from './picker/create-room/create-room.component';
 import { RoomComponent } from './picker/room/room.component';
@@ -48,7 +49,7 @@ export const firebaseConfig = {
     AngularFireAuthModule,
     FormsModule
   ],
-  providers: [ZomatoService],
+  providers: [ZomatoService, LocationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
