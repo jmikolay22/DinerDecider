@@ -2,26 +2,20 @@
 <div class="card">
 	<h2 class="card-header bg-primary text-white">
 		Room: {{ roomId }}
-		<h5>Hunger Bucks Remaining: {{ hungerBucksRemaining }}</h5>
+		<h5 *ngIf="!needsPassword">Hunger Bucks Remaining: {{ hungerBucksRemaining }}</h5>
 	</h2>
 	<div class="card-block">
-		<div class="col-12" *ngIf="!isValidRoom">
-			<h3>This room does not exist</h3>
-			<button [routerLink]="['../..']" type="button" class="btn btn-primary btn-lg btn-block btn-list">
-				Join/Create Room
-			</button>
-		</div>
-		<div class="col-12" *ngIf="needsPassword && isValidRoom">
+		<div class="col-12" *ngIf="needsPassword">
 			<label><h3>Enter Room Password:</h3></label>
 			<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
 			<div [hidden]="!invalidPasswordChecked" class="alert alert-danger">
-	      Invalid password.
+	      Invalid password or the room does not exist.
 	    </div>
 	    <button (click)="checkPassword()" type="button" [disabled]="!password" class="btn btn-primary btn-lg btn-block btn-list">
 				Enter Room
 			</button>
 		</div>
-		<div class="col-12" *ngIf="!needsPassword && isValidRoom">
+		<div class="col-12" *ngIf="!needsPassword">
 			<div class="progress" *ngIf="showLoading">
 			  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
 			</div>

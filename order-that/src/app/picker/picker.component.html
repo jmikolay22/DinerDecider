@@ -16,9 +16,14 @@
 			</div>
 			<div *ngIf="showJoinRoom">
 				<div class="form-group">
+					<label><h3>Enter Room Name:</h3></label>
 					<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text" placeholder="Enter room id">
+			    <div class="col-12 no-pad" *ngIf="needsPassword">
+				    <label><h3>Enter Room Password:</h3></label>
+						<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
+					</div>
 					<div [hidden]="isValidRoom" class="alert alert-danger">
-			      The room entered does not exist.
+			      Invalid room name and or password.
 			    </div>
 			    <button (click)="joinRoom()" type="button" [disabled]="!roomId" class="btn btn-primary btn-lg btn-block btn-list">
 						Join Room

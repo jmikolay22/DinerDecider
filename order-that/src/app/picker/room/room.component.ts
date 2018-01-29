@@ -18,57 +18,57 @@ export class RoomComponent implements OnInit {
 	roomId: string;
 	uid: string;
 	password: string;
-	isValidRoom: boolean = false;
 	needsPassword: boolean = true;
 	invalidPasswordChecked: boolean = false;
 	showLoading: boolean = true;
 	showCategories: boolean = false;
 	showRestaurants: boolean = false;
+	firstTimePasswordChecked: boolean = true;
 	room: Object;
 	categories: any[];
 	restaurants: any[];
 
   constructor(private _zomatoService: ZomatoService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
-  	// Check if room exists
-  	this.route.params.subscribe(params => {
-      this.roomId = params['id'];
-      const roomQuery = db.object('rooms/' + this.roomId).valueChanges();
-	  	roomQuery.subscribe(data => {
-	  		// If data is not null, we have found a valid room.
-	  		if(data !== null){
-	  			this.isValidRoom = true;
-	  			this.room = data;
-	  			this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
-	  		}else{
-	  			//Room is invalid so we can stop here.
-	  			return;
-	  		}
+  	const user = afAuth.authState;
+  	user.subscribe(response => {
+  		this.uid = response.uid;
+  	});
 
-	  		// Check if user is the owner of the room.
-	  		const user = afAuth.authState;
-		  	user.subscribe(data => {
-		  		this.uid = data.uid;
-		  		// If user is the room owner, don't require a password.
-		  		if(this.room['owner'] === this.uid){
-		  			this.needsPassword = false;
-		  			this.getCategories();
-		  		}
-		  	});
-	  	});
-    });
+  	// Check if user is authorized to enter room
+  	this.checkIfUserHasRoomPermissions();
   }
 
   ngOnInit() {
   }
 
+  checkIfUserHasRoomPermissions() {
+  	this.route.params.subscribe(params => {
+      this.roomId = params['id'];
+      const roomQuery = this.db.object('rooms/' + this.roomId).valueChanges();
+	  	roomQuery.subscribe(data => {
+  			this.room = data;
+  			this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
+		  	this.needsPassword = false;
+		  	this.getCategories();
+	  	},
+	  	err => {
+	  		if(this.firstTimePasswordChecked){
+	  			this.firstTimePasswordChecked = false;
+	  		}else{
+	  			this.invalidPasswordChecked = true;
+	  		}
+	  		this.needsPassword = true;
+	  	});
+    });
+  }
+
   checkPassword() {
-  	if(this.password === this.room['password']){
-  		this.needsPassword = false;
-  		this.invalidPasswordChecked = false;
-  		this.getCategories();
-  	}else{
-  		this.invalidPasswordChecked = true;
-  	}
+  	const itemRef = this.db.object('users/' + this.uid + '/rooms');
+  	itemRef.update({ [this.roomId]: {
+			password: this.password
+		}});
+
+  	this.checkIfUserHasRoomPermissions();
   }
 
   resetValidation() {
