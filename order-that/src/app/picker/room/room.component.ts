@@ -28,6 +28,7 @@ export class RoomComponent implements OnInit {
 	room: Object;
 	categories: any[];
 	restaurants: any[];
+	restaurantToHungerBucks: Map<number, number>;
 
   constructor(private _zomatoService: ZomatoService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
@@ -37,6 +38,7 @@ export class RoomComponent implements OnInit {
 
   	// Check if user is authorized to enter room
   	this.checkIfUserHasRoomPermissions();
+  	this.restaurantToHungerBucks = new Map<number, number>();
   }
 
   ngOnInit() {
@@ -143,5 +145,30 @@ export class RoomComponent implements OnInit {
 			dollarSigns.push('$');
 		}
 		return dollarSigns;
+	}
+
+	spendHungerBuck(restaurantId: number) {
+		// Initialize restaurant to 0 if it hasn't been set yet.
+		if(this.restaurantToHungerBucks[restaurantId] == null){
+			this.restaurantToHungerBucks[restaurantId] = 0;
+		// Return early if user is out of hunger bucks to spend.
+		}else if(this.hungerBucksRemaining == 0){
+			return;
+		}
+		this.restaurantToHungerBucks[restaurantId]++;
+		this.hungerBucksRemaining--;
+	}
+
+	refundHungerBuck(restaurantId: number) {
+		// Initialize restaurant to 0 if it hasn't been set yet.
+		if(this.restaurantToHungerBucks[restaurantId] == null){
+			this.restaurantToHungerBucks[restaurantId] = 0;	
+		}
+		// Return early if the restaurant has not hunger bucks to refund.
+		if(this.restaurantToHungerBucks[restaurantId] == 0){
+			return;
+		}
+		this.restaurantToHungerBucks[restaurantId]--;
+		this.hungerBucksRemaining++;
 	}
 }

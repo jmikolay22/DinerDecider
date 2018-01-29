@@ -33,10 +33,17 @@
 			<div *ngIf="showRestaurants">
 				<div *ngFor="let item of restaurants; let i = index">
 					<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
-						<h4>{{ item.restaurant.name }}</h4>
-						<p>{{ item.restaurant.user_rating.aggregate_rating }} ({{ item.restaurant.user_rating.votes }})</p>
-						<p *ngFor="let dollar of getDollarSigns(item.restaurant.price_range)" class="inline">{{ dollar }} </p>
-						<p class="inline">· {{ item.restaurant.cuisines }} · {{ item.restaurant.location.address }}</p>
+						<div>
+							<h4>{{ item.restaurant.name }}</h4>
+							<p>{{ item.restaurant.user_rating.aggregate_rating }} ({{ item.restaurant.user_rating.votes }})</p>
+							<p *ngFor="let dollar of getDollarSigns(item.restaurant.price_range)" class="inline">{{ dollar }} </p>
+							<p class="inline">· {{ item.restaurant.cuisines }} · {{ item.restaurant.location.address }}</p>
+						</div>
+						<div>
+							<button (click)="spendHungerBuck(item.restaurant.id)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+							{{restaurantToHungerBucks[item.restaurant.id]}}
+							<button (click)="refundHungerBuck(item.restaurant.id)"><i class="fa fa-minus" aria-hidden="true"></i></button>
+						</div>
 					</button>		
 				</div>
 			</div>
