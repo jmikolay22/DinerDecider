@@ -11,6 +11,7 @@ const httpOptions = {
 
 @Injectable()
 export class ZomatoService {
+	colors: string[] = ['#f80c12','#ff6644','#feae2d','#69d025','#12bdb9','#4444dd','#442299'];
 
   constructor(private http:HttpClient) {}
  
@@ -26,4 +27,12 @@ export class ZomatoService {
     	}
       return this.http.get(url, httpOptions);
     }
+
+    getButtonColor(i: number) {
+  	if(i >= this.colors.length){
+  		return this.colors[i % this.colors.length];
+  	}else{
+  		return this.colors[i];
+  	}
+  }
 }

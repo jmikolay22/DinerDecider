@@ -33,7 +33,6 @@ export class HomeComponent implements OnInit {
 	showLoading: boolean = true;
 	showCategories: boolean = false;
 	showRestaurants: boolean = false;
-	colors: string[] = ['#f80c12','#ff6644','#feae2d','#69d025','#12bdb9','#4444dd','#442299'];
 
 	user: Observable<firebase.User>;
 
@@ -47,8 +46,7 @@ export class HomeComponent implements OnInit {
 
   getCategories() {
   	this._zomatoService.get('categories').subscribe(
-  		data => { 
-  			console.log(data);
+  		data => {
   			this.categories = data['categories'];
   			this.showCategories = true;
   			this.showLoading = false;
@@ -56,14 +54,6 @@ export class HomeComponent implements OnInit {
   		err => console.log(err),
   		() => console.log('Done')
   	);
-  }
-
-  getColorIndex(i: number) {
-  	if(i >= this.colors.length){
-  		return i % this.colors.length;
-  	}else{
-  		return i;
-  	}
   }
 
   onCategoryClick(i: number) {

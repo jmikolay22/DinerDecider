@@ -7,14 +7,14 @@
 			</div>
 			<div *ngIf="showCategories">
 				<div *ngFor="let item of categories; let i = index">
-					<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': colors[getColorIndex(i)]}" (click)="onCategoryClick(item.categories.id)">
+					<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}" (click)="onCategoryClick(item.categories.id)">
 						{{ item.categories.name }}
 					</button>		
 				</div>
 			</div>
 			<div *ngIf="showRestaurants">
 				<div *ngFor="let item of restaurants; let i = index">
-					<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': colors[getColorIndex(i)]}">
+					<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
 						{{ item.restaurant.name }}
 					</button>		
 				</div>
