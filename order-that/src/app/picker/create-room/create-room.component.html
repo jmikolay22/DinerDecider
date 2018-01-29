@@ -3,7 +3,10 @@
 	<div class="card-block">
 		<div class="col-12">
 			<label><h3>Enter Room Name:</h3></label>
-			<input [(ngModel)]="roomId" class="form-control" type="text">
+			<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text">
+			<div [hidden]="!roomAlreadyExists" class="alert alert-danger">
+	      This room name is taken.
+	    </div>
 			<label><h3>Enter Room Password:</h3></label>
 			<input [(ngModel)]="roomPassword" class="form-control" type="text">
 			<label><h3>Hunger Bucks Per Person:</h3></label>

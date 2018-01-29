@@ -23,6 +23,7 @@ export class CreateRoomComponent implements OnInit {
 	long: number = null;
 	hungerBucks: number = null;
 	radius: number = null;
+	roomAlreadyExists: boolean = false;
 
   constructor(private _locationService: LocationService, private _zomatoService: ZomatoService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
@@ -49,6 +50,10 @@ export class CreateRoomComponent implements OnInit {
 					hungerBucks: this.hungerBucks,
 					radiusMeters: this.convertMilesToMeters(this.radius)
 				}
+			}).then(data => {
+				this.router.navigate(['/picker/room/' + this.roomId]);
+			}, err => {
+				this.roomAlreadyExists = true;
 			});
   	}else{
   		itemRef.update({ [this.roomId]: {
@@ -59,10 +64,12 @@ export class CreateRoomComponent implements OnInit {
 					hungerBucks: this.hungerBucks,
 					radiusMeters: this.convertMilesToMeters(this.radius)
 				}
+			}).then(data => {
+				this.router.navigate(['/picker/room/' + this.roomId]);
+			}, err => {
+				this.roomAlreadyExists = true;
 			});
   	}
-		
-		this.router.navigate(['/picker/room/' + this.roomId]);
   }
 
   canCreateRoom() {
@@ -77,5 +84,9 @@ export class CreateRoomComponent implements OnInit {
   convertMilesToMeters(miles: number) {
   	let metersPerMile: number = 1609.344;
   	return miles * metersPerMile;
+  }
+
+  resetValidation() {
+  	this.roomAlreadyExists = false;
   }
 }

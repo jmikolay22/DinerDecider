@@ -24,6 +24,7 @@ export class RoomComponent implements OnInit {
 	showCategories: boolean = false;
 	showRestaurants: boolean = false;
 	firstTimePasswordChecked: boolean = true;
+	showDifferentRoomButton: boolean = false;
 	room: Object;
 	categories: any[];
 	restaurants: any[];
@@ -46,16 +47,27 @@ export class RoomComponent implements OnInit {
       this.roomId = params['id'];
       const roomQuery = this.db.object('rooms/' + this.roomId).valueChanges();
 	  	roomQuery.subscribe(data => {
-  			this.room = data;
-  			this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
-		  	this.needsPassword = false;
-		  	this.getCategories();
+  			if(data !== null){
+  				this.room = data;
+	  			this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
+			  	this.needsPassword = false;
+			  	this.getCategories();
+  			}else{
+  				if(this.firstTimePasswordChecked){
+	  			this.firstTimePasswordChecked = false;
+	  		}else{
+	  			this.invalidPasswordChecked = true;
+	  			this.showDifferentRoomButton = true;
+	  		}
+	  		this.needsPassword = true;
+  			}
 	  	},
 	  	err => {
 	  		if(this.firstTimePasswordChecked){
 	  			this.firstTimePasswordChecked = false;
 	  		}else{
 	  			this.invalidPasswordChecked = true;
+	  			this.showDifferentRoomButton = true;
 	  		}
 	  		this.needsPassword = true;
 	  	});
@@ -73,6 +85,7 @@ export class RoomComponent implements OnInit {
 
   resetValidation() {
   	this.invalidPasswordChecked = false;
+  	this.showDifferentRoomButton = false;
   }
 
   getCategories() {

@@ -14,6 +14,9 @@
 	    <button (click)="checkPassword()" type="button" [disabled]="!password" class="btn btn-primary btn-lg btn-block btn-list">
 				Enter Room
 			</button>
+			<button *ngIf="showDifferentRoomButton" [routerLink]="['../..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+				Create / Join Different Room
+			</button>
 		</div>
 		<div class="col-12" *ngIf="!needsPassword">
 			<div class="progress" *ngIf="showLoading">
