@@ -1,0 +1,18 @@
+<div class="card">
+	<h2 class="card-header bg-primary text-white">Create Room</h2>
+	<div class="card-block">
+		<div class="col-12">
+			<label><h3>Enter Room Name:</h3></label>
+			<input [(ngModel)]="roomId" class="form-control" type="text">
+			<label><h3>Enter Room Password:</h3></label>
+			<input [(ngModel)]="roomPassword" class="form-control" type="text">
+			<div *ngIf="roomId">
+				<label><h3>Room Link:</h3></label>
+				<input [placeholder]="'localhost:4200/picker/room/' + roomId" class="form-control" type="text" readonly="readonly">
+			</div>
+	    <button (click)="createRoom()" type="button" [disabled]="!roomId" class="btn btn-primary btn-lg btn-block btn-list">
+				Enter Your Room
+			</button>
+		</div>
+	</div>
+</div>
