@@ -1,11 +1,11 @@
 .app-container {
-	padding: 3em;
+	padding: 5em 2em 2em 2em;
+	height: 100vh;
 }
 .login {
 	width: 140px;
   height:100px;
-  text-align: left;
-  position: absolute;
-  top: calc(50vh - (/* height */100px / 2));
-  left: calc(50vw - (/* width */240px / 2));
+}
+.login-container {
+	height: 100%;
 }

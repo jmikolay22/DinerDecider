@@ -1,4 +1,4 @@
-<nav class="navbar navbar-toggleable-sm navbar-dark navbar-expand-sm bg-primary">
+<nav class="navbar navbar-toggleable-sm navbar-dark navbar-expand-sm bg-primary fixed-top">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
           aria-label="Toggle navigation" (click)="isActive = !isActive">
     <span class="navbar-toggler-icon"></span>
@@ -10,11 +10,11 @@
         <a class="nav-link" routerLink="">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="about">About</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" routerLink="picker">Picker</a>
       </li>
+      <li class="nav-item">
+        <!--<a class="nav-link" routerLink="about">About</a>-->
+      </li>  
       <li class="nav-item">
       	<a class="nav-link" (click)="logout()">Logout</a>
       </li>

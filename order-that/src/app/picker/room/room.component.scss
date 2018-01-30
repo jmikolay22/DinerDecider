@@ -1,5 +1,6 @@
 .back-button {
 	width: auto;
+	margin-bottom: .5em;
 }
 .inline {
 	display: inline;
@@ -9,4 +10,24 @@
   padding: .5em;
   margin-bottom: .5em;
   color: white;
+}
+#categories{
+	height: 100%;
+}
+
+#restaurants{
+	height: 100%;
+}
+
+#totals{
+	height: 100%;
+}
+
+
+.card-header{
+	height: 95px !important;
+}
+
+.card-block{
+	height: calc(100% - 135px);
 }

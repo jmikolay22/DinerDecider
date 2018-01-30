@@ -2,23 +2,31 @@
 	<h2 class="card-header bg-primary text-white">Create Room</h2>
 	<div class="card-block">
 		<div class="col-12">
-			<label><h3>Enter Room Name:</h3></label>
-			<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text">
-			<div [hidden]="!roomAlreadyExists" class="alert alert-danger">
-	      This room name is taken.
-	    </div>
-			<label><h3>Enter Room Password:</h3></label>
-			<input [(ngModel)]="roomPassword" class="form-control" type="text">
-			<label><h3>Hunger Bucks Per Person:</h3></label>
-			<div class="col-1 no-pad">
-			<input [(ngModel)]="hungerBucks" class="form-control" type="number" min="1">
+			<div class="form-group">
+				<label><p class="input-label">Enter Room Name:</p></label>
+				<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text">
+				<div [hidden]="!roomAlreadyExists" class="alert alert-danger">
+		      This room name is taken.
+		    </div>
+	  	</div>
+	  	<div class="form-group">
+				<label><p class="input-label">Enter Room Password:</p></label>
+				<input [(ngModel)]="roomPassword" class="form-control" type="text">
 			</div>
-			<label><h3>Restaurant Radius (Miles):</h3></label>
-			<div class="col-1 no-pad">
-				<input [(ngModel)]="radius" class="form-control" type="number" min="0" max="50">
+			<div class="form-group">
+				<label><p class="input-label">Hunger Bucks Per Person:</p></label>
+				<div class="col-3 no-pad">
+				<input [(ngModel)]="hungerBucks" class="form-control" type="number" min="1" max="20">
+				</div>
 			</div>
-			<div *ngIf="roomId">
-				<label><h3>Shareable Room Link:</h3></label>
+			<div class="form-group">
+				<label><p class="input-label">Distance From Current Location (Miles):</p></label>
+				<div class="col-3 no-pad">
+					<input [(ngModel)]="radius" class="form-control" type="number" min="0" max="50">
+				</div>
+			</div>
+			<div *ngIf="roomId" class="form-group">
+				<label><p class="input-label">Shareable Room Link:</p></label>
 				<input [(ngModel)]="href + '/picker/room/' + roomId" class="form-control" type="text" readonly="readonly">
 			</div>
 	    <button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">

@@ -1,8 +1,5 @@
-<div class="login" *ngIf="!(user | async)?.uid">
+<div class="login-container text-center" *ngIf="!(user | async)?.uid">
   <button (click)="login()" *ngIf="!(user | async)?.uid">Anonymous Login</button>
-  <div id="details-container">
-      <p *ngFor="let item of items | async">{{item.message}}</p>
-  </div>
 </div>
 <div *ngIf="(user | async)?.uid" style="top: 0; right: 0; left: 0; bottom: 0; position: absolute;">
   <app-navigation></app-navigation>

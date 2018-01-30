@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { trigger, style, transition, animate, keyframes, query, stagger, state } from '@angular/animations';
 
 import { AngularFireDatabase, AngularFireList  } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -11,14 +12,55 @@ import { ZomatoService } from '../../zomato.service';
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
-  styleUrls: ['./room.component.scss']
+  styleUrls: ['./room.component.scss'],
+  animations: [
+    trigger('slide', [
+      transition('* => *', [
+        query(':enter', style({ opacity: 0 }), {optional: true}),
+
+        query(':enter', stagger('50ms', [
+          animate('.6s ease-in', keyframes([
+            style({opacity: 0, transform: 'translateY(-75%)', offset: 0}),
+            style({opacity: .5, transform: 'translateY(35px)',  offset: 0.3}),
+            style({opacity: 1, transform: 'translateY(0)',     offset: 1.0}),
+          ]))]), {optional: true}),
+
+        query(':leave', stagger('10ms', [
+          animate('.6s ease-out', keyframes([
+            style({opacity: 1, transform: 'translateY(0)', offset: 0}),
+            style({opacity: .5, transform: 'translateY(35px)',  offset: 0.3}),
+            style({opacity: 0, transform: 'translateY(-75%)',     offset: 1.0}),
+          ]))]), {optional: true})
+      ])
+    ]),
+    trigger('flyInOut', [
+	    state('in', style({transform: 'translateX(0)'})),
+	    transition('void => *', [
+	      style({transform: 'translateX(-100%)'}),
+	      animate(100)
+	    ]),
+	    transition('* => void', [
+	      animate(100, style({transform: 'translateX(-100%)'}))
+	    ])
+	  ]),
+	  trigger('flyDownOut', [
+	    state('in', style({transform: 'translateY(0)'})),
+	    transition('void => *', [
+	      style({transform: 'translateY(-100%)'}),
+	      animate(100)
+	    ]),
+	    transition('* => void', [
+	      animate(100, style({transform: 'translateY(-100%)'}))
+	    ])
+	  ])
+  ]
 })
 export class RoomComponent implements OnInit {
 	hungerBucksRemaining: number;
 	roomId: string;
 	uid: string;
 	password: string;
-	needsPassword: boolean = true;
+	needsPassword: boolean = false;
 	invalidPasswordChecked: boolean = false;
 	showLoading: boolean = true;
 	showCategories: boolean = false;

@@ -49,8 +49,67 @@ button {
 }
 .card-block {
 	margin: .5em;
-	color: #343a40 !important
+	color: #343a40 !important;
 }
 .no-pad {
 	padding: 0em;
+}
+
+.card {
+	max-height: 95%;
+	overflow: hidden;
+}
+
+.card-full {
+	height: 95%;
+	overflow: hidden;
+}
+
+.input-label {
+	margin-bottom: 0rem;
+}
+
+label{
+	margin-bottom: 0rem;
+}
+
+.no-scroll {
+	overflow: hidden;
+}
+
+.scroll {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+html {
+	height: 100%;
+}
+
+.full-height {
+	height: 100%;
+}
+
+::-webkit-scrollbar
+{
+  width: 3px;  /* for vertical scrollbars */
+  height: 3px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track
+{
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: .2em;
+}
+
+::-webkit-scrollbar-thumb
+{
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: .2em;
+}
+
+@media screen and (min-width : 430) {
+	h2 {
+		font-size: 1px;
+	}
 }
