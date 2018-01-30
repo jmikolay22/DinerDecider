@@ -1,10 +1,10 @@
-<button [@flyInOut] (click)="goBackToCategories()" class="btn btn-primary btn-lg back-button text-left" *ngIf="showRestaurants"><i class="fa fa-arrow-left back-icon" aria-hidden="true"></i> Categories</button>
-<div class="card card-full">
+<div class="card">
 	<h2 class="card-header bg-primary text-white">
 		Room: {{ roomId }}
 		<h5 *ngIf="!needsPassword">Hunger Bucks Remaining: {{ hungerBucksRemaining }}</h5>
 	</h2>
 	<div class="card-block">
+		<button [@flyInOut] (click)="goBackToCategories()" class="btn btn-primary btn-lg back-button text-left" *ngIf="showRestaurants"><i class="fa fa-arrow-left back-icon" aria-hidden="true"></i> Categories</button>
 		<div class="col-12" *ngIf="needsPassword">
 			<label><h3>Enter Room Password:</h3></label>
 			<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
@@ -20,10 +20,10 @@
 		</div>
 		<div class="col-sm-12 full-height" *ngIf="!needsPassword">
 			<div class="row full-height">
-				<div class="col-sm-4 text-left">
+				<div class="col-sm-4 text-left" id="totals-container">
 					<label><h5>Totals</h5></label>
-					<div id="totals" class="scroll">
-						<div *ngFor="let order of orders; let i = index">
+					<div id="totals" class="scroll totals-horizontal-scroll-sm">
+						<div *ngFor="let order of orders; let i = index" class="total-horizontal">
 							<div [@flyInOut] class="restaurant-card" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
 								<div class="row">
 									<div class="col-9">
@@ -52,7 +52,7 @@
 						</div>
 					</div>
 				</div>
-				<div *ngIf="showRestaurants" class="col-sm-8" [@flyInOut]>
+				<div *ngIf="showRestaurants" class="col-sm-8 full-height" [@flyInOut]>
 					<label><h5>Results</h5></label>
 					<div class="scroll" id="restaurants" [@slide]>
 						<div class="row restaurant-card" *ngFor="let item of restaurants; let i = index" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">

@@ -1,6 +1,6 @@
 <div class="card">
-	<h2 class="card-header bg-primary text-white">Create Room</h2>
-	<div class="card-block">
+	<h2 class="card-header card-header-single-line bg-primary text-white">Create Room</h2>
+	<div class="card-block card-block-single-line scroll">
 		<div class="col-12">
 			<div class="form-group">
 				<label><p class="input-label">Enter Room Name:</p></label>
@@ -27,7 +27,7 @@
 			</div>
 			<div *ngIf="roomId" class="form-group">
 				<label><p class="input-label">Shareable Room Link:</p></label>
-				<input [(ngModel)]="href + '/picker/room/' + roomId" class="form-control" type="text" readonly="readonly">
+				<input [(ngModel)]="href + '/diner-decider/room/' + roomId" class="form-control" type="text" readonly="readonly">
 			</div>
 	    <button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">
 				Enter Your Room

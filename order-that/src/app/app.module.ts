@@ -17,9 +17,9 @@ import { NavigationComponent } from './navigation/navigation.component';
 
 import { ZomatoService } from './zomato.service';
 import { LocationService } from './location.service';
-import { PickerComponent } from './picker/picker.component';
-import { CreateRoomComponent } from './picker/create-room/create-room.component';
-import { RoomComponent } from './picker/room/room.component';
+import { DinerDeciderComponent } from './diner-decider/diner-decider.component';
+import { CreateRoomComponent } from './diner-decider/create-room/create-room.component';
+import { RoomComponent } from './diner-decider/room/room.component';
 import { DropDropdownDirective } from './navigation/drop-dropdown.directive';
 import { KeysPipe } from './keys.pipe';
 import { MapKeysPipe } from './map-keys.pipe';
@@ -40,7 +40,7 @@ export const firebaseConfig = {
     HomeComponent,
     AboutComponent,
     NavigationComponent,
-    PickerComponent,
+    DinerDeciderComponent,
     CreateRoomComponent,
     RoomComponent,
     DropDropdownDirective,

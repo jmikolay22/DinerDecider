@@ -1,6 +1,7 @@
 <div class="card">
 	<h2 class="card-header bg-primary text-white">{{title}}</h2>
 	<div class="card-block scroll">
+		<button [@flyInOut] (click)="goBackToCategories()" class="btn btn-primary btn-lg back-button text-left" *ngIf="showRestaurants"><i class="fa fa-arrow-left back-icon" aria-hidden="true"></i> Categories</button>
 		<div class="col-12">
 			<div class="progress" *ngIf="showLoading" [@flyInOut]>
 			  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
@@ -13,11 +14,18 @@
 				</div>
 			</div>
 			<div *ngIf="showRestaurants" [@slide]>
-				<div *ngFor="let item of restaurants; let i = index">
-					<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
-						{{ item.restaurant.name }}
-					</button>		
-				</div>
+				<div class="scroll" id="restaurants" >
+						<div class="row restaurant-card" *ngFor="let item of restaurants; let i = index" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
+							<div class="col-12">
+								<div>
+									<h4>{{ item.restaurant.name }}</h4>
+									<p>{{ item.restaurant.user_rating.aggregate_rating }} ({{ item.restaurant.user_rating.votes }})</p>
+									<p [@slide] *ngFor="let dollar of getDollarSigns(item.restaurant.price_range)" class="inline" >{{ dollar }} </p>
+									<p class="inline">· {{ item.restaurant.cuisines }} · {{ item.restaurant.location.address }}</p>
+								</div>
+							</div>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>

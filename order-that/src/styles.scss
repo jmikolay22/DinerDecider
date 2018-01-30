@@ -84,10 +84,17 @@ label{
 
 html {
 	height: 100%;
+	min-width: 320px;
+	overflow-x: auto;
 }
 
 .full-height {
 	height: 100%;
+}
+
+.back-button {
+	width: auto;
+	margin-bottom: .5em;
 }
 
 ::-webkit-scrollbar
@@ -106,4 +113,84 @@ html {
 {
   background: rgba(0, 0, 0, 0.5);
   border-radius: .2em;
+}
+
+.inline {
+	display: inline;
+}
+.restaurant-card{
+  border-radius: .3em;
+  padding: .5em;
+  margin: 0 .1em .5em .1em;
+  color: white;
+}
+#categories{
+	height: 100%;
+}
+
+#restaurants{
+	height: 100%;
+}
+
+#totals{
+	height: 100%;
+}
+
+@media screen 
+and (max-width : 575px) {
+	#totals-container{
+		height: 20%;
+	}
+	#totals {
+		height: 50%;
+		width: 100%;
+	}
+
+	.totals-horizontal-scroll-sm {
+		overflow-y: hidden;
+		overflow-x: auto;
+	}
+
+	.total-horizontal {
+		display: inline-block;
+	}
+
+	#categories{
+		height: 65%;
+	}
+
+	#restaurants{
+		height: 65%;
+	}
+}
+
+.card-header{
+	height: 95px;
+}
+
+.card-block{
+	height: calc(100% - 135px);
+}
+
+.card {
+	height: 100%;
+}
+
+@media screen 
+and (max-width : 430px) {
+	.card-header{
+		height: 145px;
+	}
+
+	.card-block{
+		height: calc(100% - 215px);
+	}
+
+	.card-header-single-line{
+		height: 60px;
+	}
+
+	.card-block-single-line{
+		height: calc(100% - 215px);
+	}
 }

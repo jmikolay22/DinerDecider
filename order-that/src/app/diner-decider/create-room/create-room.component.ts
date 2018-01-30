@@ -54,7 +54,7 @@ export class CreateRoomComponent implements OnInit {
 					radiusMeters: this.convertMilesToMeters(this.radius)
 				}
 			}).then(data => {
-				this.router.navigate(['/picker/room/' + this.roomId]);
+				this.router.navigate(['/diner-decider/room/' + this.roomId]);
 			}, err => {
 				this.roomAlreadyExists = true;
 			});
@@ -68,7 +68,7 @@ export class CreateRoomComponent implements OnInit {
 					radiusMeters: this.convertMilesToMeters(this.radius)
 				}
 			}).then(data => {
-				this.router.navigate(['/picker/room/' + this.roomId]);
+				this.router.navigate(['/diner-decider/room/' + this.roomId]);
 			}, err => {
 				this.roomAlreadyExists = true;
 			});

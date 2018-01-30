@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
 import { ZomatoService } from '../zomato.service';
+import { LocationService } from '../location.service';
 
 @Component({
   selector: 'app-home',
@@ -60,12 +61,19 @@ export class HomeComponent implements OnInit {
 	showLoading: boolean = true;
 	showCategories: boolean = false;
 	showRestaurants: boolean = false;
+	lat: number;
+	long: number;
 	title: string = "Categories"
 
 	user: Observable<firebase.User>;
 
-  constructor(public afAuth: AngularFireAuth, private _zomatoService: ZomatoService) { 
+  constructor(private _locationService: LocationService, public afAuth: AngularFireAuth, private _zomatoService: ZomatoService) { 
   	this.user = afAuth.authState;
+  	_locationService.getPosition()
+  		.then(position => {
+  			this.lat = position['coords']['latitude'];
+  			this.long = position['coords']['longitude'];
+  		});
   }
 
   ngOnInit() {
@@ -87,15 +95,32 @@ export class HomeComponent implements OnInit {
   onCategoryClick(i: number) {
   	this.showCategories = false;
   	this.showLoading = true;
-  	this._zomatoService.search([{ id: 'category', value: i }]).subscribe(	
+
+  	this._zomatoService.search([
+  		{ id: 'category', value: i },
+  		{ id: 'lat', value: this.lat },
+  		{ id: 'lon', value: this.long },
+  		{ id: 'radius', value: 5000 }
+  	]).subscribe(	
   		data => { 
   			this.restaurants = data['restaurants'];
   			this.showRestaurants = true;
   			this.showLoading = false;
-  			this.title = "Restaurants";
   		},
-  		err => console.log(err),
-  		() => console.log('Done')
+  		err => console.log(err)
   	);
   }
+
+  goBackToCategories() {
+  	this.showCategories = true;
+  	this.showRestaurants = false;
+  }
+
+  getDollarSigns(total: number) {
+		var dollarSigns = [];
+		for(var i = 0; i < total; i++) {
+			dollarSigns.push('$');
+		}
+		return dollarSigns;
+	}
 }

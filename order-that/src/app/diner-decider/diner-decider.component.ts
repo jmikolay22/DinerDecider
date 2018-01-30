@@ -7,11 +7,11 @@ import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
 @Component({
-  selector: 'app-picker',
-  templateUrl: './picker.component.html',
-  styleUrls: ['./picker.component.scss']
+  selector: 'app-diner-decider',
+  templateUrl: './diner-decider.component.html',
+  styleUrls: ['./diner-decider.component.scss']
 })
-export class PickerComponent implements OnInit {
+export class DinerDeciderComponent implements OnInit {
 	showJoinRoom: boolean = false;
 	isValidRoom: boolean = true;
 	roomId: string = null;
@@ -36,7 +36,7 @@ export class PickerComponent implements OnInit {
   joinRoom() {
   	const room = this.db.object('rooms/' + this.roomId).valueChanges();
   	room.subscribe(success => {
-	  	this.router.navigate(['picker/room/' + this.roomId]);
+	  	this.router.navigate(['diner-decider/room/' + this.roomId]);
   	},
   	err => {
   		if(this.password !== null){

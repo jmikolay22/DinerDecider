@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PickerComponent } from './picker.component';
+import { DinerDeciderComponent } from './diner-decider.component';
 
-describe('PickerComponent', () => {
-  let component: PickerComponent;
-  let fixture: ComponentFixture<PickerComponent>;
+describe('DinerDeciderComponent', () => {
+  let component: DinerDeciderComponent;
+  let fixture: ComponentFixture<DinerDeciderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PickerComponent ]
+      declarations: [ DinerDeciderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PickerComponent);
+    fixture = TestBed.createComponent(DinerDeciderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
