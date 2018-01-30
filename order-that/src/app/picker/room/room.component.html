@@ -37,12 +37,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-8" *ngIf="showLoading">
+				<div class="col-sm-8" *ngIf="showLoading" [@flyInOut]>
 					<div class="progress">
 					  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
 					</div>
 				</div>
-				<div *ngIf="showCategories" class="col-sm-8 full-height">
+				<div *ngIf="showCategories" class="col-sm-8 full-height" [@flyInOut]>
 					<label><h5>Restaurant Categories</h5></label>
 					<div class="scroll" id="categories" [@slide]>
 						<div *ngFor="let item of categories; let i = index">
@@ -52,7 +52,7 @@
 						</div>
 					</div>
 				</div>
-				<div *ngIf="showRestaurants" class="col-sm-8">
+				<div *ngIf="showRestaurants" class="col-sm-8" [@flyInOut]>
 					<label><h5>Results</h5></label>
 					<div class="scroll" id="restaurants" [@slide]>
 						<div class="row restaurant-card" *ngFor="let item of restaurants; let i = index" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">

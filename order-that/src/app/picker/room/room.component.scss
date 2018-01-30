@@ -23,11 +23,21 @@
 	height: 100%;
 }
 
-
 .card-header{
-	height: 95px !important;
+	height: 95px;
 }
 
 .card-block{
 	height: calc(100% - 135px);
+}
+
+@media screen 
+and (max-width : 430px) {
+	.card-header{
+		height: 145px;
+	}
+
+	.card-block{
+		height: calc(100% - 215px);
+	}
 }

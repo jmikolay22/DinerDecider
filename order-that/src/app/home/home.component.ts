@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { trigger, style, transition, animate, keyframes, query, stagger } from '@angular/animations';
+import { trigger, style, transition, animate, keyframes, query, stagger, state } from '@angular/animations';
 
 import { AngularFireDatabase, AngularFireList  } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -31,7 +31,27 @@ import { ZomatoService } from '../zomato.service';
             style({opacity: 0, transform: 'translateY(-75%)',     offset: 1.0}),
           ]))]), {optional: true})
       ])
-    ])
+    ]),
+    trigger('flyInOut', [
+	    state('in', style({transform: 'translateX(0)'})),
+	    transition('void => *', [
+	      style({transform: 'translateX(-100%)'}),
+	      animate(100)
+	    ]),
+	    transition('* => void', [
+	      animate(100, style({transform: 'translateX(-100%)'}))
+	    ])
+	  ]),
+	  trigger('flyDownOut', [
+	    state('in', style({transform: 'translateY(0)'})),
+	    transition('void => *', [
+	      style({transform: 'translateY(-100%)'}),
+	      animate(100)
+	    ]),
+	    transition('* => void', [
+	      animate(100, style({transform: 'translateY(-100%)'}))
+	    ])
+	  ])
   ]
 })
 export class HomeComponent implements OnInit {
@@ -40,6 +60,7 @@ export class HomeComponent implements OnInit {
 	showLoading: boolean = true;
 	showCategories: boolean = false;
 	showRestaurants: boolean = false;
+	title: string = "Categories"
 
 	user: Observable<firebase.User>;
 
@@ -71,6 +92,7 @@ export class HomeComponent implements OnInit {
   			this.restaurants = data['restaurants'];
   			this.showRestaurants = true;
   			this.showLoading = false;
+  			this.title = "Restaurants";
   		},
   		err => console.log(err),
   		() => console.log('Done')
