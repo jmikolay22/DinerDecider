@@ -1,38 +1,34 @@
-<div class="card">
-	<h2 class="card-header card-header-single-line bg-primary text-white">Diner Decider</h2>
-	<div class="card-block card-block-single-line scroll">
-		<p>Diner Decider helps you decide where you and your friends should go get food!<br><br>
-			<b>How To Play</b><br>
-			When each friend joins the room, they are given a certain amount of "HungerBucks". The friend will then spend their HungerBucks as they please on the restaurants of their desire. When the room creator closes the room, each friend will see which restaurants nabbed the most HungerBucks. The restaurant with the most HungerBucks is where you eat.
-		</p>
-		<div class="col-12">
-			<div *ngIf="!showJoinRoom">
-				<button [routerLink]="['create-room']" type="button" class="btn btn-primary btn-lg btn-block btn-list">
-					Create Room
-				</button>
-				<button (click)="enableJoinRoom()" type="button" class="btn btn-primary btn-lg btn-block btn-list">
-					Join Room
-				</button>
+<h3>Diner Decider</h3>
+<p>Diner Decider helps you decide where you and your friends should go get food!<br><br>
+	<b>How To Play</b><br>
+	When each friend joins the room, they are given a certain amount of "HungerBucks". The friend will then spend their HungerBucks as they please on the restaurants of their desire. When the room creator closes the room, each friend will see which restaurants nabbed the most HungerBucks. The restaurant with the most HungerBucks is where you eat.
+</p>
+<div class="col-12 no-pad">
+	<div *ngIf="!showJoinRoom">
+		<button routerLink="create-room" type="button" class="btn btn-primary btn-lg btn-block btn-list margin-top">
+			Create Room
+		</button>
+		<button (click)="enableJoinRoom()" type="button" class="btn btn-primary btn-lg btn-block btn-list">
+			Join Room
+		</button>
+	</div>
+	<div *ngIf="showJoinRoom">
+		<div class="form-group no-pad">
+			<label><h3>Enter Room Name:</h3></label>
+			<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text" placeholder="Enter room id">
+	    <div class="col-12 no-pad" *ngIf="needsPassword">
+		    <label><h3>Enter Room Password:</h3></label>
+				<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
 			</div>
-			<div *ngIf="showJoinRoom">
-				<div class="form-group">
-					<label><h3>Enter Room Name:</h3></label>
-					<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text" placeholder="Enter room id">
-			    <div class="col-12 no-pad" *ngIf="needsPassword">
-				    <label><h3>Enter Room Password:</h3></label>
-						<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
-					</div>
-					<div [hidden]="isValidRoom" class="alert alert-danger">
-			      Invalid room name and or password.
-			    </div>
-			    <button (click)="joinRoom()" type="button" [disabled]="!roomId" class="btn btn-primary btn-lg btn-block btn-list">
-						Join Room
-					</button>
-					<button (click)="cancel()" type="button" class="btn btn-danger btn-lg btn-block btn-list">
-						Cancel
-					</button>
-			  </div>
-			</div>
-		</div>
+			<div [hidden]="isValidRoom" class="alert alert-danger">
+	      Invalid room name and or password.
+	    </div>
+	    <button (click)="joinRoom()" type="button" [disabled]="!roomId" class="btn btn-primary btn-lg btn-block btn-list margin-top">
+				Join Room
+			</button>
+			<button (click)="cancel()" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+				Cancel
+			</button>
+	  </div>
 	</div>
 </div>

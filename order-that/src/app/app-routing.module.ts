@@ -8,12 +8,12 @@ import { RoomComponent } from './diner-decider/room/room.component';
 import { ListingComponent } from './listing/listing.component';
 
 const routes: Routes = [
-	{ path: '', component: ListingComponent },
 	{ path: 'about', component: AboutComponent },
 	{ path: 'diner-decider', component: DinerDeciderComponent },
 	{ path: 'diner-decider/create-room',  component: CreateRoomComponent },
-  { path: 'diner-decider/room/:id',  component: RoomComponent }
-];
+  { path: 'diner-decider/room/:id',  component: RoomComponent },
+  { path: '**', redirectTo: 'diner-decider', pathMatch: 'full' }
+]; 
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

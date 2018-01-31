@@ -23,6 +23,7 @@
     "@angular/router": "^5.2.0",
     "angularfire2": "^5.0.0-rc.6",
     "bootstrap": "^4.0.0",
+    "bootstrap-slider": "^10.0.0",
     "core-js": "^2.4.1",
     "firebase": "^4.9.0",
     "font-awesome": "^4.7.0",

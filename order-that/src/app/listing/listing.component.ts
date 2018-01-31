@@ -1,4 +1,8 @@
 import {Component, OnInit, Output, Input, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { Observable } from 'rxjs/Observable';
+import * as firebase from 'firebase/app';
+
 import { ListingService } from './listing.service';
 import { Listing } from './listing';
 
@@ -17,6 +21,11 @@ export class ListingComponent implements OnInit, OnChanges  {
   @Output() onListingChange = new EventEmitter<number>();
 
   compressed: boolean;
+  user: Observable<firebase.User>;
+
+  constructor( public afAuth: AngularFireAuth) {
+    this.user = this.afAuth.authState;
+  }
 
   ngOnInit() {
     $('.map-results-list').TrackpadScrollEmulator();
@@ -36,17 +45,7 @@ export class ListingComponent implements OnInit, OnChanges  {
     }
   }
 
-  buildRating(rating) {
-    let template = '';
-
-    for (let i = 1; i < rating; i++) {
-      template += '<i class="fa fa-star"></i>';
-    }
-
-    for (let i = rating; i <= 5; i++) {
-      template += '<i class="fa fa-star-o"></i>';
-    }
-
-    return template;
+  login() {
+    this.afAuth.auth.signInAnonymously();
   }
 }

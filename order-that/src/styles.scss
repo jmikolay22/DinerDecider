@@ -1,190 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway:300,700');
-@import "~bootstrap/dist/css/bootstrap.css";
-ul {
-    list-style-type:none;
-    margin:0 0 2em 0;
-    padding:0;
-}
-ul li {
-    display:inline;
-    margin-right: 30px;
-}
-ul li a {
-    font-size: 1.5em;
-}
-a {
-    color:#fff;
-    text-decoration:none;
-}
-.progress {
-	margin: 2em;
-}
-
-.btn-list {
-	margin: .5em 0 .5em 0;
-}
-* {
-    font-family: 'Raleway';
-}
-button {
-    background:#008FEF;
-    color:white;
-    padding: 1.2em;
-    width:300px;
-    text-align:center;
-    font-size:1.2em;
-    margin-bottom: 30px;
-    cursor:pointer;
-}
-.card-block {
-	margin: .5em;
-	color: #343a40 !important;
-}
-.no-pad {
-	padding: 0em;
-}
-
-.card {
-	max-height: 95%;
-	overflow: hidden;
-}
-
-.card-full {
-	height: 95%;
-	overflow: hidden;
-}
-
-.input-label {
-	margin-bottom: 0rem;
-}
-
-label{
-	margin-bottom: 0rem;
-}
-
-.no-scroll {
-	overflow: hidden;
-}
-
-.scroll {
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-
-html {
-	height: 100%;
-	min-width: 320px;
-	overflow-x: auto;
-}
-
-.full-height {
-	height: 100%;
-}
-
-.back-button {
-	width: auto;
-	margin-bottom: .5em;
-}
-
-::-webkit-scrollbar
-{
-  width: 3px;  /* for vertical scrollbars */
-  height: 3px; /* for horizontal scrollbars */
-}
-
-::-webkit-scrollbar-track
-{
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: .2em;
-}
-
-::-webkit-scrollbar-thumb
-{
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: .2em;
-}
-
-.inline {
-	display: inline;
-}
-.restaurant-card{
-  border-radius: .3em;
-  padding: .5em;
-  margin: 0 .1em .5em .1em;
-  color: white;
-}
-#categories{
-	height: 100%;
-}
-
-#restaurants{
-	height: 100%;
-}
-
-#totals{
-	height: 100%;
-}
-
-@media screen 
-and (max-width : 575px) {
-	#totals-container{
-		height: 20%;
-	}
-	#totals {
-		height: 50%;
-		width: 100%;
-	}
-
-	.totals-horizontal-scroll-sm {
-		overflow-y: hidden;
-		overflow-x: auto;
-		display: flex;
-	}
-
-	.total-horizontal {
-		display: inline-block;
-	}
-
-	#categories{
-		height: 65%;
-	}
-
-	#restaurants{
-		height: 65%;
-	}
-}
-
-.card-header{
-	height: 95px;
-}
-
-.card-block{
-	height: calc(100% - 135px);
-}
-
-.card {
-	height: 100%;
-}
-
-@media screen 
-and (max-width : 430px) {
-	.card-header{
-		height: 145px;
-	}
-
-	.card-block{
-		height: calc(100% - 215px);
-	}
-
-	.card-header-single-line{
-		height: 60px;
-	}
-
-	.card-block-single-line{
-		height: calc(100% - 215px);
-	}
-}
-
 .sebm-google-map-container {
 	bottom: 0;
 	left: 0;
@@ -192,4 +5,49 @@ and (max-width : 430px) {
 	right: 0;
 	top: 0;
 	height: calc(100vh - 60px);
+}
+
+.no-pad {
+	padding: 0em;
+}
+
+.flex {
+	display: flex;
+}
+
+.flex-space-between {
+	display: flex;
+	justify-content: space-between;
+}
+
+.listing-row-medium-price {
+	color: white;	
+}
+
+.float-none {
+	float: none;
+}
+
+.no-margin {
+	margin: 0em !important;
+}
+
+.next-to-button {
+	line-height: 1.8;
+	margin: 0em;
+	padding-left: .3em;
+}
+
+.margin-top {
+	margin-top: .3em;
+}
+
+.negative-margins {
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
+hr {
+	margin-top: .3em;
+	margin-bottom: .3em;
 }

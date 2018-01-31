@@ -1,40 +1,40 @@
-<div class="card">
-	<h2 class="card-header card-header-single-line bg-primary text-white">Create Room</h2>
-	<div class="card-block card-block-single-line scroll">
-		<div class="col-12">
-			<div class="form-group">
-				<label><p class="input-label">Enter Room Name:</p></label>
-				<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text">
-				<div [hidden]="!roomAlreadyExists" class="alert alert-danger">
-		      This room name is taken.
-		    </div>
-	  	</div>
-	  	<div class="form-group">
-				<label><p class="input-label">Enter Room Password:</p></label>
-				<input [(ngModel)]="roomPassword" class="form-control" type="text">
-			</div>
-			<div class="form-group">
-				<label><p class="input-label">Hunger Bucks Per Person:</p></label>
-				<div class="col-3 no-pad">
-				<input [(ngModel)]="hungerBucks" class="form-control" type="number" min="1" max="20">
-				</div>
-			</div>
-			<div class="form-group">
-				<label><p class="input-label">Distance From Current Location (Miles):</p></label>
-				<div class="col-3 no-pad">
-					<input [(ngModel)]="radius" class="form-control" type="number" min="0" max="50">
-				</div>
-			</div>
-			<div *ngIf="roomId" class="form-group">
-				<label><p class="input-label">Shareable Room Link:</p></label>
-				<input [(ngModel)]="href + '/diner-decider/room/' + roomId" class="form-control" type="text" readonly="readonly">
-			</div>
-	    <button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">
-				Enter Your Room
-			</button>
-			<button [routerLink]="['..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
-			Cancel
-		</button>
-		</div>
+<h3>Create Room</h3>
+<div class="col-12">
+	<div class="form-group">
+		<label><p>Enter Room Name:</p></label>
+		<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text" maxlength="10">
+		<div [hidden]="!roomAlreadyExists" class="alert alert-danger">
+      This room name is taken.
+    </div>
 	</div>
+	<div class="form-group">
+		<label><p>Enter Room Passcode (Optional):</p></label>
+		<input [(ngModel)]="roomPassword" class="form-control" type="text" maxlength="4">
+	</div>
+	<div class="form-group">
+		<div class="col-12 no-pad flex">
+			<p>1&nbsp;&nbsp;&nbsp;&nbsp;</p><input id="hunger-bucks-slider" class="form-control slider">
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;20</p>
+		</div>
+		<label class="flex"><p id="hunger-bucks-value"><b>10</b></p><p>&nbsp;Hunger Bucks Per Person</p></label>
+	</div>
+	<div class="form-group">
+		<div class="col-12 no-pad flex">
+			<p>1&nbsp;&nbsp;&nbsp;&nbsp;</p><input id="radius-slider" class="form-control slider">
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;50</p>
+		</div>
+		<label class="flex"><p>Limit to restaurants within&nbsp;</p>
+		<p id="radius-value"><b>5</b></p>
+		<p>&nbsp;miles of my current location</p></label>
+	</div>
+	<div *ngIf="roomId" class="form-group">
+		<label><p>Shareable Room Link:</p></label>
+		<input [(ngModel)]="href + '/diner-decider/room/' + roomId" class="form-control" type="text" readonly="readonly">
+	</div>
+  <button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">
+		Enter Your Room
+	</button>
+	<button [routerLink]="['..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+	Cancel
+	</button>
 </div>

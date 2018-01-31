@@ -10,22 +10,27 @@ import * as firebase from 'firebase/app';
 import { ZomatoService } from '../../zomato.service';
 import { LocationService } from '../../location.service';
 
+declare const $: any;
+
 @Component({
   selector: 'app-create-room',
   templateUrl: './create-room.component.html',
   styleUrls: ['./create-room.component.scss']
 })
 export class CreateRoomComponent implements OnInit {
-	roomId: string;
+	roomId: string = '';
 	roomPassword: string;
 	rooms: Observable<any>;
 	uid: string;
 	lat: number = null;
 	long: number = null;
-	hungerBucks: number = null;
-	radius: number = null;
+	hungerBucks: number = 10;
+  hungerBucksSlider: any;
+  radiusSlider: any;
+	radius: number = 5;
 	roomAlreadyExists: boolean = false;
 	href: string = null;
+  zip: number = null;
 
   constructor(private platformLocation: PlatformLocation, private _locationService: LocationService, private _zomatoService: ZomatoService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
@@ -41,7 +46,43 @@ export class CreateRoomComponent implements OnInit {
   		});
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.hungerBucksSlider = $('#hunger-bucks-slider').slider({
+      value: 10,
+      min: 1,
+      max: 20,
+      ticks_tooltip: true
+    });
+    $('#hunger-bucks-slider').slider().on('slideStart', function(ev){
+        $('#hunger-bucks-slider').slider().data('slider').getValue();
+    });
+
+    $('#hunger-bucks-slider').slider().on('slideStop', function(ev){
+        var newVal = $('#hunger-bucks-slider').slider().data('slider').getValue();
+        if(this.hungerBucks != newVal) {
+            this.hungerBucks = newVal;
+            $('#hunger-bucks-value').html('<b>' + this.hungerBucks + '</b>');
+        }
+    });
+
+    this.radiusSlider = $('#radius-slider').slider({
+      value: 5,
+      min: 1,
+      max: 50,
+      ticks_tooltip: true
+    });
+    $('#radius-slider').slider().on('slideStart', function(ev){
+        $('#radius-slider').slider().data('slider').getValue();
+    });
+
+    $('#radius-slider').slider().on('slideStop', function(ev){
+        var newVal = $('#radius-slider').slider().data('slider').getValue();
+        if(this.hungerBucks != newVal) {
+            this.hungerBucks = newVal;
+            $('#radius-value').html('<b>' + this.hungerBucks + '</b>');
+        }
+    });
+  }
 
   createRoom() {
   	const itemRef = this.db.object('rooms');
@@ -76,7 +117,7 @@ export class CreateRoomComponent implements OnInit {
   }
 
   canCreateRoom() {
-  	if(this.roomId !== null && this.lat !== null && this.long !== null
+  	if(this.roomId !== '' && this.lat !== null && this.long !== null
   		&& this.hungerBucks !== null && this.radius !== null){
   		return true;
   	}else{

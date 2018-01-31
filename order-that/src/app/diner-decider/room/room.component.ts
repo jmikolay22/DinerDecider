@@ -65,12 +65,14 @@ export class RoomComponent implements OnInit {
 	showLoading: boolean = true;
 	showCategories: boolean = false;
 	showRestaurants: boolean = false;
+	showCart: boolean = false;
 	firstTimePasswordChecked: boolean = true;
 	showDifferentRoomButton: boolean = false;
 	room: Object;
 	categories: any[];
 	restaurants: any[];
 	orders: any[] = [];
+	browseTitle: string = "Restaurant Categories";
 
   constructor(private _zomatoService: ZomatoService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
@@ -90,15 +92,15 @@ export class RoomComponent implements OnInit {
       this.roomId = params['id'];
       const roomQuery = this.db.object('rooms/' + this.roomId).valueChanges();
 	  	roomQuery.subscribe(data => {
-  			if(data !== null){
+  			if (data !== null) {
   				this.room = data;
 	  			this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
 			  	this.needsPassword = false;
 			  	this.getCategories();
-  			}else{
-  				if(this.firstTimePasswordChecked){
+  			} else {
+  				if (this.firstTimePasswordChecked) {
 	  			this.firstTimePasswordChecked = false;
-	  		}else{
+	  		} else {
 	  			this.invalidPasswordChecked = true;
 	  			this.showDifferentRoomButton = true;
 	  		}
@@ -106,9 +108,9 @@ export class RoomComponent implements OnInit {
   			}
 	  	},
 	  	err => {
-	  		if(this.firstTimePasswordChecked){
+	  		if (this.firstTimePasswordChecked) {
 	  			this.firstTimePasswordChecked = false;
-	  		}else{
+	  		} else {
 	  			this.invalidPasswordChecked = true;
 	  			this.showDifferentRoomButton = true;
 	  		}
@@ -142,12 +144,12 @@ export class RoomComponent implements OnInit {
   	);
   }
 
-  onCategoryClick(i: number) {
+  onCategoryClick(id: number) {
   	this.showCategories = false;
   	this.showLoading = true;
 
   	this._zomatoService.search([
-  		{ id: 'category', value: i },
+  		{ id: 'category', value: id },
   		{ id: 'lat', value: this.room['lat'] },
   		{ id: 'lon', value: this.room['long'] },
   		{ id: 'radius', value: this.room['radiusMeters'] }
@@ -156,6 +158,11 @@ export class RoomComponent implements OnInit {
   			this.restaurants = data['restaurants'];
   			this.showRestaurants = true;
   			this.showLoading = false;
+  			for (var i = 0; i < this.categories.length; i++) {
+  				if (this.categories[i].categories.id === id) {
+  					this.browseTitle = this.categories[i].categories.name;
+  				}
+  			}
   		},
   		err => console.log(err)
   	);
@@ -164,6 +171,8 @@ export class RoomComponent implements OnInit {
   goBackToCategories() {
   	this.showCategories = true;
   	this.showRestaurants = false;
+  	this.restaurants = [];
+  	this.browseTitle = "Restaurant Categories";
   }
 
   getDistance(lat1, lon1, lat2, lon2, unit) {
@@ -182,19 +191,19 @@ export class RoomComponent implements OnInit {
 
 	getDollarSigns(total: number) {
 		var dollarSigns = [];
-		for(var i = 0; i < total; i++) {
+		for (var i = 0; i < total; i++) {
 			dollarSigns.push('$');
 		}
 		return dollarSigns;
 	}
 
 	spendHungerBuck(restaurant: Object) {
-		if(this.hungerBucksRemaining === 0){
+		if (this.hungerBucksRemaining === 0) {
 			return;
 		}
 
-		for(var i = 0; i < this.orders.length; i++){
-			if(this.orders[i].restaurantId === restaurant['id']){
+		for (var i = 0; i < this.orders.length; i++) {
+			if (this.orders[i].restaurantId === restaurant['id']) {
 				this.orders[i].balance++;
 				this.hungerBucksRemaining--;
 				return;
@@ -203,17 +212,18 @@ export class RoomComponent implements OnInit {
 
 		this.orders.push({
 			restaurantId: restaurant['id'],
-			restaurantName: restaurant['name'],
+			restaurant: restaurant,
 			balance: 1
 		})
+		this.hungerBucksRemaining--;
 	}
 
 	refundHungerBuck(restaurant: Object) {
-		for(var i = 0; i < this.orders.length; i++) {
-			if(this.orders[i].restaurantId === restaurant['id']) {
+		for (var i = 0; i < this.orders.length; i++) {
+			if (this.orders[i].restaurantId === restaurant['id']) {
 				this.orders[i].balance--;
 				this.hungerBucksRemaining++;
-				if(this.orders[i].balance === 0) {
+				if (this.orders[i].balance === 0) {
 					this.orders.splice(i, 1);
 				}
 				return;
@@ -224,11 +234,41 @@ export class RoomComponent implements OnInit {
 	}
 
 	getRestaurantHungerBucksTotal(id: number) {
-		for(var i = 0; i < this.orders.length; i++) {
-			if(this.orders[i].restaurantId === id) {
+		for (var i = 0; i < this.orders.length; i++) {
+			if (this.orders[i].restaurantId === id) {
 				return this.orders[i].balance;
 			}
 		}
 		return 0;
 	}
+
+	buildRating(rating) {
+    rating = Math.round(rating);
+    let template = '';
+
+    for (let i = 1; i < rating; i++) {
+      template += '<i class="fa fa-star"></i>';
+    }
+
+    for (let i = rating; i <= 5; i++) {
+      template += '<i class="fa fa-star-o"></i>';
+    }
+
+    return template;
+  }
+
+  showCartDiv() {
+  	this.showCart = true;
+  	this.showCategories = false;
+  	this.showRestaurants = false;
+  }
+
+  showBrowseDivs() {
+  	this.showCart = false;
+  	if (this.restaurants === undefined || this.restaurants.length === 0) {
+  		this.showCategories = true;
+  	} else {
+  		this.showRestaurants = true;
+  	}
+  }
 }

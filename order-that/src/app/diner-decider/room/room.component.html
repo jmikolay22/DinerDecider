@@ -1,81 +1,135 @@
-<div class="card">
-	<h2 class="card-header bg-primary text-white">
-		Room: {{ roomId }}
-		<h5 *ngIf="!needsPassword">Hunger Bucks Remaining: {{ hungerBucksRemaining }}</h5>
-	</h2>
-	<div class="card-block">
-		<button [@flyInOut] (click)="goBackToCategories()" class="btn btn-primary btn-lg back-button text-left" *ngIf="showRestaurants"><i class="fa fa-arrow-left back-icon" aria-hidden="true"></i> Categories</button>
-		<div class="col-12" *ngIf="needsPassword">
-			<label><h3>Enter Room Password:</h3></label>
-			<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
-			<div [hidden]="!invalidPasswordChecked" class="alert alert-danger">
-	      Invalid password or the room does not exist.
-	    </div>
-	    <button (click)="checkPassword()" type="button" [disabled]="!password" class="btn btn-primary btn-lg btn-block btn-list">
-				Enter Room
-			</button>
-			<button *ngIf="showDifferentRoomButton" [routerLink]="['../..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
-				Create / Join Different Room
-			</button>
-		</div>
-		<div class="col-sm-12 full-height" *ngIf="!needsPassword">
-			<div class="row full-height">
-				<div class="col-sm-4 text-left" id="totals-container">
-					<label><h5>Totals</h5></label>
-					<div id="totals" class="scroll totals-horizontal-scroll-sm">
-						<div *ngFor="let order of orders; let i = index" class="total-horizontal">
-							<div [@flyInOut] class="restaurant-card" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
-								<div class="row">
-									<div class="col-9">
-										<p>{{ order.restaurantName }}</p> 
-									</div>
-									<div class="col-3">
-										<p>{{ order.balance }}</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-8" *ngIf="showLoading" [@flyInOut]>
-					<div class="progress">
-					  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-					</div>
-				</div>
-				<div *ngIf="showCategories" class="col-sm-8 full-height" [@flyInOut]>
-					<label><h5>Restaurant Categories</h5></label>
-					<div class="scroll" id="categories" [@slide]>
-						<div *ngFor="let item of categories; let i = index">
-							<button type="button" class="btn btn-lg btn-block btn-list text-white" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}" (click)="onCategoryClick(item.categories.id)">
-								{{ item.categories.name }}
-							</button>		
-						</div>
-					</div>
-				</div>
-				<div *ngIf="showRestaurants" class="col-sm-8 full-height" [@flyInOut]>
-					<label><h5>Results</h5></label>
-					<div class="scroll" id="restaurants" [@slide]>
-						<div class="row restaurant-card" *ngFor="let item of restaurants; let i = index" [ngStyle]="{'background-color': _zomatoService.getButtonColor(i)}">
-							<div class="col-8">
+<div class="flex">
+	<h3>Room:</h3>
+	<h5>&nbsp;{{ roomId }}</h5>
+</div>
+<div class="flex" *ngIf="!needsPassword">
+	<h3 style="line-height: .2;">Hunger Bucks Remaining:</h3>
+	<h5 style="line-height: .2;">&nbsp;{{ hungerBucksRemaining }}</h5>
+</div>
+<hr class="negative-margins">
+<div class="col-12 no-pad" *ngIf="needsPassword">
+	<h5 class="margin-top">Enter Room Password:</h5>
+	<input [(ngModel)]="password" (ngModelChange)="resetValidation()" class="form-control" type="text">
+	<div [hidden]="!invalidPasswordChecked" class="alert alert-danger">
+    Invalid password or the room does not exist.
+  </div>
+  <button (click)="checkPassword()" type="button" [disabled]="!password" class="btn btn-primary btn-lg btn-block btn-list margin-top">
+		Enter Room
+	</button>
+	<button *ngIf="showDifferentRoomButton" [routerLink]="['../..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+		Create / Join Different Room
+	</button>
+</div>
+<div class="col-12 no-pad flex-space-between" *ngIf="!needsPassword">
+	<button class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : (showRestaurants || showCategories)}" (click)="showBrowseDivs()">Browse</button>
+	<button class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showCart}" (click)="showCartDiv()">Cart</button>
+</div>
+<hr *ngIf="!needsPassword" class="negative-margins">
+<div *ngIf="showCategories || showRestaurants" class="flex">
+	<button *ngIf="showRestaurants" [@flyInOut] (click)="goBackToCategories()" class="btn btn-primary btn-lg back-button text-left"><i class="fa fa-arrow-left no-margin" aria-hidden="true"></i></button>
+	<h5 class="next-to-button">{{ browseTitle }}</h5>
+</div>
+<hr *ngIf="!showLoading && !showCart" class="negative-margins">
+<h5 *ngIf="(orders === undefined || orders.length === 0) && showCart" class="margin-top">Your cart is empty. Click browse to find restaurants.</h5>
+<h5 class="margin-top" *ngIf="(restaurants === undefined || restaurants.length === 0) && !showLoading && showRestaurants">No restaurants found.</h5>
+<div class="col-sm-12 no-pad" *ngIf="!needsPassword">
+	<div class="row no-pad">
+		<div *ngIf="showCart" class="col-sm-12 no-pad text-left">
+			<div class="map-results-content">
+				<div class="listing-row-medium"*ngFor="let item of orders; let i = index">
+					<div class="listing-row-medium-inner flex-space-between">
+						<div>
+							<div class="listing-row-medium-content">
+                <div class="listing-row-medium-price">
+                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(item.restaurant.price_range)">{{ dollar }}</ng-container>
+              	</div>
+								<div class="listing-row-medium-category tag">{{ item.restaurant.cuisines }}</div>
+
+								<h4 class="listing-row-medium-title"><div>{{ item.restaurant.name }}</div></h4>
+
+								<div class="listing-row-medium-address">{{ item.restaurant.location.address }}</div>
 								<div>
-									<h4>{{ item.restaurant.name }}</h4>
-									<p>{{ item.restaurant.user_rating.aggregate_rating }} ({{ item.restaurant.user_rating.votes }})</p>
-									<p [@slide] *ngFor="let dollar of getDollarSigns(item.restaurant.price_range)" class="inline" >{{ dollar }} </p>
-									<p class="inline">· {{ item.restaurant.cuisines }} · {{ item.restaurant.location.address }}</p>
+									<span class="listing-row-medium-rating float-none">
+										<span>({{ item.restaurant.user_rating.aggregate_rating }})</span>
+
+	                  <b [innerHTML]="buildRating(item.restaurant.user_rating.aggregate_rating)"></b>
+									</span>
 								</div>
 							</div>
-							<div class="col-4">
-								<button (click)="spendHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus" aria-hidden="true"></i></button>
+						</div>
+						<div class="text-right">
+							<button (click)="spendHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
+							<ng-container>
+							<div class="text-center">
+								{{ getRestaurantHungerBucksTotal(item.restaurant.id) }}
+							</div>
+							</ng-container>
+							<button (click)="refundHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
+						</div>	
+			    </div>
+				</div>
+			</div>
+		</div>
+		<div *ngIf="showCategories" class="col-sm-12 no-pad" [@flyInOut]>
+			<div class="col-sm-12 no-pad" *ngIf="showLoading" [@flyInOut]>
+				<div class="progress">
+				  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+				</div>
+			</div>
+			<div [@slide]>
+				<div class="map-results-content clickable">
+					<div class="listing-row-medium" *ngFor="let item of categories; let i = index"
+               (click)="onCategoryClick(item.categories.id)">
+						<div class="listing-row-medium-inner">
+							<div class="listing-row-medium-content">
+								<h3>{{ item.categories.name }}</h3>
+							</div>
+				    </div>
+					</div>		
+				</div>
+			</div>
+		</div>
+		<div *ngIf="showRestaurants" class="col-sm-12 no-pad" [@flyInOut]>
+			<div class="col-sm-12 no-pad" *ngIf="showLoading" [@flyInOut]>
+				<div class="progress">
+				  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+				</div>
+			</div>
+			<div [@slide]>
+				<div class="map-results-content">
+					<div class="listing-row-medium" *ngFor="let item of restaurants; let i = index">
+						<div class="listing-row-medium-inner flex-space-between">
+							<div>
+								<div class="listing-row-medium-content">
+	                <div class="listing-row-medium-price">
+	                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(item.restaurant.price_range)">{{ dollar }}</ng-container>
+	              	</div>
+									<div class="listing-row-medium-category tag">{{ item.restaurant.cuisines }}</div>
+
+									<h4 class="listing-row-medium-title"><div>{{ item.restaurant.name }}</div></h4>
+
+									<div class="listing-row-medium-address">{{ item.restaurant.location.address }}</div>
+									<div>
+										<span class="listing-row-medium-rating float-none">
+											<span>({{ item.restaurant.user_rating.aggregate_rating }})</span>
+
+		                  <b [innerHTML]="buildRating(item.restaurant.user_rating.aggregate_rating)"></b>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="text-right">
+								<button (click)="spendHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
 								<ng-container>
 								<div class="text-center">
 									{{ getRestaurantHungerBucksTotal(item.restaurant.id) }}
 								</div>
 								</ng-container>
-								<button (click)="refundHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus" aria-hidden="true"></i></button>
-							</div>		
-						</div>
+								<button (click)="refundHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
+							</div>	
+				    </div>
 					</div>
-				</div>
+				</div>	
 			</div>
 		</div>
 	</div>

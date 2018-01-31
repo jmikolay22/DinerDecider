@@ -22,6 +22,7 @@
         "../node_modules/font-awesome/scss/font-awesome.scss",
         "assets/css/trackpad-scroll-emulator.css",
         "assets/css/explorer.css",
+        "../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css",
         "styles.scss"
       ],
       "scripts": [
@@ -30,7 +31,8 @@
         "assets/js/google-map-infobox.min.js",
         "assets/js/google-map-markerclusterer.js",
         "assets/js/google-map-richmarker.min.js",
-        "../node_modules/bootstrap/dist/js/bootstrap.js"
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../node_modules/bootstrap-slider/dist/bootstrap-slider.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

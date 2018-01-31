@@ -1,5 +1,4 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
@@ -13,15 +12,15 @@ import {Listing} from './listing/listing';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-	user: Observable<firebase.User>;
 	listings: Listing[] = [];
   listing_id: number;
+  user: Observable<firebase.User>;
 
   title = 'app';
 
-  constructor(private cd: ChangeDetectorRef, listingService: ListingService, public afAuth: AngularFireAuth) {
-    this.user = this.afAuth.authState;
+  constructor(private afAuth: AngularFireAuth, private cd: ChangeDetectorRef, listingService: ListingService) {
     const listing$ = listingService.getListings();
+    this.user = afAuth.authState;
     
     listing$.subscribe(
       listings => this.listings = listings
@@ -32,4 +31,8 @@ export class AppComponent {
     this.listing_id = listing_id;
     this.cd.detectChanges();
   }
+
+  logout() {
+	  this.afAuth.auth.signOut();
+	}
 }

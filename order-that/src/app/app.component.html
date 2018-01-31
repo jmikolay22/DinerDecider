@@ -2,9 +2,9 @@
   <div class="header-wrapper">
     <div class="header">
       <div class="container-fluid">
-        <div class="header-inner">
+        <div class="header-inner flex-space-between">
           <div class="header-logo">
-            <a>
+            <a routerLink="">
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0 0 128 128" version="1.1" class="svg replaced-svg">
                   <defs>
                       <path d="M63,86 C45.8791728,86 32,72.1208272 32,55 C32,37.8791728 45.8791728,24 63,24 C80.1208272,24 94,37.8791728 94,55 C94,72.1208272 80.1208272,86 63,86 Z M63,74 C73.4934102,74 82,65.4934102 82,55 C82,44.5065898 73.4934102,36 63,36 C52.5065898,36 44,44.5065898 44,55 C44,65.4934102 52.5065898,74 63,74 Z" id="path-1"></path>
@@ -27,7 +27,10 @@
               </svg>
             </a>
 
-            <a class="header-title">Diner</a>
+            <a class="header-title" routerLink="">Diner Decider</a>
+          </div>
+          <div *ngIf="(user | async)?.uid" class="header-logo">
+            <a class="header-title" (click)="logout()">Logout</a>
           </div>
         </div>
       </div>
