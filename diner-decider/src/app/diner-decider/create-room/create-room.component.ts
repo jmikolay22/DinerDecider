@@ -92,7 +92,8 @@ export class CreateRoomComponent implements OnInit {
 					lat: this.lat,
 					long: this.long,
 					hungerBucks: this.hungerBucks,
-					radiusMeters: this.convertMilesToMeters(this.radius)
+					radiusMeters: this.convertMilesToMeters(this.radius),
+          inProgress: true
 				}
 			}).then(data => {
 				this.router.navigate(['/diner-decider/room/' + this.roomId]);
@@ -106,7 +107,8 @@ export class CreateRoomComponent implements OnInit {
 					lat: this.lat,
 					long: this.long,
 					hungerBucks: this.hungerBucks,
-					radiusMeters: this.convertMilesToMeters(this.radius)
+					radiusMeters: this.convertMilesToMeters(this.radius),
+          inProgress: true
 				}
 			}).then(data => {
 				this.router.navigate(['/diner-decider/room/' + this.roomId]);

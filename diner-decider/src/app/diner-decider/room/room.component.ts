@@ -68,11 +68,14 @@ export class RoomComponent implements OnInit {
 	showCart: boolean = false;
 	firstTimePasswordChecked: boolean = true;
 	showDifferentRoomButton: boolean = false;
+	submittedCart: boolean = false;
+	firstCategoryLoad: boolean = true;
 	room: Object;
 	categories: any[];
 	restaurants: any[];
 	orders: any[] = [];
 	browseTitle: string = "Restaurant Categories";
+	results: Object = {};
 
   constructor(private _zomatoService: ZomatoService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
@@ -96,7 +99,19 @@ export class RoomComponent implements OnInit {
   				this.room = data;
 	  			this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
 			  	this.needsPassword = false;
-			  	this.getCategories();
+			  	for (var key in this.room['submissions']) {
+			  		if (key === this.uid) {
+			  			this.submittedCart = true;
+			  			break;
+			  		}
+			  	}
+			  	if (this.firstCategoryLoad && this.submittedCart === false) {
+			  		this.getCategories();
+			  		this.firstCategoryLoad = false;
+			  	}
+			  	if (this.room['inProgress'] === false) {
+			  		this.showResults();
+			  	}
   			} else {
   				if (this.firstTimePasswordChecked) {
 	  			this.firstTimePasswordChecked = false;
@@ -138,6 +153,7 @@ export class RoomComponent implements OnInit {
   		data => {
   			this.categories = data['categories'];
   			this.showCategories = true;
+  			this.showCart = false;
   			this.showLoading = false;
   		},
   		err => console.log(err)
@@ -270,5 +286,52 @@ export class RoomComponent implements OnInit {
   	} else {
   		this.showRestaurants = true;
   	}
+  }
+
+  submitCart() {
+  	var cartSubmission = {};
+  	for (var i = 0; i < this.orders.length; i++) {
+  		var order = this.orders[i];
+  		cartSubmission[order.restaurantId] = {
+  			balance: order.balance,
+  			restaurant: order.restaurant
+  		}
+  	}
+  	const itemRef = this.db.object('rooms/' + this.roomId + '/submissions');
+		itemRef.update({ [this.uid]: cartSubmission })
+		.then(data => {
+			this.submittedCart = true;
+			this.showCart = false;
+			this.showCategories = false;
+			this.showRestaurants = false;
+		}, err => {
+			console.log('error', err);
+		});
+  }
+
+  showResults() {
+  	const itemRef = this.db.object('rooms/' + this.roomId);
+		itemRef.update({ ['inProgress']: false })
+		.then(data => {
+			for (var submission in this.room['submissions']) {
+				for (var restaurant in this.room['submissions'][submission]) {
+					this.updateResults(this.room['submissions'][submission][restaurant]);
+				}
+			}
+			console.log(this.results);
+		}, err => {
+			console.log('error', err);
+		});
+  }
+
+  updateResults(restaurant: Object) {
+  	if (Object.keys(this.results).length === 0 || this.results[restaurant['restaurant']['id']] === undefined) {
+  		this.results[restaurant['restaurant']['id']] = restaurant;
+  	} else {
+  		var newBalance = this.results[restaurant['restaurant']['id']].balance + restaurant['balance'];
+  		restaurant['balance'] = newBalance;
+  		this.results[restaurant['restaurant']['id']] = restaurant;
+  	}
+  	this.results = Object.assign({}, this.results);
   }
 }
