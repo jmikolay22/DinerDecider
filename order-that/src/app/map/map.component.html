@@ -1,0 +1,18 @@
+<div class="map-object">
+
+	<div id="map-object"></div>
+
+	<div class="map-toolbar">
+		<div class="map-toolbar-group">
+			<div id="map-toolbar-action-zoom-in" class="map-toolbar-group-item" (click)="actionZoomIn()"><i class="fa fa-plus"></i></div>
+			<div id="map-toolbar-action-zoom-out" class="map-toolbar-group-item" (click)="actionZoomOut()"><i class="fa fa-minus"></i></div>
+		</div>
+
+		<div class="map-toolbar-group">
+			<div id="map-toolbar-action-roadmap" class="map-toolbar-group-item" (click)="actionType('ROADMAP')">Roadmap</div>
+			<div id="map-toolbar-action-satellite" class="map-toolbar-group-item" (click)="actionType('SATELLITE')">Satellite</div>
+			<div id="map-toolbar-action-terrain" class="map-toolbar-group-item" (click)="actionType('TERRAIN')">Terrain</div>
+      <div id="map-toolbar-action-hybrid" class="map-toolbar-group-item" (click)="actionType('HYBRID')">Hybrid</div>
+		</div>
+	</div>
+</div>

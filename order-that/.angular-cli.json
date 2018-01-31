@@ -20,9 +20,16 @@
       "prefix": "app",
       "styles": [
         "../node_modules/font-awesome/scss/font-awesome.scss",
+        "assets/css/trackpad-scroll-emulator.css",
+        "assets/css/explorer.css",
         "styles.scss"
       ],
       "scripts": [
+        "../node_modules/jquery/dist/jquery.min.js",
+        "assets/js/jquery.trackpad-scroll-emulator.min.js",
+        "assets/js/google-map-infobox.min.js",
+        "assets/js/google-map-markerclusterer.js",
+        "assets/js/google-map-richmarker.min.js",
         "../node_modules/bootstrap/dist/js/bootstrap.js"
       ],
       "environmentSource": "environments/environment.ts",

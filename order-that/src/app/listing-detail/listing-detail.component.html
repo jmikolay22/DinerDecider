@@ -1,0 +1,27 @@
+<div class="map-results-detail tse-scrollable" [@stateChanged]="state">
+  <div class="tse-content">
+    <div class="map-results-detail-header">
+      <h3>
+          {{ listing?.name }}
+
+          <i class="fa fa-close" (click)="close()"></i>
+      </h3>
+
+      <div class="map-results-detail-address">
+        {{ listing?.address }}
+      </div>
+    </div><!-- .map-results-detail-header -->
+
+
+    <div class="map-results-detail-gallery">
+      <img [src]="listing?.thumbnail">
+
+    </div><!-- /.map-results-detail-gallery -->
+
+    <h4>Description</h4>
+
+    <p>
+      {{ listing?.description }}
+    </p>
+  </div><!-- /.tse-content -->
+</div><!-- /.map-results-detail -->

@@ -1,0 +1,51 @@
+<div [ngClass]="{'compressed': compressed, 'map-results': true}">
+	<div class="map-results-inner">
+		<div class="map-results-list tse-scrollable">
+			<div class="tse-content">
+				<div class="map-results-header">
+					<app-diner-decider></app-diner-decider>
+					<h3>Best Spots in City</h3>
+
+					<p>
+            Check all listings available in our catalogue. You can use map for finding the spot and displaying information.
+					</p>
+
+					<div class="map-results-count">{{ listings.length }} items matching search query</div>
+				</div>
+
+				<div class="map-results-content clickable">
+					<div *ngFor="let listing of listings"
+               (click)="changeListing(listing.id)"
+               [ngClass]="{'active': listing_id === listing.id, 'listing-row-medium': true}">
+						<div class="listing-row-medium-inner">
+							<a class="listing-row-medium-image" [ngStyle]="{'background-image': 'url(' + listing.thumbnail + ')'}">
+								<span *ngIf="listing.is_featured" class="listing-row-medium-featured">Featured</span><!-- /.listing-row-medium-featured -->
+							</a>
+
+							<div class="listing-row-medium-content">
+                <a class="listing-row-medium-price" href="#">{{ listing.price }}</a>
+								<a *ngIf="listing.categories" class="listing-row-medium-category tag">{{ listing.categories }}</a>
+
+								<span *ngIf="listing.rating" class="listing-row-medium-rating">
+									<span>({{ listing.rating }})</span>
+
+                  <b [innerHTML]="buildRating(listing.rating)"></b>
+								</span>
+
+								<h4 class="listing-row-medium-title"><a>{{ listing.name }}</a></h4>
+
+								<div class="listing-row-medium-address">{{ listing.address }}</div>
+							</div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+  <app-listing-detail (onListingChange)="changeListing($event)" [listing_id]="listing_id"></app-listing-detail>
+
+	<div class="map-results-toggle" (click)="toggleResults()">
+		<i class="fa fa-chevron-left"></i>
+	</div>
+</div>

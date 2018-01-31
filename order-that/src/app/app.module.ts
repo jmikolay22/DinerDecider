@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import {FormsModule} from '@angular/forms'
+import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AngularFireModule } from 'angularfire2';
@@ -14,6 +15,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { NavigationComponent } from './navigation/navigation.component';
+
+import {ListingModule} from './listing/listing.module';
+import {MapModule} from './map/map.module';
+import {GlobalService} from './global.service';
 
 import { ZomatoService } from './zomato.service';
 import { LocationService } from './location.service';
@@ -51,13 +56,16 @@ export const firebaseConfig = {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    HttpModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     FormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ListingModule,
+    MapModule
   ],
-  providers: [ZomatoService, LocationService],
+  providers: [ZomatoService, LocationService, GlobalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

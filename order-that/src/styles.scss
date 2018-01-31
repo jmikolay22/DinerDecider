@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:300,700');
 @import "~bootstrap/dist/css/bootstrap.css";
-
-body {
-    background:#2E9CE6;
-    font-family: 'Raleway', 'Arial';
-    color:#fff;
-}
 ul {
     list-style-type:none;
     margin:0 0 2em 0;
@@ -28,11 +22,6 @@ a {
 
 .btn-list {
 	margin: .5em 0 .5em 0;
-}
-
-body {
-    background-color:#EBEBEB;
-    padding-top: 5em;
 }
 * {
     font-family: 'Raleway';
@@ -149,6 +138,7 @@ and (max-width : 575px) {
 	.totals-horizontal-scroll-sm {
 		overflow-y: hidden;
 		overflow-x: auto;
+		display: flex;
 	}
 
 	.total-horizontal {
@@ -193,4 +183,13 @@ and (max-width : 430px) {
 	.card-block-single-line{
 		height: calc(100% - 215px);
 	}
+}
+
+.sebm-google-map-container {
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: calc(100vh - 60px);
 }
