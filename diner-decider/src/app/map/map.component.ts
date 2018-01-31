@@ -6,6 +6,7 @@ declare const google: any;
 declare const InfoBox: any;
 declare const MarkerClusterer: any;
 declare const RichMarker: any;
+declare const $: any;
 
 @Component({
   selector: 'app-map',

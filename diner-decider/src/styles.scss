@@ -56,6 +56,22 @@ hr {
 	bottom: 60px;
 }
 
+.gm-iv-container {
+	margin-left: 60px !important;
+}
+
+.gm-iv-address {
+	height: 56px !important;
+	width: 150px !important;
+}
+
+.gm-svpc {
+	top: auto !important;
+	bottom: 55px !important;
+	left: -5px !important;
+	height: 30px !important;
+}
+
 @media screen and (max-width: 460px) {
 	.map-results {
 	  width: 380px; }
