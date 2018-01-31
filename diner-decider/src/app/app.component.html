@@ -30,7 +30,7 @@
             <a class="header-title" routerLink="">Diner Decider</a>
           </div>
           <div *ngIf="(user | async)?.uid" class="header-logo">
-            <a class="header-title" (click)="logout()">Logout</a>
+            <a class="header-title" (click)="logout()"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
           </div>
         </div>
       </div>

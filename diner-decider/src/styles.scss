@@ -51,3 +51,195 @@ hr {
 	margin-top: .3em;
 	margin-bottom: .3em;
 }
+
+.map-toolbar-top {
+	bottom: 60px;
+}
+
+@media screen and (max-width: 460px) {
+	.map-results {
+	  width: 380px; }
+
+	.map-results.compressed {
+	  transform: translateX(-380px); }
+
+	.map-results-inner {
+	  width: 380px; }
+
+	.expanded .map-results-toggle {
+	  transform: translateX(calc(100% + 380px)); }
+	    
+	.map-results-detail { 
+	  width: 380px; }
+
+	.expanded .map-results-detail {
+	  transform: translateX(380px); }
+
+	.map-results-list {
+	  width: 380px;}
+
+	.map-results {
+	  width: 380px; }
+
+	.map-results.compressed {
+	  transform: translateX(-380px); }
+
+	.map-results-inner {
+	  width: 380px; }
+
+	.expanded .map-results-toggle {
+	  transform: translateX(calc(100% + 380px)); }
+	  
+	.map-results-detail {
+	  width: 380px; }
+
+	.expanded .map-results-detail {
+	  transform: translateX(380px); }
+
+	.map-results-list {
+	  width: 380px; }
+}
+
+@media screen and (max-width: 425px) {
+	.map-results {
+	  width: 300px; }
+
+	.map-results.compressed {
+	  transform: translateX(-300px); }
+
+	.map-results-inner {
+	  width: 300px; }
+
+	.expanded .map-results-toggle {
+	  transform: translateX(calc(100% + 300px)); }
+	    
+	.map-results-detail { 
+	  width: 300px; }
+
+	.expanded .map-results-detail {
+	  transform: translateX(300px); }
+
+	.map-results-list {
+	  width: 300px;}
+
+	.map-results {
+	  width: 300px; }
+
+	.map-results.compressed {
+	  transform: translateX(-300px); }
+
+	.map-results-inner {
+	  width: 300px; }
+
+	.expanded .map-results-toggle {
+	  transform: translateX(calc(100% + 300px)); }
+	  
+	.map-results-detail {
+	  width: 300px; }
+
+	.expanded .map-results-detail {
+	  transform: translateX(300px); }
+
+	.map-results-list {
+	  width: 300px; }
+
+	.map-toolbar-group-item {
+		padding: 0 6px; }
+}
+
+@media screen and (max-width: 385px) {
+	.map-results {
+	  width: 300px; }
+
+	.map-results.compressed {
+	  transform: translateX(-300px); }
+
+	.map-results-inner {
+	  width: 300px; }
+
+	.expanded .map-results-toggle {
+	  transform: translateX(calc(100% + 300px)); }
+	    
+	.map-results-detail { 
+	  width: 300px; }
+
+	.expanded .map-results-detail {
+	  transform: translateX(300px); }
+
+	.map-results-list {
+	  width: 300px;}
+
+	.map-results {
+	  width: 300px; }
+
+	.map-results.compressed {
+	  transform: translateX(-300px); }
+
+	.map-results-inner {
+	  width: 300px; }
+
+	.expanded .map-results-toggle {
+	  transform: translateX(calc(100% + 300px)); }
+	  
+	.map-results-detail {
+	  width: 300px; }
+
+	.expanded .map-results-detail {
+	  transform: translateX(300px); }
+
+	.map-results-list {
+	  width: 300px; }
+
+	.map-toolbar-group-item {
+		padding: 0 6px; }  
+}
+
+@media screen and (max-width: 345px) {
+	.map-results {
+	  width: 275px; }
+
+	.map-results.compressed {
+	  transform: translateX(-275px); }
+
+	.map-results-inner {
+	  width: 275px; }
+
+	.expanded .map-results-toggle {
+	  transform: translateX(calc(100% + 275px)); }
+	    
+	.map-results-detail { 
+	  width: 275px; }
+
+	.expanded .map-results-detail {
+	  transform: translateX(275px); }
+
+	.map-results-list {
+	  width: 275px;}
+
+	.map-results {
+	  width: 275px; }
+
+	.map-results.compressed {
+	  transform: translateX(-275px); }
+
+	.map-results-inner {
+	  width: 275px; }
+
+	.expanded .map-results-toggle {
+	  transform: translateX(calc(100% + 275px)); }
+	  
+	.map-results-detail {
+	  width: 275px; }
+
+	.expanded .map-results-detail {
+	  transform: translateX(275px); }
+
+	.map-results-list {
+	  width: 275px; }
+
+	.map-toolbar-group-item {
+		padding: 0 5px; }
+
+	.map-toolbar-group {
+		margin: 0; }
+}
