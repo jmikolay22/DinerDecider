@@ -1,7 +1,6 @@
 import {Component, OnInit, Output, Input, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import { ListingService } from './listing.service';
 import { Listing } from './listing';
-import { DinerDeciderComponent } from '../diner-decider/diner-decider.component'
 
 declare const $: any;
 

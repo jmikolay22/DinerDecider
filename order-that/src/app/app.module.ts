@@ -16,15 +16,18 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { NavigationComponent } from './navigation/navigation.component';
 
-import {ListingModule} from './listing/listing.module';
 import {MapModule} from './map/map.module';
 import {GlobalService} from './global.service';
+import { CommonModule } from '@angular/common';
+import { ListingDetailComponent } from './listing-detail/listing-detail.component';;
+import { ListingService } from "./listing/listing.service";
 
 import { ZomatoService } from './zomato.service';
 import { LocationService } from './location.service';
 import { DinerDeciderComponent } from './diner-decider/diner-decider.component';
 import { CreateRoomComponent } from './diner-decider/create-room/create-room.component';
 import { RoomComponent } from './diner-decider/room/room.component';
+import { ListingComponent } from './listing/listing.component';
 import { DropDropdownDirective } from './navigation/drop-dropdown.directive';
 import { KeysPipe } from './keys.pipe';
 import { MapKeysPipe } from './map-keys.pipe';
@@ -44,6 +47,8 @@ export const firebaseConfig = {
     AppComponent,
     HomeComponent,
     AboutComponent,
+    ListingComponent,
+    ListingDetailComponent,
     NavigationComponent,
     DinerDeciderComponent,
     CreateRoomComponent,
@@ -53,6 +58,7 @@ export const firebaseConfig = {
     MapKeysPipe
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -62,10 +68,13 @@ export const firebaseConfig = {
     AngularFireAuthModule,
     FormsModule,
     BrowserAnimationsModule,
-    ListingModule,
     MapModule
   ],
-  providers: [ZomatoService, LocationService, GlobalService],
+  exports: [
+    ListingComponent,
+    ListingDetailComponent
+  ],
+  providers: [ZomatoService, LocationService, GlobalService, ListingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
