@@ -17,10 +17,8 @@ import { AboutComponent } from './about/about.component';
 import { NavigationComponent } from './navigation/navigation.component';
 
 import {MapModule} from './map/map.module';
-import {GlobalService} from './global.service';
 import { CommonModule } from '@angular/common';
 import { ListingDetailComponent } from './listing-detail/listing-detail.component';;
-import { ListingService } from "./listing/listing.service";
 
 import { ZomatoService } from './zomato.service';
 import { LocationService } from './location.service';
@@ -74,7 +72,7 @@ export const firebaseConfig = {
     ListingComponent,
     ListingDetailComponent
   ],
-  providers: [ZomatoService, LocationService, GlobalService, ListingService],
+  providers: [ZomatoService, LocationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

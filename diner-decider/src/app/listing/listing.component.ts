@@ -3,7 +3,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
-import { ListingService } from './listing.service';
 import { Listing } from './listing';
 
 declare const $: any;
@@ -12,7 +11,7 @@ declare const $: any;
   selector: 'app-listing',
   templateUrl: './listing.component.html',
   styleUrls: ['./listing.component.css'],
-  providers: [ListingService]
+  providers: []
 })
 
 export class ListingComponent implements OnInit, OnChanges  {
