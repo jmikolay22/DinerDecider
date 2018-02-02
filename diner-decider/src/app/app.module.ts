@@ -15,13 +15,14 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { MapComponent } from './map/map.component';
 
-import {MapModule} from './map/map.module';
 import { CommonModule } from '@angular/common';
 import { ListingDetailComponent } from './listing-detail/listing-detail.component';;
 
 import { ZomatoService } from './zomato.service';
 import { LocationService } from './location.service';
+import { MarkerService } from './marker.service';
 import { DinerDeciderComponent } from './diner-decider/diner-decider.component';
 import { CreateRoomComponent } from './diner-decider/create-room/create-room.component';
 import { RoomComponent } from './diner-decider/room/room.component';
@@ -44,6 +45,7 @@ export const firebaseConfig = {
   declarations: [
     AppComponent,
     HomeComponent,
+    MapComponent,
     AboutComponent,
     ListingComponent,
     ListingDetailComponent,
@@ -65,14 +67,13 @@ export const firebaseConfig = {
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     FormsModule,
-    BrowserAnimationsModule,
-    MapModule
+    BrowserAnimationsModule
   ],
   exports: [
     ListingComponent,
     ListingDetailComponent
   ],
-  providers: [ZomatoService, LocationService],
+  providers: [ZomatoService, LocationService, MarkerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -45,8 +45,11 @@
           <div class="map-wrapper">
             <div class="map">
               <div class="map-inner">
-                <app-listing (onListingChange)="setListing($event)" [listing_id]="listing_id" [listings]="listings"></app-listing>
-                <app-map (onListingChange)="setListing($event)" [listing_id]="listing_id" [listings]="listings"></app-map>
+                <app-listing></app-listing>
+                <div class="map-object">
+                  <div id="map-object"></div>
+                  <app-map></app-map>
+                </div>
               </div>
             </div>
           </div>

@@ -16,16 +16,14 @@
 			<p>1&nbsp;&nbsp;&nbsp;&nbsp;</p><input id="hunger-bucks-slider" class="form-control slider">
 			<p>&nbsp;&nbsp;&nbsp;&nbsp;20</p>
 		</div>
-		<label class="flex"><p id="hunger-bucks-value"><b>10</b></p><p>&nbsp;Hunger Bucks Per Person</p></label>
+		<label class="flex"><p id="hunger-bucks-value"><b>{{ hungerBucks }}</b> Hunger Bucks Per Person</p></label>
 	</div>
 	<div class="form-group">
 		<div class="col-12 no-pad flex">
 			<p>1&nbsp;&nbsp;&nbsp;&nbsp;</p><input id="radius-slider" class="form-control slider">
-			<p>&nbsp;&nbsp;&nbsp;&nbsp;50</p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;15</p>
 		</div>
-		<label class="flex"><p>Limit to restaurants within&nbsp;</p>
-		<p id="radius-value"><b>5</b></p>
-		<p>&nbsp;miles of my current location</p></label>
+		<label class="flex"><p>Limit to restaurants within <b>{{ radius }}</b> miles of my current location</p></label>
 	</div>
 	<div *ngIf="roomId" class="form-group">
 		<label><p>Shareable Room Link:</p></label>

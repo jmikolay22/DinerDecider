@@ -72,6 +72,20 @@ hr {
 	height: 30px !important;
 }
 
+.marker {
+	border-radius: .3em;
+	width: 100px;
+	padding: 5px;
+	background-color: #00ad79;
+	height: 34px;
+}
+
+.marker-text {
+	margin: 0;
+	line-height: 12px;
+	word-break: break-word;
+}
+
 @media screen and (max-width: 460px) {
 	.map-results {
 	  width: 380px; }

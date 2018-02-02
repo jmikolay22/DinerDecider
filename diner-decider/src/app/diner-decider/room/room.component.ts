@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, style, transition, animate, keyframes, query, stagger, state } from '@angular/animations';
 
@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
 import { ZomatoService } from '../../zomato.service';
+import { MarkerService } from '../../marker.service';
 
 @Component({
   selector: 'app-room',
@@ -63,21 +64,22 @@ export class RoomComponent implements OnInit {
 	needsPassword: boolean = false;
 	invalidPasswordChecked: boolean = false;
 	showLoading: boolean = true;
-	showCategories: boolean = false;
 	showRestaurants: boolean = false;
 	showCart: boolean = false;
 	firstTimePasswordChecked: boolean = true;
 	showDifferentRoomButton: boolean = false;
 	submittedCart: boolean = false;
-	firstCategoryLoad: boolean = true;
+	firstRestaurantLoad: boolean = true;
+	showMore: boolean = false;
 	room: Object;
-	categories: any[];
 	restaurants: any[];
+	restaurantTotal: number = 0;
 	orders: any[] = [];
-	browseTitle: string = "Restaurant Categories";
+	browseTitle: string = "Restaurants";
 	results: Object = {};
+	@Output() onListingChange = new EventEmitter<number>();
 
-  constructor(private _zomatoService: ZomatoService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
+  constructor(private _markerService: MarkerService, private _zomatoService: ZomatoService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
   	user.subscribe(response => {
   		this.uid = response.uid;
@@ -85,6 +87,16 @@ export class RoomComponent implements OnInit {
 
   	// Check if user is authorized to enter room
   	this.checkIfUserHasRoomPermissions();
+
+  	this._markerService.restaurants.subscribe(
+      value => {
+        this.restaurants = value;
+        this.restaurantTotal = value.length;
+        this.showLoading = false;
+        this.showRestaurants = true;
+        this.showMore = _markerService.showMore;
+      }
+    )
   }
 
   ngOnInit() {
@@ -105,9 +117,9 @@ export class RoomComponent implements OnInit {
 			  			break;
 			  		}
 			  	}
-			  	if (this.firstCategoryLoad && this.submittedCart === false) {
-			  		this.getCategories();
-			  		this.firstCategoryLoad = false;
+			  	if (this.firstRestaurantLoad && this.submittedCart === false) {
+			  		this.updateRestaurants();
+			  		this.firstRestaurantLoad = false;
 			  	}
 			  	if (this.room['inProgress'] === false) {
 			  		this.showResults();
@@ -148,47 +160,10 @@ export class RoomComponent implements OnInit {
   	this.showDifferentRoomButton = false;
   }
 
-  getCategories() {
-  	this._zomatoService.get('categories').subscribe(
-  		data => {
-  			this.categories = data['categories'];
-  			this.showCategories = true;
-  			this.showCart = false;
-  			this.showLoading = false;
-  		},
-  		err => console.log(err)
-  	);
-  }
-
-  onCategoryClick(id: number) {
-  	this.showCategories = false;
+  updateRestaurants() {
   	this.showLoading = true;
-
-  	this._zomatoService.search([
-  		{ id: 'category', value: id },
-  		{ id: 'lat', value: this.room['lat'] },
-  		{ id: 'lon', value: this.room['long'] },
-  		{ id: 'radius', value: this.room['radiusMeters'] }
-  	]).subscribe(	
-  		data => { 
-  			this.restaurants = data['restaurants'];
-  			this.showRestaurants = true;
-  			this.showLoading = false;
-  			for (var i = 0; i < this.categories.length; i++) {
-  				if (this.categories[i].categories.id === id) {
-  					this.browseTitle = this.categories[i].categories.name;
-  				}
-  			}
-  		},
-  		err => console.log(err)
-  	);
-  }
-
-  goBackToCategories() {
-  	this.showCategories = true;
-  	this.showRestaurants = false;
-  	this.restaurants = [];
-  	this.browseTitle = "Restaurant Categories";
+  	this._markerService.findRestaurants(
+  		this.room['lat'], this.room['long'], this.room['radiusMeters']);
   }
 
   getDistance(lat1, lon1, lat2, lon2, unit) {
@@ -262,7 +237,7 @@ export class RoomComponent implements OnInit {
     rating = Math.round(rating);
     let template = '';
 
-    for (let i = 1; i < rating; i++) {
+    for (let i = 1; i <= rating; i++) {
       template += '<i class="fa fa-star"></i>';
     }
 
@@ -275,23 +250,20 @@ export class RoomComponent implements OnInit {
 
   showCartDiv() {
   	this.showCart = true;
-  	this.showCategories = false;
   	this.showRestaurants = false;
   }
 
   showBrowseDivs() {
   	this.showCart = false;
-  	if (this.restaurants === undefined || this.restaurants.length === 0) {
-  		this.showCategories = true;
-  	} else {
-  		this.showRestaurants = true;
-  	}
+  	this.showRestaurants = true;
   }
 
   submitCart() {
   	var cartSubmission = {};
   	for (var i = 0; i < this.orders.length; i++) {
   		var order = this.orders[i];
+  		delete order.restaurant.geometry;
+  		delete order.restaurant.photos;
   		cartSubmission[order.restaurantId] = {
   			balance: order.balance,
   			restaurant: order.restaurant
@@ -302,7 +274,6 @@ export class RoomComponent implements OnInit {
 		.then(data => {
 			this.submittedCart = true;
 			this.showCart = false;
-			this.showCategories = false;
 			this.showRestaurants = false;
 		}, err => {
 			console.log('error', err);
@@ -318,7 +289,6 @@ export class RoomComponent implements OnInit {
 					this.updateResults(this.room['submissions'][submission][restaurant]);
 				}
 			}
-			console.log(this.results);
 		}, err => {
 			console.log('error', err);
 		});

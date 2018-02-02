@@ -53,33 +53,33 @@ export class CreateRoomComponent implements OnInit {
       max: 20,
       ticks_tooltip: true
     });
+    let self = this;
     $('#hunger-bucks-slider').slider().on('slideStart', function(ev){
         $('#hunger-bucks-slider').slider().data('slider').getValue();
     });
 
     $('#hunger-bucks-slider').slider().on('slideStop', function(ev){
         var newVal = $('#hunger-bucks-slider').slider().data('slider').getValue();
-        if(this.hungerBucks != newVal) {
-            this.hungerBucks = newVal;
-            $('#hunger-bucks-value').html('<b>' + this.hungerBucks + '</b>');
+        if(self.hungerBucks != newVal) {
+          self.hungerBucks = newVal;
         }
     });
 
     this.radiusSlider = $('#radius-slider').slider({
       value: 5,
       min: 1,
-      max: 50,
+      max: 15,
       ticks_tooltip: true
     });
+
     $('#radius-slider').slider().on('slideStart', function(ev){
         $('#radius-slider').slider().data('slider').getValue();
     });
 
     $('#radius-slider').slider().on('slideStop', function(ev){
         var newVal = $('#radius-slider').slider().data('slider').getValue();
-        if(this.hungerBucks != newVal) {
-            this.hungerBucks = newVal;
-            $('#radius-value').html('<b>' + this.hungerBucks + '</b>');
+        if(self.radius != newVal) {
+          self.radius = newVal;
         }
     });
   }
