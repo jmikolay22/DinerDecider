@@ -3,15 +3,16 @@
 		<div class="map-results-list tse-scrollable">
 			<div class="tse-content">
 				<div class="map-results-header">
-					<h5 *ngIf="!(user | async)?.uid" class="text-center">Welcome! Please Log In.</h5>
-			  	<button class="btn btn-primary btn-lg btn-block btn-list" (click)="login()" *ngIf="!(user | async)?.uid">Anonymous Login</button>
+					<div *ngIf="!(user | async)?.uid" class="text-center">
+						<h5 >Welcome! Please Log In.</h5>
+				  	<button class="btn btn-primary btn-lg btn-block btn-list" (click)="facebookLogin()">Login With Facebook</button>
+				  	<button class="btn btn-primary btn-lg btn-block btn-list" (click)="googleLogin()">Login With Google</button>
+			  	</div>
 			    <router-outlet *ngIf="(user | async)?.uid"></router-outlet>
 				</div>
 			</div>
 		</div>
 	</div>
-
-  <app-listing-detail (onListingChange)="changeListing($event)" [listing_id]="listing_id"></app-listing-detail>
 
 	<div class="map-results-toggle" (click)="toggleResults()">
 		<i class="fa fa-chevron-left"></i>

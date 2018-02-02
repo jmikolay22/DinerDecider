@@ -20,6 +20,7 @@ export class MarkerService {
   public long: number = -84.5069
   public getNextPage: any;
   public showMore: boolean = false;
+  private markerClusterer: any = null;
 
   constructor(private _locationService: LocationService) {
   	this.map = new google.maps.Map(document.getElementById('map-object'), {
@@ -68,9 +69,18 @@ export class MarkerService {
   }
 
   public clearMarkers() {
-  	this.markers.forEach(marker => {
-      marker.setMap(null);
-    });
+  	this.restaurants.next([]);
+  	for (var i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(null);
+    };
+		this.markers = new Array();
+		if (this.markerClusterer !== null){
+			this.markerClusterer.clearMarkers();
+		}
+  }
+
+  public clearRestaurants() {
+  	this.restaurants.next([]);
   }
 
   public addMarker(id: string, hungerBucks: number) {
@@ -103,20 +113,25 @@ export class MarkerService {
 
 	      this.markers.push(marker);
 	      component.bound.extend(marker.getPosition());
-
-    		new MarkerClusterer(this.map, this.markers, {
-    			styles: [
-			      {
-			        url: 'assets/img/cluster.png',
-			        height: 36,
-			        width: 36
-			      }
-			    ],
-			    gridSize: 50,
-			    zoomOnClick: true,
-			    averageCenter: true,
-			    minimumClusterSize: 2
-			  });
+   
+    		if (this.markerClusterer === null) {
+    			this.markerClusterer = new MarkerClusterer(this.map, this.markers, {
+	    			styles: [
+				      {
+				        url: 'assets/img/cluster.png',
+				        height: 36,
+				        width: 36
+				      }
+				    ],
+				    gridSize: 50,
+				    zoomOnClick: true,
+				    averageCenter: true,
+				    minimumClusterSize: 2
+				  });
+    		} else {
+    			this.markerClusterer.addMarker(marker);
+    		}
+    		
 	    }
     });
   }
@@ -132,9 +147,12 @@ export class MarkerService {
     		const component = this;
   			component.bound = new google.maps.LatLngBounds();
 
-  			this.clearMarkers();
+  			if (!this.showMore) {
+  				this.clearMarkers();
+  			}
 
   			var newRestaurantArray = this.restaurants.getValue();
+  			var newMarkers = [];
   			for (var i = 0; i < restaurants.length; i++ ) {
     			const markerContent =
 		        '<div class="marker">' +
@@ -151,34 +169,46 @@ export class MarkerService {
 			      content: markerContent
 			    });
 
+			    this.markers.push(marker);
+			    newMarkers.push(marker);
+
 			    marker.addListener('click', () => {
 		        component.map.setCenter(marker.getPosition());
 		      });
-
-		      this.markers.push(marker);
+  
 		      component.bound.extend(marker.getPosition());
 		    	newRestaurantArray.push(restaurants[i]);
 		    }
 
-    		new MarkerClusterer(this.map, this.markers, {
-    			styles: [
-			      {
-			        url: 'assets/img/cluster.png',
-			        height: 36,
-			        width: 36
-			      }
-			    ],
-			    gridSize: 50,
-			    zoomOnClick: true,
-			    averageCenter: true,
-			    minimumClusterSize: 2
-			  });
-
+    		if (this.markerClusterer === null) {
+    			this.markerClusterer = new MarkerClusterer(this.map, this.markers, {
+	    			styles: [
+				      {
+				        url: 'assets/img/cluster.png',
+				        height: 36,
+				        width: 36
+				      }
+				    ],
+				    gridSize: 50,
+				    zoomOnClick: true,
+				    averageCenter: true,
+				    minimumClusterSize: 2
+				  });
+    		} else {
+    			this.markerClusterer.addMarkers(newMarkers);
+    		}
+    		
     		this.showMore = pagination.hasNextPage;
         this.getNextPage = pagination.hasNextPage && function() {
           pagination.nextPage();
         };
+
         this.restaurants.next(newRestaurantArray);
+
+        if ( this.showMore ) {
+        	this.getNextPage();
+        }
+        
 	    }
     });
   }

@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, Input, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, OnInit, Output, Input, EventEmitter} from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
@@ -14,10 +14,7 @@ declare const $: any;
   providers: []
 })
 
-export class ListingComponent implements OnInit, OnChanges  {
-  @Input() listings: Listing[] = [];
-  @Input() listing_id: number;
-  @Output() onListingChange = new EventEmitter<number>();
+export class ListingComponent implements OnInit  {
 
   compressed: boolean;
   user: Observable<firebase.User>;
@@ -30,21 +27,25 @@ export class ListingComponent implements OnInit, OnChanges  {
     $('.map-results-list').TrackpadScrollEmulator();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-  }
-
-  toggleResults() {
-    this.compressed ? this.compressed = false : this.compressed = true
-  }
-
-  changeListing(listing_id: number) {
-    if (this.listing_id !== listing_id) {
-      this.listing_id = listing_id;
-      this.onListingChange.emit(listing_id);
-    }
-  }
-
   login() {
     this.afAuth.auth.signInAnonymously();
+  }
+
+  googleLogin() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    this.socialSignIn(provider);
+  }
+
+  facebookLogin() {
+    const provider = new firebase.auth.FacebookAuthProvider()
+    this.socialSignIn(provider);
+  }
+
+  private socialSignIn(provider) {
+    this.afAuth.auth.signInWithPopup(provider)
+      .then((credential) =>  {
+          
+      })
+      .catch(error => console.log(error));
   }
 }

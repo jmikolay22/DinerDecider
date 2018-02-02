@@ -68,7 +68,6 @@ export class RoomComponent implements OnInit {
 	firstTimePasswordChecked: boolean = true;
 	submittedCart: boolean = false;
 	firstRestaurantLoad: boolean = true;
-	showMore: boolean = false;
 	room: Object;
 	restaurants: any[];
 	restaurantTotal: number = 0;
@@ -105,6 +104,8 @@ export class RoomComponent implements OnInit {
 			  	}
 			  	if (this.firstRestaurantLoad && this.submittedCart === false) {
 			  		this.updateRestaurants();
+			  		this._markerService.clearMarkers();
+			  		this._markerService.clearRestaurants();
 			  		this._markerService.restaurants.subscribe(
 				      value => {
 				      	if ( value !== undefined && value.length !== 0) {
@@ -112,7 +113,6 @@ export class RoomComponent implements OnInit {
 					        this.restaurantTotal = value.length;
 					        this.showLoading = false;
 					        this.showRestaurants = true;
-					        this.showMore = this._markerService.showMore;
 				  				this.firstRestaurantLoad = false;
 				  			}
 				      }
@@ -155,7 +155,6 @@ export class RoomComponent implements OnInit {
   }
 
   updateRestaurants() {
-  	this.showLoading = true;
   	this._markerService.findRestaurants(
   		this.room['lat'], this.room['long'], this.room['radiusMeters']);
   }
