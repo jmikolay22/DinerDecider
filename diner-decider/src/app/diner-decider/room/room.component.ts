@@ -160,6 +160,10 @@ export class RoomComponent implements OnInit {
   		this.room['lat'], this.room['long'], this.room['radiusMeters']);
   }
 
+  getNextPage() {
+  	this._markerService.getNextPage();
+  }
+
   getDistance(lat1, lon1, lat2, lon2, unit) {
 		var radlat1 = Math.PI * lat1/180
 		var radlat2 = Math.PI * lat2/180

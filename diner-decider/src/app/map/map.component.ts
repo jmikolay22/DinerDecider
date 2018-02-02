@@ -18,6 +18,10 @@ export class MapComponent {
     this.map = _markerService.map;
   }
 
+  setLocation() {
+    this._markerService.setLocation();
+  }
+
   actionZoomIn() {
     this.map.setZoom(this.map.getZoom() + 1);
   }

@@ -31,7 +31,7 @@
 </div>
 <div *ngIf="showRestaurants" class="flex-space-between">
 	<h5 id="restaurants-title" class="next-to-button">Restaurants ({{ restaurantTotal }})</h5>
-	<button *ngIf="showMore" class="btn btn-primary btn-lg btn-list text-white" (click)="_markerService.getNextPage()">Show More</button>
+	<button *ngIf="showMore" class="btn btn-primary btn-lg btn-list text-white" (click)="getNextPage()">Show More</button>
 </div>
 <hr *ngIf="!showLoading && !showCart && !submittedCart" class="negative-margins">
 <h5 *ngIf="(orders === undefined || orders.length === 0) && showCart" class="margin-top">Your cart is empty. Click browse to find restaurants.</h5>
