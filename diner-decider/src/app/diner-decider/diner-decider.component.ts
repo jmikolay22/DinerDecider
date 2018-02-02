@@ -36,7 +36,7 @@ export class DinerDeciderComponent implements OnInit {
   joinRoom() {
   	const room = this.db.object('rooms/' + this.roomId).valueChanges();
   	room.subscribe(success => {
-	  	this.router.navigate(['diner-decider/room/' + this.roomId]);
+	  	this.router.navigate(['diner-decider/room/' + this.roomId.toLowerCase()]);
   	},
   	err => {
   		if(this.password !== null){
@@ -59,7 +59,7 @@ export class DinerDeciderComponent implements OnInit {
 
   addRoomPasswordToUser() {
   	const itemRef = this.db.object('users/' + this.uid + '/rooms');
-  	itemRef.update({ [this.roomId]: {
+  	itemRef.update({ [this.roomId.toLowerCase()]: {
 			password: this.password
 		}});
   }

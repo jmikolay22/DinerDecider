@@ -30,6 +30,7 @@ export class CreateRoomComponent implements OnInit {
 	roomAlreadyExists: boolean = false;
 	href: string = null;
   zip: number = null;
+  roomLink: string = null;
 
   constructor(private platformLocation: PlatformLocation, private _locationService: LocationService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
@@ -86,7 +87,7 @@ export class CreateRoomComponent implements OnInit {
   createRoom() {
   	const itemRef = this.db.object('rooms');
   	if(this.roomPassword == null){
-  		itemRef.update({ [this.roomId]: {
+  		itemRef.update({ [this.roomId.toLowerCase()]: {
 					owner: this.uid,
 					lat: this.lat,
 					long: this.long,
@@ -100,7 +101,7 @@ export class CreateRoomComponent implements OnInit {
 				this.roomAlreadyExists = true;
 			});
   	}else{
-  		itemRef.update({ [this.roomId]: {
+  		itemRef.update({ [this.roomId.toLowerCase()]: {
 	  			password: this.roomPassword,
 					owner: this.uid,
 					lat: this.lat,
@@ -132,6 +133,7 @@ export class CreateRoomComponent implements OnInit {
   }
 
   resetValidation() {
+    this.roomLink = this.href + '/DinerDecider/diner-decider/' + this.roomId.toLowerCase();
   	this.roomAlreadyExists = false;
   }
 }
