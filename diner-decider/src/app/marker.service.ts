@@ -100,12 +100,11 @@ export class MarkerService {
 				    });
 
 				    marker.addListener('click', () => {
-				    	console.log('hi');
-			        component.map.setCenter(this.map.position);
+			        component.map.setCenter(marker.getPosition());
 			      });
 
 			      this.markers.push(marker);
-			      component.bound.extend(new google.maps.LatLng(restaurants[i]['geometry'].location));
+			      component.bound.extend(marker.getPosition());
 			    	newRestaurantArray.push(restaurants[i]);
 			    }
 
