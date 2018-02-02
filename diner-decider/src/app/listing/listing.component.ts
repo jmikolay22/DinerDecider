@@ -49,6 +49,7 @@ export class ListingComponent implements OnInit  {
   private socialSignIn(provider) {
     this.afAuth.auth.signInWithPopup(provider)
       .then((credential) =>  {
+        this.message = null;
       })
       .catch(error => {
         this.message = error.message;
