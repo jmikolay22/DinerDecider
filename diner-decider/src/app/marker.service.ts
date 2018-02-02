@@ -21,6 +21,7 @@ export class MarkerService {
   public getNextPage: any;
   public showMore: boolean = false;
   private markerClusterer: any = null;
+  public doneLoading: boolean = false;
 
   constructor(private _locationService: LocationService) {
   	this.map = new google.maps.Map(document.getElementById('map-object'), {
@@ -203,12 +204,13 @@ export class MarkerService {
           pagination.nextPage();
         };
 
-        this.restaurants.next(newRestaurantArray);
-
         if ( this.showMore ) {
+        	this.restaurants.next(newRestaurantArray);
         	this.getNextPage();
-        }
-        
+        } else {
+        	this.doneLoading = true;
+        	this.restaurants.next(newRestaurantArray);
+        }   
 	    }
     });
   }

@@ -81,7 +81,6 @@ export class RoomComponent implements OnInit {
   constructor(private _markerService: MarkerService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
   	user.subscribe(response => {
-  		console.log(response);
   		this.uid = response.uid;
   		this.displayName = response.displayName;
   	});
@@ -112,13 +111,16 @@ export class RoomComponent implements OnInit {
 			  		this.updateRestaurants();
 			  		this._markerService.clearMarkers();
 			  		this._markerService.clearRestaurants();
+			  		this.showRestaurants = true;
 			  		this._markerService.restaurants.subscribe(
 				      value => {
 				      	if ( value !== undefined && value.length !== 0) {
 					        this.restaurants = value;
-					        this.restaurantTotal = value.length;
-					        this.showLoading = false;
-					        this.showRestaurants = true;
+					        if (this._markerService.doneLoading === true) {
+					        	this.restaurantTotal = value.length;
+						        this.showLoading = false;
+					        }
+
 				  				this.firstRestaurantLoad = false;
 				  			}
 				      }
@@ -184,6 +186,9 @@ export class RoomComponent implements OnInit {
 	}
 
 	getDollarSigns(total: number) {
+		if ( total === undefined ) {
+			return ['?'];
+		}
 		var dollarSigns = [];
 		for (var i = 0; i < total; i++) {
 			dollarSigns.push('$');
