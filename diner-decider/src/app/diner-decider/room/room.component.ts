@@ -118,7 +118,7 @@ export class RoomComponent implements OnInit {
 				      }
 				    )	
 			  	}
-			  	if (this.room['inProgress'] === false) {
+			  	if (this.firstRestaurantLoad && this.room['inProgress'] === false) {
 			  		this.showResults();
 			  	}
   			} else {
@@ -278,9 +278,11 @@ export class RoomComponent implements OnInit {
   }
 
   showResults() {
+  	console.log('hi');
   	const itemRef = this.db.object('rooms/' + this.roomId);
 		itemRef.update({ ['inProgress']: false })
 		.then(data => {
+			console.log('updatesmade');
 			this._markerService.clearMarkers();
 			for (var submission in this.room['submissions']) {
 				for (var restaurant in this.room['submissions'][submission]) {
