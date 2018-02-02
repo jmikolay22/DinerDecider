@@ -68,16 +68,22 @@ export class RoomComponent implements OnInit {
 	firstTimePasswordChecked: boolean = true;
 	submittedCart: boolean = false;
 	firstRestaurantLoad: boolean = true;
+	showCards: boolean = false;
+	displayName: string;
 	room: Object;
 	restaurants: any[];
 	restaurantTotal: number = 0;
 	orders: any[] = [];
 	results: Object = {};
+	card1: Object = {};
+	card2: Object = {};
 
   constructor(private _markerService: MarkerService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
   	user.subscribe(response => {
+  		console.log(response);
   		this.uid = response.uid;
+  		this.displayName = response.displayName;
   	});
 
   	// Check if user is authorized to enter room
@@ -263,7 +269,8 @@ export class RoomComponent implements OnInit {
   		delete order.restaurant.photos;
   		cartSubmission[order.restaurantId] = {
   			balance: order.balance,
-  			restaurant: order.restaurant
+  			restaurant: order.restaurant,
+  			displayName: this.displayName
   		}
   	}
   	const itemRef = this.db.object('rooms/' + this.roomId + '/submissions');
@@ -278,11 +285,9 @@ export class RoomComponent implements OnInit {
   }
 
   showResults() {
-  	console.log('hi');
   	const itemRef = this.db.object('rooms/' + this.roomId);
 		itemRef.update({ ['inProgress']: false })
 		.then(data => {
-			console.log('updatesmade');
 			this._markerService.clearMarkers();
 			for (var submission in this.room['submissions']) {
 				for (var restaurant in this.room['submissions'][submission]) {
@@ -306,5 +311,19 @@ export class RoomComponent implements OnInit {
   		this.results[restaurant['restaurant']['place_id']] = restaurant;
   	}
   	this.results = Object.assign({}, this.results);
+  }
+
+  getDisplayNameFromSubmission(submission: Object) {
+  	var firstItem = submission['value'][Object.keys(submission['value'])[0]];
+  	return firstItem.displayName;
+  }
+
+  flip() {
+  	for (var result in this.results) {
+  		this.card1['name'] = this.results[result]['restaurant'].name;
+  		this.card2['name'] = this.results[result]['restaurant'].name;
+  	}
+  	this.showCards = true;
+  	document.getElementById("#flipper").classList.toggle("flip");
   }
 }

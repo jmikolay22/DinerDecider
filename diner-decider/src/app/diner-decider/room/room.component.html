@@ -21,7 +21,7 @@
 	</button>
 </div>
 <div class="col-12 no-pad flex-space-between" *ngIf="!needsPassword && !submittedCart">
-	<button class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : (showRestaurants)}" (click)="showBrowseDivs()">Browse</button>
+	<button class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showRestaurants}" (click)="showBrowseDivs()">Browse</button>
 	<button class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showCart}" (click)="showCartDiv()">Cart</button>
 </div>
 <hr *ngIf="!needsPassword && !submittedCart" class="negative-margins">
@@ -123,15 +123,26 @@
 				</div>
 				<div *ngIf="room.owner !== uid" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
 				<h5 class="margin-top">Submitted:</h5>
-				<div *ngFor="let submission of room.submissions | keys">
-					{{ submission.key }}
-				</div>
+				<ng-container *ngFor="let submission of room.submissions | keys">
+					<p>{{ getDisplayNameFromSubmission(submission) }}</p>
+				</ng-container>
 				<button *ngIf="room.owner === uid" (click)="showResults()" class="btn btn-lg btn-block btn-list text-white margin-top">Decide!</button>
 			</div>
 			<div *ngIf="!room.inProgress">
 				<div class="flex-space-between">
 					<h5>Restaurant</h5>
 					<h5>Hunger Bucks</h5>
+				</div>
+				<button (click)="flip()" class="btn btn-lg btn-block btn-list text-white">Flip</button>
+				<div [ngClass]="{'hide-cards': !showCards}" class="flip-container flip" id="#flipper">
+					<div class="flipper">
+						<div class="front">
+							{{ card1.name }}
+						</div>
+						<div class="back">
+							{{ card2.name }} Back
+						</div>
+					</div>
 				</div>
 				<hr class="negative-margins">
 				<div class="map-results-content">

@@ -27,6 +27,10 @@ export class ListingComponent implements OnInit  {
     $('.map-results-list').TrackpadScrollEmulator();
   }
 
+  toggleResults() {
+    this.compressed ? this.compressed = false : this.compressed = true
+  }
+
   login() {
     this.afAuth.auth.signInAnonymously();
   }
