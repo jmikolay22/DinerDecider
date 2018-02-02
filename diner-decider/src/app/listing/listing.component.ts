@@ -18,6 +18,7 @@ export class ListingComponent implements OnInit  {
 
   compressed: boolean;
   user: Observable<firebase.User>;
+  message: string = null;
 
   constructor( public afAuth: AngularFireAuth) {
     this.user = this.afAuth.authState;
@@ -48,8 +49,9 @@ export class ListingComponent implements OnInit  {
   private socialSignIn(provider) {
     this.afAuth.auth.signInWithPopup(provider)
       .then((credential) =>  {
-          
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        this.message = error.message;
+      });
   }
 }

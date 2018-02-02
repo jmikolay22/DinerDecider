@@ -8,6 +8,9 @@
 				  	<button class="btn btn-primary btn-lg btn-block btn-list" (click)="facebookLogin()">Login With Facebook</button>
 				  	<button class="btn btn-primary btn-lg btn-block btn-list" (click)="googleLogin()">Login With Google</button>
 			  	</div>
+			  	<div [hidden]="message === null" class="alert alert-danger margin-top">
+			      {{ this.message }}
+			    </div>
 			    <router-outlet *ngIf="(user | async)?.uid"></router-outlet>
 				</div>
 			</div>
