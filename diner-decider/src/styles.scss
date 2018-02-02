@@ -7,6 +7,10 @@
 	height: calc(100vh - 60px);
 }
 
+.listing-row-medium-address {
+	white-space: pre-wrap;
+}
+
 .no-pad {
 	padding: 0em;
 }
@@ -77,7 +81,7 @@ hr {
 	width: 100px;
 	padding: 5px;
 	background-color: #00ad79;
-	height: 34px;
+	max-height: 46px;
 }
 
 .marker-text {
@@ -131,6 +135,14 @@ hr {
 }
 
 @media screen and (max-width: 425px) {
+	#hunger-bucks-remaining {
+		font-size: 17px;
+	}
+
+	#restaurants-title {
+		font-size: 1.00rem;
+	}
+
 	.map-results {
 	  width: 300px; }
 
@@ -178,6 +190,14 @@ hr {
 }
 
 @media screen and (max-width: 385px) {
+	#hunger-bucks-remaining {
+		font-size: 17px;
+	}
+
+	#restaurants-title {
+		font-size: 1.00rem;
+	}
+
 	.map-results {
 	  width: 300px; }
 
@@ -225,6 +245,14 @@ hr {
 }
 
 @media screen and (max-width: 345px) {
+	#hunger-bucks-remaining {
+		font-size: 17px;
+	}
+
+	#restaurants-title {
+		font-size: 1.00rem;
+	}
+
 	.map-results {
 	  width: 275px; }
 

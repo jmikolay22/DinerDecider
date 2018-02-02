@@ -7,7 +7,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
-import { ZomatoService } from '../../zomato.service';
 import { LocationService } from '../../location.service';
 
 declare const $: any;
@@ -32,7 +31,7 @@ export class CreateRoomComponent implements OnInit {
 	href: string = null;
   zip: number = null;
 
-  constructor(private platformLocation: PlatformLocation, private _locationService: LocationService, private _zomatoService: ZomatoService,
+  constructor(private platformLocation: PlatformLocation, private _locationService: LocationService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
   	const user = afAuth.authState;
   	this.href = (platformLocation as any).location.origin;

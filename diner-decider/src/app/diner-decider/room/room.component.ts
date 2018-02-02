@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { trigger, style, transition, animate, keyframes, query, stagger, state } from '@angular/animations';
 
@@ -7,7 +7,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
-import { ZomatoService } from '../../zomato.service';
 import { MarkerService } from '../../marker.service';
 
 @Component({
@@ -67,7 +66,6 @@ export class RoomComponent implements OnInit {
 	showRestaurants: boolean = false;
 	showCart: boolean = false;
 	firstTimePasswordChecked: boolean = true;
-	showDifferentRoomButton: boolean = false;
 	submittedCart: boolean = false;
 	firstRestaurantLoad: boolean = true;
 	showMore: boolean = false;
@@ -75,11 +73,9 @@ export class RoomComponent implements OnInit {
 	restaurants: any[];
 	restaurantTotal: number = 0;
 	orders: any[] = [];
-	browseTitle: string = "Restaurants";
 	results: Object = {};
-	@Output() onListingChange = new EventEmitter<number>();
 
-  constructor(private _markerService: MarkerService, private _zomatoService: ZomatoService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
+  constructor(private _markerService: MarkerService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
   	user.subscribe(response => {
   		this.uid = response.uid;
@@ -87,16 +83,6 @@ export class RoomComponent implements OnInit {
 
   	// Check if user is authorized to enter room
   	this.checkIfUserHasRoomPermissions();
-
-  	this._markerService.restaurants.subscribe(
-      value => {
-        this.restaurants = value;
-        this.restaurantTotal = value.length;
-        this.showLoading = false;
-        this.showRestaurants = true;
-        this.showMore = _markerService.showMore;
-      }
-    )
   }
 
   ngOnInit() {
@@ -119,7 +105,18 @@ export class RoomComponent implements OnInit {
 			  	}
 			  	if (this.firstRestaurantLoad && this.submittedCart === false) {
 			  		this.updateRestaurants();
-			  		this.firstRestaurantLoad = false;
+			  		this._markerService.restaurants.subscribe(
+				      value => {
+				      	if ( value !== undefined && value.length !== 0) {
+					        this.restaurants = value;
+					        this.restaurantTotal = value.length;
+					        this.showLoading = false;
+					        this.showRestaurants = true;
+					        this.showMore = this._markerService.showMore;
+				  				this.firstRestaurantLoad = false;
+				  			}
+				      }
+				    )	
 			  	}
 			  	if (this.room['inProgress'] === false) {
 			  		this.showResults();
@@ -129,7 +126,6 @@ export class RoomComponent implements OnInit {
 	  			this.firstTimePasswordChecked = false;
 	  		} else {
 	  			this.invalidPasswordChecked = true;
-	  			this.showDifferentRoomButton = true;
 	  		}
 	  		this.needsPassword = true;
   			}
@@ -139,7 +135,6 @@ export class RoomComponent implements OnInit {
 	  			this.firstTimePasswordChecked = false;
 	  		} else {
 	  			this.invalidPasswordChecked = true;
-	  			this.showDifferentRoomButton = true;
 	  		}
 	  		this.needsPassword = true;
 	  	});
@@ -157,7 +152,6 @@ export class RoomComponent implements OnInit {
 
   resetValidation() {
   	this.invalidPasswordChecked = false;
-  	this.showDifferentRoomButton = false;
   }
 
   updateRestaurants() {
@@ -194,7 +188,7 @@ export class RoomComponent implements OnInit {
 		}
 
 		for (var i = 0; i < this.orders.length; i++) {
-			if (this.orders[i].restaurantId === restaurant['id']) {
+			if (this.orders[i].restaurantId === restaurant['place_id']) {
 				this.orders[i].balance++;
 				this.hungerBucksRemaining--;
 				return;
@@ -202,7 +196,7 @@ export class RoomComponent implements OnInit {
 		}
 
 		this.orders.push({
-			restaurantId: restaurant['id'],
+			restaurantId: restaurant['place_id'],
 			restaurant: restaurant,
 			balance: 1
 		})
@@ -211,7 +205,7 @@ export class RoomComponent implements OnInit {
 
 	refundHungerBuck(restaurant: Object) {
 		for (var i = 0; i < this.orders.length; i++) {
-			if (this.orders[i].restaurantId === restaurant['id']) {
+			if (this.orders[i].restaurantId === restaurant['place_id']) {
 				this.orders[i].balance--;
 				this.hungerBucksRemaining++;
 				if (this.orders[i].balance === 0) {
@@ -284,10 +278,14 @@ export class RoomComponent implements OnInit {
   	const itemRef = this.db.object('rooms/' + this.roomId);
 		itemRef.update({ ['inProgress']: false })
 		.then(data => {
+			this._markerService.clearMarkers();
 			for (var submission in this.room['submissions']) {
 				for (var restaurant in this.room['submissions'][submission]) {
 					this.updateResults(this.room['submissions'][submission][restaurant]);
 				}
+			}
+			for (var key in this.results) {
+				this._markerService.addMarker(this.results[key]['restaurant']['place_id'], this.results[key]['balance']);
 			}
 		}, err => {
 			console.log('error', err);
@@ -295,12 +293,12 @@ export class RoomComponent implements OnInit {
   }
 
   updateResults(restaurant: Object) {
-  	if (Object.keys(this.results).length === 0 || this.results[restaurant['restaurant']['id']] === undefined) {
-  		this.results[restaurant['restaurant']['id']] = restaurant;
+  	if (Object.keys(this.results).length === 0 || this.results[restaurant['restaurant']['place_id']] === undefined) {
+  		this.results[restaurant['restaurant']['place_id']] = restaurant;
   	} else {
-  		var newBalance = this.results[restaurant['restaurant']['id']].balance + restaurant['balance'];
+  		var newBalance = this.results[restaurant['restaurant']['place_id']].balance + restaurant['balance'];
   		restaurant['balance'] = newBalance;
-  		this.results[restaurant['restaurant']['id']] = restaurant;
+  		this.results[restaurant['restaurant']['place_id']] = restaurant;
   	}
   	this.results = Object.assign({}, this.results);
   }

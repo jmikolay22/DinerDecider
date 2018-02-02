@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { DinerDeciderComponent } from './diner-decider/diner-decider.component';
 import { CreateRoomComponent } from './diner-decider/create-room/create-room.component';

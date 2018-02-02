@@ -67,67 +67,119 @@ export class MarkerService {
   	this.getRestaurants(queryObject)
   }
 
+  public clearMarkers() {
+  	this.markers.forEach(marker => {
+      marker.setMap(null);
+    });
+  }
+
+  public addMarker(id: string, hungerBucks: number) {
+    var service = new google.maps.places.PlacesService(this.map);
+    service.getDetails({
+      placeId: id
+    }, (place, status) => {
+    	if (status === google.maps.places.PlacesServiceStatus.OK) {
+    		const component = this;
+  			component.bound = new google.maps.LatLngBounds();
+
+  			const markerContent =
+	        '<div class="marker">' +
+	        '<p class="text-white marker-text"><b>' + place.name + ' (' + hungerBucks + ')</b></p>' +
+	        '</div>';
+
+    		const marker = new RichMarker({
+		      id: place.id,
+		      data: 'Im data',
+		      flat: true,
+		      position: place.geometry.location,
+		      map: this.map,
+		      shadow: 1,
+		      content: markerContent
+		    });
+
+		    marker.addListener('click', () => {
+	        component.map.setCenter(marker.getPosition());
+	      });
+
+	      this.markers.push(marker);
+	      component.bound.extend(marker.getPosition());
+
+    		new MarkerClusterer(this.map, this.markers, {
+    			styles: [
+			      {
+			        url: 'assets/img/cluster.png',
+			        height: 36,
+			        width: 36
+			      }
+			    ],
+			    gridSize: 50,
+			    zoomOnClick: true,
+			    averageCenter: true,
+			    minimumClusterSize: 2
+			  });
+	    }
+    });
+  }
+
   private getRestaurants(query: Object) {
     var service = new google.maps.places.PlacesService(this.map);
-      service.nearbySearch({
-        location: {lat: query['lat'] , lng: query['long']},
-        radius: query['radius'],
-        type: ['restaurant']
-      }, (restaurants, status, pagination) => {
-      	if (status === google.maps.places.PlacesServiceStatus.OK) {
-      		const component = this;
-    			component.bound = new google.maps.LatLngBounds();
+    service.nearbySearch({
+      location: {lat: query['lat'] , lng: query['long']},
+      radius: query['radius'],
+      type: ['restaurant']
+    }, (restaurants, status, pagination) => {
+    	if (status === google.maps.places.PlacesServiceStatus.OK) {
+    		const component = this;
+  			component.bound = new google.maps.LatLngBounds();
 
-    			this.markers.forEach(marker => {
-		        marker.setMap(null);
+  			this.clearMarkers();
+
+  			var newRestaurantArray = this.restaurants.getValue();
+  			for (var i = 0; i < restaurants.length; i++ ) {
+    			const markerContent =
+		        '<div class="marker">' +
+		        '<p class="text-white marker-text"><b>' + restaurants[i].name + '</b></p>' +
+		        '</div>';
+
+      		const marker = new RichMarker({
+			      id: restaurants[i].id,
+			      data: 'Im data',
+			      flat: true,
+			      position: restaurants[i].geometry.location,
+			      map: this.map,
+			      shadow: 1,
+			      content: markerContent
+			    });
+
+			    marker.addListener('click', () => {
+		        component.map.setCenter(marker.getPosition());
 		      });
 
-    			var newRestaurantArray = this.restaurants.getValue();
-    			for (var i = 0; i < restaurants.length; i++ ) {
-	    			const markerContent =
-			        '<div class="marker">' +
-			        '<p class="text-white marker-text"><b>' + restaurants[i].name + '</b></p>' +
-			        '</div>';
-
-	      		const marker = new RichMarker({
-				      id: restaurants[i].id,
-				      data: 'Im data',
-				      flat: true,
-				      position: restaurants[i].geometry.location,
-				      map: this.map,
-				      shadow: 1,
-				      content: markerContent
-				    });
-
-				    marker.addListener('click', () => {
-			        component.map.setCenter(marker.getPosition());
-			      });
-
-			      this.markers.push(marker);
-			      component.bound.extend(marker.getPosition());
-			    	newRestaurantArray.push(restaurants[i]);
-			    }
-
-      		new MarkerClusterer(this.map, this.markers, {
-      			styles: [
-				      {
-				        url: 'assets/img/cluster.png',
-				        height: 36,
-				        width: 36
-				      }
-				    ],
-				    gridSize: 50,
-				    zoomOnClick: true,
-				    averageCenter: true,
-				    minimumClusterSize: 2
-				  });
-
-      		this.showMore = pagination.hasNextPage;
-          this.getNextPage = pagination.hasNextPage && function() {
-            pagination.nextPage();
-          };
-          this.restaurants.next(newRestaurantArray);
+		      this.markers.push(marker);
+		      component.bound.extend(marker.getPosition());
+		    	newRestaurantArray.push(restaurants[i]);
 		    }
-	    });
+
+    		new MarkerClusterer(this.map, this.markers, {
+    			styles: [
+			      {
+			        url: 'assets/img/cluster.png',
+			        height: 36,
+			        width: 36
+			      }
+			    ],
+			    gridSize: 50,
+			    zoomOnClick: true,
+			    averageCenter: true,
+			    minimumClusterSize: 2
+			  });
+
+    		this.showMore = pagination.hasNextPage;
+        this.getNextPage = pagination.hasNextPage && function() {
+          pagination.nextPage();
+        };
+        this.restaurants.next(newRestaurantArray);
+	    }
+    });
   }
 }

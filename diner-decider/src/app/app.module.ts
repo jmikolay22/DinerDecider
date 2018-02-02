@@ -12,7 +12,6 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { MapComponent } from './map/map.component';
@@ -20,7 +19,6 @@ import { MapComponent } from './map/map.component';
 import { CommonModule } from '@angular/common';
 import { ListingDetailComponent } from './listing-detail/listing-detail.component';;
 
-import { ZomatoService } from './zomato.service';
 import { LocationService } from './location.service';
 import { MarkerService } from './marker.service';
 import { DinerDeciderComponent } from './diner-decider/diner-decider.component';
@@ -44,7 +42,6 @@ export const firebaseConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     MapComponent,
     AboutComponent,
     ListingComponent,
@@ -73,7 +70,7 @@ export const firebaseConfig = {
     ListingComponent,
     ListingDetailComponent
   ],
-  providers: [ZomatoService, LocationService, MarkerService],
+  providers: [LocationService, MarkerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

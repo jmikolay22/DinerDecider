@@ -3,7 +3,7 @@
 	<h5>&nbsp;{{ roomId }}</h5>
 </div>
 <div class="flex" *ngIf="!needsPassword && !submittedCart">
-	<h3 style="line-height: .2;">Hunger Bucks Remaining:</h3>
+	<h3 id="hunger-bucks-remaining" style="line-height: .2;">Hunger Bucks Remaining:</h3>
 	<h5 style="line-height: .2;">&nbsp;{{ hungerBucksRemaining }}</h5>
 </div>
 <hr class="negative-margins">
@@ -16,7 +16,7 @@
   <button (click)="checkPassword()" type="button" [disabled]="!password" class="btn btn-primary btn-lg btn-block btn-list margin-top">
 		Enter Room
 	</button>
-	<button *ngIf="showDifferentRoomButton" [routerLink]="['../..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+	<button [routerLink]="['../..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
 		Create / Join Different Room
 	</button>
 </div>
@@ -30,7 +30,7 @@
 	<hr class="negative-margins">
 </div>
 <div *ngIf="showRestaurants" class="flex-space-between">
-	<h5 class="next-to-button">{{ browseTitle }} ({{ restaurantTotal }})</h5>
+	<h5 id="restaurants-title" class="next-to-button">Restaurants ({{ restaurantTotal }})</h5>
 	<button *ngIf="showMore" class="btn btn-primary btn-lg btn-list text-white" (click)="_markerService.getNextPage()">Show More</button>
 </div>
 <hr *ngIf="!showLoading && !showCart && !submittedCart" class="negative-margins">
@@ -64,7 +64,7 @@
 							<button (click)="spendHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
 							<ng-container>
 							<div class="text-center">
-								{{ getRestaurantHungerBucksTotal(item.restaurant.id) }}
+								{{ getRestaurantHungerBucksTotal(item.restaurant.place_id) }}
 							</div>
 							</ng-container>
 							<button (click)="refundHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
@@ -106,7 +106,7 @@
 								<button (click)="spendHungerBuck(item)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
 								<ng-container>
 								<div class="text-center">
-									{{ getRestaurantHungerBucksTotal(item.id) }}
+									{{ getRestaurantHungerBucksTotal(item.place_id) }}
 								</div>
 								</ng-container>
 								<button (click)="refundHungerBuck(item)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
@@ -118,15 +118,16 @@
 		</div>
 		<div *ngIf="submittedCart" class="col-sm-12 text-left">
 			<div *ngIf="room.inProgress">
-				<h5 *ngIf="room.owner !== uid">Other users are still making selections. Please wait...</h5>
+				<p *ngIf="room.owner !== uid">Waiting for all users to submit.</p>
 				<div *ngIf="room.owner === uid">
-					<h5>Users That Have Submitted:</h5>
-					<div *ngFor="let submission of room.submissions | keys">
-						{{ submission.key }}
-					</div>
 					<p>Once all desired users have submitted their Hunger Bucks, click the button below to show the results.</p>
-					<button (click)="showResults()" class="btn btn-lg btn-block btn-list text-white">Decide!</button>
 				</div>
+				<div *ngIf="room.owner !== uid" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+				<h5 class="margin-top">Submitted:</h5>
+				<div *ngFor="let submission of room.submissions | keys">
+					{{ submission.key }}
+				</div>
+				<button *ngIf="room.owner === uid" (click)="showResults()" class="btn btn-lg btn-block btn-list text-white margin-top">Decide!</button>
 			</div>
 			<div *ngIf="!room.inProgress">
 				<div class="flex-space-between">
