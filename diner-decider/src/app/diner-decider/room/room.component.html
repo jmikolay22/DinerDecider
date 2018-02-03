@@ -130,19 +130,9 @@
 				</ng-container>
 				<button *ngIf="room.owner === uid" (click)="showResults(true)" class="btn btn-lg btn-block btn-list text-white margin-top">Decide!</button>
 			</div>
-			<div *ngIf="!room.inProgress">
+			<div *ngIf="!room.inProgress && !showFlip">
 				<p>Pick two restaurants to flip for a decision.</p>
 				<button [disabled]="!isFlipReady()" (click)="flip()" class="btn btn-lg btn-block btn-list text-white">Flip!</button>
-				<div [ngClass]="{'hide-cards': !showCards}" class="flip-container flip" id="#flipper">
-					<div class="flipper">
-						<div class="front">
-							{{ card1.name }}
-						</div>
-						<div class="back">
-							{{ card2.name }} Back
-						</div>
-					</div>
-				</div>
 				<hr class="negative-margins">
 				<div class="map-results-content">
 					<div class="listing-row-medium negative-margins flex" *ngFor="let item of results | keys">
@@ -176,6 +166,78 @@
 								</ng-container>
 							</div>	
 				    </div>
+					</div>
+				</div>
+			</div>
+			<div *ngIf="showFlip && !room.inProgress">
+				<button (click)="flip()" class="btn btn-lg btn-block btn-list text-white">Start Flipping!</button>
+				<button (click)="goBackToCards()" class="btn btn-lg btn-block btn-list text-white">Go Back</button>
+				<div *ngIf="showCards" class="flip-container flip" id="#flipper">
+					<div class="flipper">
+						<div class="front">
+							<div class="listing-row-medium negative-margins flex">
+								<div class="listing-row-medium-inner flex-space-between">
+									<div class="text-left">
+										<div class="listing-row-medium-content">
+			                <div class="listing-row-medium-price">
+			                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(card1.restaurant.price_level)">{{ dollar }}</ng-container>
+			              	</div>
+											<div class="listing-row-medium-category tag">{{ card1.restaurant.types[0] }}</div>
+
+											<h4 class="listing-row-medium-title"><div>{{ card1.restaurant.name }}</div></h4>
+
+											<div class="listing-row-medium-address">{{ card1.restaurant.vicinity }}</div>
+											<div>
+												<span class="listing-row-medium-rating float-none">
+													<span>({{ card1.restaurant.rating }})</span>
+
+				                  <b [innerHTML]="buildRating(card1.restaurant.rating)"></b>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="text-right">
+										<ng-container>
+										<div class="text-center">
+											<h5>{{ card1.balance }}</h5>
+										</div>
+										</ng-container>
+									</div>		
+						    </div>
+							</div>
+						</div>
+						<div class="back">
+							<div class="listing-row-medium negative-margins flex">
+								<div class="listing-row-medium-inner flex-space-between">
+									<div class="text-left">
+										<div class="listing-row-medium-content">
+			                <div class="listing-row-medium-price">
+			                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(card2.restaurant.price_level)">{{ dollar }}</ng-container>
+			              	</div>
+											<div class="listing-row-medium-category tag">{{ card2.restaurant.types[0] }}</div>
+
+											<h4 class="listing-row-medium-title"><div>{{ card2.restaurant.name }}</div></h4>
+
+											<div class="listing-row-medium-address">{{ card2.restaurant.vicinity }}</div>
+											<div>
+												<span class="listing-row-medium-rating float-none">
+													<span>({{ card2.restaurant.rating }})</span>
+
+				                  <b [innerHTML]="buildRating(card2.restaurant.rating)"></b>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="text-right">
+									<ng-container>
+									<div class="text-center">
+										<h5>{{ card2.balance }}</h5>
+									</div>
+									</ng-container>
+								</div>	
+						    </div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

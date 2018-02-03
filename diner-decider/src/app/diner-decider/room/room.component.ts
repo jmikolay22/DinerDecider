@@ -70,6 +70,7 @@ export class RoomComponent implements OnInit {
 	firstTimePasswordChecked: boolean = true;
 	submittedCart: boolean = false;
 	firstRestaurantLoad: boolean = true;
+	showFlip: boolean = false;
 	showCards: boolean = false;
 	displayName: string;
 	room: Object;
@@ -333,16 +334,29 @@ export class RoomComponent implements OnInit {
   }
 
   flip() {
-  	for (var result in this.results) {
-  		this.card1['name'] = this.results[result]['restaurant'].name;
-  		this.card2['name'] = this.results[result]['restaurant'].name;
+  	if (this.showFlip === false) {
+  		for (var key in this.results) {
+	  		if (key === this.checkedResults[0]) {
+	  			this.card1 = this.results[key]
+	  		} else if (key === this.checkedResults[1]) {
+	  			this.card2 = this.results[key];
+	  		}
+	  	}
+  		this.showFlip = true;
+  		this.showCards = true;
+  		return;
+  	} else {
+  		document.getElementById("#flipper").classList.toggle("flip");
   	}
-  	this.showCards = true;
-  	document.getElementById("#flipper").classList.toggle("flip");
+  }
+
+  goBackToCards() {
+  	this.showFlip = false;
+  	this.showCards = false;
   }
 
   isFlipReady() {
-  	if (this.checkedResults.length === 2) {
+  	if (this.checkedResults !== undefined && this.checkedResults.length === 2) {
   		return true;
   	} else {
   		return false;
