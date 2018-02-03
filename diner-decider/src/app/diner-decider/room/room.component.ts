@@ -81,6 +81,7 @@ export class RoomComponent implements OnInit {
 	results: Object = {};
 	card1: Object = {};
 	card2: Object = {};
+	flipClass: string = 'flip-container flip1';
 
   constructor(private _markerService: MarkerService, public afAuth: AngularFireAuth, public db: AngularFireDatabase, private route: ActivatedRoute) { 
   	const user = afAuth.authState;
@@ -346,9 +347,44 @@ export class RoomComponent implements OnInit {
   		this.showCards = true;
   		return;
   	} else {
-  		document.getElementById("#flipper").classList.toggle("flip");
+  		var x = Math.floor(Math.random()*(1-0+1)+0);
+	    if (x === 0) {
+	    	if (this.flipClass === "flip-container flip1") {
+	    		this.flipClass = "flip-container";
+	    	} else {
+	    		this.flipClass = 'flip-container flip1';
+	    	}
+	    } else {
+	      if (this.flipClass === "flip-container flip1") {
+	    		this.flipClass = "flip-container";
+	    	} else {
+	    		this.flipClass = 'flip-container flip1';
+	    	}
+	    }
   	}
   }
+
+  RotateIt(deg){
+	  $('#flipper').stop().animate({deg: deg}, {
+	      step: function(now,fx) {
+	        $(this).css('-webkit-transform','rotate('+now+'deg)'); 
+	        $(this).css('-moz-transform','rotate('+now+'deg)');
+	        $(this).css('transform','rotate('+now+'deg)');
+	      },
+	      duration:'slow'
+	  },'linear');
+	}
+
+	ResetRotate(){
+	  $('#flipper').stop().animate({deg: 0}, {
+	      step: function(now,fx) {
+	        $(this).css('-webkit-transform','rotate('+now+'deg)'); 
+	        $(this).css('-moz-transform','rotate('+now+'deg)');
+	        $(this).css('transform','rotate('+now+'deg)');
+	      },
+	      duration:'slow'
+	  },'linear');
+	}
 
   goBackToCards() {
   	this.showFlip = false;

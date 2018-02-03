@@ -172,11 +172,11 @@
 			<div *ngIf="showFlip && !room.inProgress">
 				<button (click)="flip()" class="btn btn-lg btn-block btn-list text-white">Start Flipping!</button>
 				<button (click)="goBackToCards()" class="btn btn-lg btn-block btn-list text-white">Go Back</button>
-				<div *ngIf="showCards" class="flip-container flip" id="#flipper">
+				<div *ngIf="showCards"[className]="flipClass">
 					<div class="flipper">
 						<div class="front">
 							<div class="listing-row-medium negative-margins flex">
-								<div class="listing-row-medium-inner flex-space-between">
+								<div class="listing-row-medium-inner flex-space-between result-card">
 									<div class="text-left">
 										<div class="listing-row-medium-content">
 			                <div class="listing-row-medium-price">
@@ -208,7 +208,7 @@
 						</div>
 						<div class="back">
 							<div class="listing-row-medium negative-margins flex">
-								<div class="listing-row-medium-inner flex-space-between">
+								<div class="listing-row-medium-inner flex-space-between result-card">
 									<div class="text-left">
 										<div class="listing-row-medium-content">
 			                <div class="listing-row-medium-price">
