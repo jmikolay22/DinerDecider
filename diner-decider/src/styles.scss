@@ -7,6 +7,36 @@
 	height: calc(100vh - 60px);
 }
 
+.result-checkbox {
+	width: 10%;
+	margin-top: auto;
+	margin-bottom: auto;
+	font-size: 25px;
+}
+
+.result-card {
+	width: 90%;
+}
+
+.map-results-header {
+	padding: 8px;
+}
+
+h3 {
+	margin: 0px 0px 10px 0px;
+}
+
+.restaurants-list {
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(50, 50, 50, 0.3);
+  box-sizing: border-box;
+  height: calc(100vh - 175px);
+  position: relative;
+  width: 420px;
+  z-index: 11; }
+  .fullscreen .map-results-list {
+    height: 100vh; }
+
 .listing-row-medium-address {
 	white-space: pre-wrap;
 }

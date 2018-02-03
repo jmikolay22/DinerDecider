@@ -21,96 +21,98 @@
 	</button>
 </div>
 <div class="col-12 no-pad flex-space-between" *ngIf="!needsPassword && !submittedCart">
-	<button class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showRestaurants}" (click)="showBrowseDivs()">Browse</button>
-	<button class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showCart}" (click)="showCartDiv()">Cart</button>
+	<button class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showRestaurants}" (click)="showBrowseDivs()">Restaurants <ng-container *ngIf="!showLoading">({{ restaurantTotal }})</ng-container></button>
+	<button *ngIf="!showCart" class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showCart}" [disabled]="showLoading" (click)="showCartDiv()">Cart</button>
+	<button *ngIf="showCart" class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showCart}" (click)="submitCart()">Submit</button>
 </div>
-<hr *ngIf="!needsPassword && !submittedCart" class="negative-margins">
-<div *ngIf="!(orders === undefined || orders.length === 0) && showCart" class="col-12 text-right no-pad">
-	<button class="btn btn-lg btn-list text-white" (click)="submitCart()">Submit Cart</button>
-	<hr class="negative-margins">
+<h5 *ngIf="submittedCart && room && room.inProgress">Submission Successful!</h5>
+<div *ngIf="room && !room.inProgress" class="flex-space-between">
+	<h5>Restaurant</h5>
+	<h5>Hunger Bucks</h5>
 </div>
-<div *ngIf="showRestaurants" class="flex-space-between">
-	<h5 id="restaurants-title" class="next-to-button">Restaurants <ng-container *ngIf="!showLoading">({{ restaurantTotal }})</ng-container></h5>
-</div>
-<hr *ngIf="!showLoading && !showCart && !submittedCart" class="negative-margins">
-<h5 *ngIf="(orders === undefined || orders.length === 0) && showCart" class="margin-top">Your cart is empty. Click browse to find restaurants.</h5>
-<div class="col-sm-12 no-pad" *ngIf="!needsPassword">
-	<div class="row no-pad">
-		<div *ngIf="showCart" class="col-sm-12 no-pad text-left">
-			<div class="map-results-content">
-				<div class="listing-row-medium"*ngFor="let item of orders; let i = index">
-					<div class="listing-row-medium-inner flex-space-between">
-						<div>
-							<div class="listing-row-medium-content">
-                <div class="listing-row-medium-price">
-                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(item.restaurant.price_level)">{{ dollar }}</ng-container>
-              	</div>
-								<div class="listing-row-medium-category tag">{{ item.restaurant.types[0] }}</div>
-
-								<h4 class="listing-row-medium-title"><div>{{ item.restaurant.name }}</div></h4>
-
-								<div class="listing-row-medium-address">{{ item.restaurant.vicinity }}</div>
+<hr>
+<div class="restaurants-list tse-scrollable">
+  <div class="tse-content">
+		<div class="col-sm-12" *ngIf="!needsPassword">
+			<div class="row">
+				<p *ngIf="(orders === undefined || orders.length === 0) && showCart" class="col-sm-12 margin-top">Your cart is empty. Click browse to find restaurants.</p>
+				<div *ngIf="showCart" class="col-sm-12 no-pad text-left">
+					<div class="map-results-content">
+						<div class="listing-row-medium"*ngFor="let item of orders; let i = index">
+							<div class="listing-row-medium-inner flex-space-between">
 								<div>
-									<span class="listing-row-medium-rating float-none">
-										<span>({{ item.restaurant.rating }})</span>
+									<div class="listing-row-medium-content">
+		                <div class="listing-row-medium-price">
+		                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(item.restaurant.price_level)">{{ dollar }}</ng-container>
+		              	</div>
+										<div class="listing-row-medium-category tag">{{ item.restaurant.types[0] }}</div>
 
-	                  <b [innerHTML]="buildRating(item.restaurant.rating)"></b>
-									</span>
-								</div>
-							</div>
-						</div>
-						<div class="text-right">
-							<button (click)="spendHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
-							<ng-container>
-							<div class="text-center">
-								{{ getRestaurantHungerBucksTotal(item.restaurant.place_id) }}
-							</div>
-							</ng-container>
-							<button (click)="refundHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
-						</div>	
-			    </div>
-				</div>
-			</div>
-		</div>
-		<div *ngIf="showRestaurants" class="col-sm-12 no-pad" [@flyInOut]>
-			<div class="col-sm-12 no-pad" *ngIf="showLoading" [@flyInOut]>
-				<div class="progress">
-				  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-				</div>
-			</div>
-			<div [@slide] *ngIf="!showLoading">
-				<div class="map-results-content">
-					<div class="listing-row-medium" *ngFor="let item of restaurants; let i = index">
-						<div class="listing-row-medium-inner flex-space-between">
-							<div>
-								<div class="listing-row-medium-content">
-	                <div class="listing-row-medium-price">
-	                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(item.price_level)">{{ dollar }}</ng-container>
-	              	</div>
-									<div class="listing-row-medium-category tag">{{ item.types[0] }}</div>
+										<h4 class="listing-row-medium-title"><div>{{ item.restaurant.name }}</div></h4>
 
-									<h4 class="listing-row-medium-title"><div>{{ item.name }}</div></h4>
+										<div class="listing-row-medium-address">{{ item.restaurant.vicinity }}</div>
+										<div>
+											<span class="listing-row-medium-rating float-none">
+												<span>({{ item.restaurant.rating }})</span>
 
-									<div class="listing-row-medium-address">{{ item.vicinity }}</div>
-									<div>
-										<span class="listing-row-medium-rating float-none">
-											<span>({{ item.rating }})</span>
-
-		                  <b [innerHTML]="buildRating(item.rating)"></b>
-										</span>
+			                  <b [innerHTML]="buildRating(item.restaurant.rating)"></b>
+											</span>
+										</div>
 									</div>
 								</div>
+								<div class="text-right">
+									<button (click)="spendHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
+									<ng-container>
+									<div class="text-center">
+										{{ getRestaurantHungerBucksTotal(item.restaurant.place_id) }}
+									</div>
+									</ng-container>
+									<button (click)="refundHungerBuck(item.restaurant)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
+								</div>	
+					    </div>
+						</div>
+					</div>
+				</div>
+				<div *ngIf="showRestaurants" class="col-sm-12 no-pad" [@flyInOut]>
+					<div class="col-sm-12 no-pad" *ngIf="showLoading" [@flyInOut]>
+						<div class="progress">
+						  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+						</div>
+					</div>
+					<div [@slide] *ngIf="!showLoading">
+						<div class="map-results-content">
+							<div class="listing-row-medium" *ngFor="let item of restaurants; let i = index">
+								<div class="listing-row-medium-inner flex-space-between">
+									<div>
+										<div class="listing-row-medium-content">
+			                <div class="listing-row-medium-price">
+			                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(item.price_level)">{{ dollar }}</ng-container>
+			              	</div>
+											<div class="listing-row-medium-category tag">{{ item.types[0] }}</div>
+
+											<h4 class="listing-row-medium-title"><div>{{ item.name }}</div></h4>
+
+											<div class="listing-row-medium-address">{{ item.vicinity }}</div>
+											<div>
+												<span class="listing-row-medium-rating float-none">
+													<span>({{ item.rating }})</span>
+
+				                  <b [innerHTML]="buildRating(item.rating)"></b>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="text-right">
+										<button (click)="spendHungerBuck(item)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
+										<ng-container>
+										<div class="text-center">
+											{{ getRestaurantHungerBucksTotal(item.place_id) }}
+										</div>
+										</ng-container>
+										<button (click)="refundHungerBuck(item)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
+									</div>	
+						    </div>
 							</div>
-							<div class="text-right">
-								<button (click)="spendHungerBuck(item)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
-								<ng-container>
-								<div class="text-center">
-									{{ getRestaurantHungerBucksTotal(item.place_id) }}
-								</div>
-								</ng-container>
-								<button (click)="refundHungerBuck(item)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
-							</div>	
-				    </div>
+						</div>
 					</div>
 				</div>	
 			</div>
@@ -126,14 +128,11 @@
 				<ng-container *ngFor="let submission of room.submissions | keys">
 					<p>{{ getDisplayNameFromSubmission(submission) }}</p>
 				</ng-container>
-				<button *ngIf="room.owner === uid" (click)="showResults()" class="btn btn-lg btn-block btn-list text-white margin-top">Decide!</button>
+				<button *ngIf="room.owner === uid" (click)="showResults(true)" class="btn btn-lg btn-block btn-list text-white margin-top">Decide!</button>
 			</div>
 			<div *ngIf="!room.inProgress">
-				<div class="flex-space-between">
-					<h5>Restaurant</h5>
-					<h5>Hunger Bucks</h5>
-				</div>
-				<button (click)="flip()" class="btn btn-lg btn-block btn-list text-white">Flip</button>
+				<p>Pick two restaurants to flip for a decision.</p>
+				<button [disabled]="!isFlipReady()" (click)="flip()" class="btn btn-lg btn-block btn-list text-white">Flip!</button>
 				<div [ngClass]="{'hide-cards': !showCards}" class="flip-container flip" id="#flipper">
 					<div class="flipper">
 						<div class="front">
@@ -146,9 +145,11 @@
 				</div>
 				<hr class="negative-margins">
 				<div class="map-results-content">
-					<div class="listing-row-medium negative-margins" *ngFor="let item of results | keys">
-						<div class="listing-row-medium-inner flex-space-between">
-							<div>
+					<div class="listing-row-medium negative-margins flex" *ngFor="let item of results | keys">
+						<i *ngIf="isChecked(item.value.restaurant.place_id)" (click)="toggleChecked(item.value.restaurant.place_id)" class="fa fa-check-square-o result-checkbox text-center"></i>
+						<i *ngIf="!isChecked(item.value.restaurant.place_id)" (click)="toggleChecked(item.value.restaurant.place_id)" class="fa fa-square-o result-checkbox text-center"></i>
+						<div class="listing-row-medium-inner flex-space-between result-card">
+							<div class="text-left">
 								<div class="listing-row-medium-content">
 	                <div class="listing-row-medium-price">
 	                	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(item.value.restaurant.price_level)">{{ dollar }}</ng-container>

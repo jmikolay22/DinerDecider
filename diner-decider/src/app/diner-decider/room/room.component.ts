@@ -9,6 +9,8 @@ import * as firebase from 'firebase/app';
 
 import { MarkerService } from '../../marker.service';
 
+declare const $: any;
+
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
@@ -74,6 +76,7 @@ export class RoomComponent implements OnInit {
 	restaurants: any[];
 	restaurantTotal: number = 0;
 	orders: any[] = [];
+	checkedResults: string[] = [];
 	results: Object = {};
 	card1: Object = {};
 	card2: Object = {};
@@ -90,11 +93,12 @@ export class RoomComponent implements OnInit {
   }
 
   ngOnInit() {
+  	$('.restaurants-list').TrackpadScrollEmulator();
   }
 
   checkIfUserHasRoomPermissions() {
   	this.route.params.subscribe(params => {
-      this.roomId = params['id'];
+      this.roomId = params['id'].toLowerCase();
       const roomQuery = this.db.object('rooms/' + this.roomId).valueChanges();
 	  	roomQuery.subscribe(data => {
   			if (data !== null) {
@@ -114,20 +118,17 @@ export class RoomComponent implements OnInit {
 			  		this.showRestaurants = true;
 			  		this._markerService.restaurants.subscribe(
 				      value => {
-				      	if ( value !== undefined && value.length !== 0) {
+				      	if ( this._markerService.doneLoading === true) {
 					        this.restaurants = value;
-					        if (this._markerService.doneLoading === true) {
-					        	this.restaurantTotal = value.length;
-						        this.showLoading = false;
-					        }
-
+					        this.restaurantTotal = value.length;
+						      this.showLoading = false;
 				  				this.firstRestaurantLoad = false;
 				  			}
 				      }
 				    )	
 			  	}
-			  	if (this.firstRestaurantLoad && this.room['inProgress'] === false) {
-			  		this.showResults();
+			  	if (this.room['inProgress'] === false) {
+			  		this.showResults(false);
 			  	}
   			} else {
   				if (this.firstTimePasswordChecked) {
@@ -289,22 +290,30 @@ export class RoomComponent implements OnInit {
 		});
   }
 
-  showResults() {
-  	const itemRef = this.db.object('rooms/' + this.roomId);
-		itemRef.update({ ['inProgress']: false })
-		.then(data => {
-			this._markerService.clearMarkers();
-			for (var submission in this.room['submissions']) {
-				for (var restaurant in this.room['submissions'][submission]) {
-					this.updateResults(this.room['submissions'][submission][restaurant]);
-				}
+  showResults(updateInProgress: boolean) {
+  	if (updateInProgress) {
+  		const itemRef = this.db.object('rooms/' + this.roomId);
+			itemRef.update({ ['inProgress']: false })
+			.then(data => {
+				this.calculateResults();
+			}, err => {
+				console.log('error', err);
+			});
+  	} else {
+  		this.calculateResults();
+  	}	
+  }
+
+  calculateResults() {
+  	this._markerService.clearMarkers();
+		for (var submission in this.room['submissions']) {
+			for (var restaurant in this.room['submissions'][submission]) {
+				this.updateResults(this.room['submissions'][submission][restaurant]);
 			}
-			for (var key in this.results) {
-				this._markerService.addMarker(this.results[key]['restaurant']['place_id'], this.results[key]['balance']);
-			}
-		}, err => {
-			console.log('error', err);
-		});
+		}
+		for (var key in this.results) {
+			this._markerService.addMarker(this.results[key]['restaurant']['place_id'], this.results[key]['balance']);
+		}
   }
 
   updateResults(restaurant: Object) {
@@ -330,5 +339,32 @@ export class RoomComponent implements OnInit {
   	}
   	this.showCards = true;
   	document.getElementById("#flipper").classList.toggle("flip");
+  }
+
+  isFlipReady() {
+  	if (this.checkedResults.length === 2) {
+  		return true;
+  	} else {
+  		return false;
+  	}
+  }
+
+  isChecked(place_id: string) {
+  	for (var i = 0; i < this.checkedResults.length; i++) {
+  		if (this.checkedResults[i] === place_id) {
+  			return true;
+  		}
+  	}
+  	return false;
+  }
+
+  toggleChecked(place_id: string) {
+  	for (var i = 0; i < this.checkedResults.length; i++) {
+  		if (this.checkedResults[i] === place_id) {
+  			this.checkedResults.splice(i, 1);
+  			return;
+  		}
+  	}
+  	this.checkedResults.push(place_id);
   }
 }

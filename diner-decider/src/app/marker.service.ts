@@ -138,6 +138,7 @@ export class MarkerService {
   }
 
   private getRestaurants(query: Object) {
+  	this.doneLoading = false;
     var service = new google.maps.places.PlacesService(this.map);
     service.nearbySearch({
       location: {lat: query['lat'] , lng: query['long']},
@@ -211,6 +212,9 @@ export class MarkerService {
         	this.doneLoading = true;
         	this.restaurants.next(newRestaurantArray);
         }   
+	    } else {
+	    	this.doneLoading = true;
+	    	this.restaurants.next([]);
 	    }
     });
   }
