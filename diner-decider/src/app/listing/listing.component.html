@@ -5,6 +5,7 @@
 				<div class="map-results-header">
 					<div *ngIf="!(user | async)?.uid" class="text-center">
 						<h5 >Welcome! Please Log In.</h5>
+						<button class="btn btn-primary btn-lg btn-block btn-list" (click)="anonymousLogin()">Login Anonymously</button>
 				  	<button class="btn btn-primary btn-lg btn-block btn-list" (click)="facebookLogin()">Login With Facebook</button>
 				  	<button class="btn btn-primary btn-lg btn-block btn-list" (click)="googleLogin()">Login With Google</button>
 			  	</div>

@@ -32,7 +32,7 @@ export class ListingComponent implements OnInit  {
     this.compressed ? this.compressed = false : this.compressed = true
   }
 
-  login() {
+  anonymousLogin() {
     this.afAuth.auth.signInAnonymously();
   }
 

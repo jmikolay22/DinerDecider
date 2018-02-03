@@ -25,8 +25,9 @@
 	<button *ngIf="!showCart" class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showCart}" [disabled]="showLoading" (click)="showCartDiv()">Cart</button>
 	<button *ngIf="showCart" class="btn btn-lg btn-list text-white" [ngClass]="{'btn-primary' : showCart}" (click)="submitCart()">Submit</button>
 </div>
-<h5 *ngIf="submittedCart && room && room.inProgress">Submission Successful!</h5>
-<div *ngIf="room && !room.inProgress" class="flex-space-between">
+<hr *ngIf="!needsPassword && !submittedCart">
+<h5 *ngIf="submittedCart && inProgress">Submission Successful!</h5>
+<div *ngIf="!inProgress" class="flex-space-between">
 	<h5>Restaurant</h5>
 	<h5>Hunger Bucks</h5>
 </div>
@@ -118,7 +119,7 @@
 			</div>
 		</div>
 		<div *ngIf="submittedCart" class="col-sm-12 text-left">
-			<div *ngIf="room.inProgress">
+			<div *ngIf="inProgress">
 				<p *ngIf="room.owner !== uid">Waiting for all users to submit.</p>
 				<div *ngIf="room.owner === uid">
 					<p>Once all desired users have submitted their Hunger Bucks, click the button below to show the results.</p>
@@ -130,7 +131,7 @@
 				</ng-container>
 				<button *ngIf="room.owner === uid" (click)="showResults(true)" class="btn btn-lg btn-block btn-list text-white margin-top">Decide!</button>
 			</div>
-			<div *ngIf="!room.inProgress && !showFlip">
+			<div *ngIf="!inProgress && !showFlip">
 				<p>Pick two restaurants to flip for a decision.</p>
 				<button [disabled]="!isFlipReady()" (click)="flip()" class="btn btn-lg btn-block btn-list text-white">Flip!</button>
 				<hr class="negative-margins">
@@ -169,7 +170,7 @@
 					</div>
 				</div>
 			</div>
-			<div *ngIf="showFlip && !room.inProgress">
+			<div *ngIf="showFlip && !inProgress">
 				<button (click)="flip()" class="btn btn-lg btn-block btn-list text-white">Start Flipping!</button>
 				<button (click)="goBackToCards()" class="btn btn-lg btn-block btn-list text-white">Go Back</button>
 				<div *ngIf="showCards"[className]="flipClass">

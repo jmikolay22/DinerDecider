@@ -63,6 +63,7 @@ export class RoomComponent implements OnInit {
 	uid: string;
 	password: string;
 	needsPassword: boolean = false;
+	inProgress: boolean = true;
 	invalidPasswordChecked: boolean = false;
 	showLoading: boolean = true;
 	showRestaurants: boolean = false;
@@ -105,6 +106,7 @@ export class RoomComponent implements OnInit {
 	  	roomQuery.subscribe(data => {
   			if (data !== null) {
   				this.room = data;
+  				this.inProgress = this.room['inProgress'];
 	  			this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
 			  	this.needsPassword = false;
 			  	for (var key in this.room['submissions']) {
@@ -129,7 +131,8 @@ export class RoomComponent implements OnInit {
 				      }
 				    )	
 			  	}
-			  	if (this.room['inProgress'] === false) {
+			  	if (this.inProgress === false && this.uid !== this.room['owner']) {
+			  		this.inProgress = false;
 			  		this.showResults(false);
 			  	}
   			} else {
@@ -275,10 +278,14 @@ export class RoomComponent implements OnInit {
   		var order = this.orders[i];
   		delete order.restaurant.geometry;
   		delete order.restaurant.photos;
+  		var id = this.displayName
+  		if (this.displayName === null) {
+  			id = this.uid;
+  		}
   		cartSubmission[order.restaurantId] = {
   			balance: order.balance,
   			restaurant: order.restaurant,
-  			displayName: this.displayName
+  			displayName: id
   		}
   	}
   	const itemRef = this.db.object('rooms/' + this.roomId + '/submissions');
@@ -297,6 +304,7 @@ export class RoomComponent implements OnInit {
   		const itemRef = this.db.object('rooms/' + this.roomId);
 			itemRef.update({ ['inProgress']: false })
 			.then(data => {
+				this.inProgress = false;
 				this.calculateResults();
 			}, err => {
 				console.log('error', err);
