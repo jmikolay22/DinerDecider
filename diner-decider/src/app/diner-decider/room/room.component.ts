@@ -107,7 +107,6 @@ export class RoomComponent implements OnInit {
   			if (data !== null) {
   				this.room = data;
   				this.inProgress = this.room['inProgress'];
-	  			this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
 			  	this.needsPassword = false;
 			  	for (var key in this.room['submissions']) {
 			  		if (key === this.uid) {
@@ -116,6 +115,7 @@ export class RoomComponent implements OnInit {
 			  		}
 			  	}
 			  	if (this.firstRestaurantLoad && this.submittedCart === false) {
+			  		this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
 			  		this.updateRestaurants();
 			  		this._markerService.clearMarkers();
 			  		this._markerService.clearRestaurants();
