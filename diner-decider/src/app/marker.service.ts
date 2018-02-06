@@ -143,7 +143,9 @@ export class MarkerService {
     service.nearbySearch({
       location: {lat: query['lat'] , lng: query['long']},
       radius: query['radius'],
-      type: ['restaurant']
+      type: ['cafe'],
+      minprice: 1,
+      open_now: true
     }, (restaurants, status, pagination) => {
     	if (status === google.maps.places.PlacesServiceStatus.OK) {
     		const component = this;
