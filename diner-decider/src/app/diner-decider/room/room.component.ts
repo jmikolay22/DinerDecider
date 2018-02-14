@@ -119,6 +119,7 @@ export class RoomComponent implements OnInit {
 			  		this.updateRestaurants();
 			  		this._markerService.clearMarkers();
 			  		this._markerService.clearRestaurants();
+			  		this._markerService.setPosition(this.room['lat'], this.room['long']);
 			  		this.showRestaurants = true;
 			  		this._markerService.restaurants.subscribe(
 				      value => {

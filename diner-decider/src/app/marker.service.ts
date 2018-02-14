@@ -22,6 +22,7 @@ export class MarkerService {
   public showMore: boolean = false;
   private markerClusterer: any = null;
   public doneLoading: boolean = false;
+  public isLocationDisabled: boolean = false;
 
   constructor(private _locationService: LocationService) {
   	this.map = new google.maps.Map(document.getElementById('map-object'), {
@@ -57,7 +58,17 @@ export class MarkerService {
         });
 
         marker.setPosition(new google.maps.LatLng(this.lat, this.long));
+        this.isLocationDisabled = false;
+      }).catch(error => {
+        // Location is disabled.
+        this.isLocationDisabled = true;
       });
+  }
+
+  public setPosition(lat, long) {
+    this.lat = lat;
+    this.long = long;
+    this.map.setCenter({ lat: this.lat, lng: this.long });
   }
 
   public findRestaurants(lat, long, radius): void {
@@ -141,11 +152,13 @@ export class MarkerService {
   	this.doneLoading = false;
     var service = new google.maps.places.PlacesService(this.map);
     service.nearbySearch({
+      keyword: 'restaurant',
       location: {lat: query['lat'] , lng: query['long']},
       radius: query['radius'],
-      type: ['cafe'],
-      minprice: 1,
-      open_now: true
+      type: ['restaurant'],
+      minPriceLevel: query['minPriceLevel'],
+      mmaxPriceLevel: query['maxPriceLevel'],
+      openNow: query['openNow']
     }, (restaurants, status, pagination) => {
     	if (status === google.maps.places.PlacesServiceStatus.OK) {
     		const component = this;

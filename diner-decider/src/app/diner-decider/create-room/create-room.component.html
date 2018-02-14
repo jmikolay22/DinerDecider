@@ -18,12 +18,23 @@
 		</div>
 		<label class="flex"><p id="hunger-bucks-value"><b>{{ hungerBucks }}</b> Hunger Bucks Per Person</p></label>
 	</div>
-	<div class="form-group">
+	<div class="form-group" *ngIf="!_markerService.isLocationDisabled && !showZip && !showCurrentLocation">
+		<label><p>Limit Restaurants By:</p></label>
+		<button (click)="toggleZip()" type="button" class="btn btn-primary btn-lg btn-block btn-list">
+		Zip Code</button>
+		<button (click)="toggleCurrentLocation()" type="button" class="btn btn-primary btn-lg btn-block btn-list">
+		Current Location</button>
+	</div>
+	<div *ngIf="showZip || _markerService.isLocationDisabled" class="form-group">
+		<label><p>Zip Code:</p></label>
+		<input [(ngModel)]="zipCode" class="form-control" type="text" maxlength="5">
+	</div>
+	<div [ngClass]="{'hide' : !validateZip() && !showCurrentLocation}" class="form-group">
 		<div class="col-12 no-pad flex">
 			<p>1&nbsp;&nbsp;&nbsp;&nbsp;</p><input id="radius-slider" class="form-control slider">
 			<p>&nbsp;&nbsp;&nbsp;&nbsp;15</p>
 		</div>
-		<label class="flex"><p>Limit to restaurants within <b>{{ radius }}</b> miles of my current location</p></label>
+		<label class="flex"><p>Limit to restaurants within <b>{{ radius }}</b> miles of <ng-container *ngIf="validateZip()">zip: {{zipCode}}.</ng-container><ng-container *ngIf="showCurrentLocation">my current location.</ng-container></p></label>
 	</div>
 	<div *ngIf="roomId" class="form-group">
 		<label><p>Shareable Room Link:</p></label>

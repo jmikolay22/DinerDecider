@@ -8,8 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
 import { LocationService } from '../../location.service';
+import { MarkerService } from '../../marker.service';
 
 declare const $: any;
+declare const google: any;
 
 @Component({
   selector: 'app-create-room',
@@ -29,10 +31,12 @@ export class CreateRoomComponent implements OnInit {
 	radius: number = 5;
 	roomAlreadyExists: boolean = false;
 	href: string = null;
-  zip: number = null;
+  zipCode: string = null;
   roomLink: string = null;
+  showZip: boolean = false;
+  showCurrentLocation: boolean = false;
 
-  constructor(private platformLocation: PlatformLocation, private _locationService: LocationService,
+  constructor(private _markerService: MarkerService, private platformLocation: PlatformLocation, private _locationService: LocationService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
   	const user = afAuth.authState;
   	this.href = (platformLocation as any).location.origin;
@@ -44,6 +48,7 @@ export class CreateRoomComponent implements OnInit {
   			this.lat = position['coords']['latitude'];
   			this.long = position['coords']['longitude'];
   		});
+    _markerService.clearMarkers();
   }
 
   ngOnInit() {
@@ -84,7 +89,67 @@ export class CreateRoomComponent implements OnInit {
     });
   }
 
-  createRoom() {
+  private getZipLatLong() {
+    var deferred = $.Deferred();
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'address': this.zipCode }, function (results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        var lat = results[0].geometry.location.lat();
+        var long = results[0].geometry.location.lng();
+        deferred.resolve(lat, long);
+      } else {
+        deferred.reject(status);
+      }
+    })
+
+    return deferred.promise();
+  }
+
+  private createRoomWithZip() {
+    var vm = this;
+    this.getZipLatLong()
+    .then(function(lat, long) {
+      vm.lat = lat;
+      vm.long = long;
+      vm.submitRoom();
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  private createRoom() {
+    if (this.validateZip()) {
+      this.createRoomWithZip();
+    } else {
+      this.submitRoom();
+    }
+  }
+
+  private validateZip() {
+    if (this.zipCode !== null) {
+      if (this.isNumeric(this.zipCode)) {
+        if (this.zipCode.length === 5) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private toggleZip() {
+    this.showZip = !this.showZip;
+  }
+
+  private toggleCurrentLocation() {
+    this.showCurrentLocation = !this.showCurrentLocation;
+  }
+
+  private isNumeric(value) {
+    return /^-{0,1}\d+$/.test(value);
+  }
+
+  private submitRoom() {
+    this._markerService.setPosition(this.lat, this.long);
   	const itemRef = this.db.object('rooms');
   	if(this.roomPassword == null){
   		itemRef.update({ [this.roomId.toLowerCase()]: {
@@ -118,8 +183,8 @@ export class CreateRoomComponent implements OnInit {
   	}
   }
 
-  canCreateRoom() {
-  	if(this.roomId !== '' && this.lat !== null && this.long !== null
+  private canCreateRoom() {
+  	if(this.roomId !== '' && (this.validateZip() === true || (this.lat !== null && this.long !== null))
   		&& this.hungerBucks !== null && this.radius !== null){
   		return true;
   	}else{
@@ -127,12 +192,12 @@ export class CreateRoomComponent implements OnInit {
   	}
   }
 
-  convertMilesToMeters(miles: number) {
+  private convertMilesToMeters(miles: number) {
   	let metersPerMile: number = 1609.344;
   	return miles * metersPerMile;
   }
 
-  resetValidation() {
+  private resetValidation() {
     this.roomLink = this.href + '/DinerDecider/diner-decider/' + this.roomId.toLowerCase();
   	this.roomAlreadyExists = false;
   }
