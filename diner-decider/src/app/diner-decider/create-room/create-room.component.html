@@ -36,6 +36,24 @@
 		</div>
 		<label class="flex"><p>Limit to restaurants within <b>{{ radius }}</b> miles of <ng-container *ngIf="validateZip()">zip: {{zipCode}}.</ng-container><ng-container *ngIf="showCurrentLocation">my current location.</ng-container></p></label>
 	</div>
+	<div class="form-group">
+		<label><p>Min Price:</p></label>
+		<div class="dollars">
+			<button *ngIf="1 <= maxPrice" (click)="minPrice = 1" class="btn dollar-button" [ngClass]="{'btn-primary': minPrice === 1}">$</button>
+			<button *ngIf="2 <= maxPrice" (click)="minPrice = 2" class="btn dollar-button" [ngClass]="{'btn-primary': minPrice === 2}">$$</button>
+			<button *ngIf="3 <= maxPrice" (click)="minPrice = 3" class="btn dollar-button" [ngClass]="{'btn-primary': minPrice === 3}">$$$</button>
+			<button *ngIf="4 <= maxPrice" (click)="minPrice = 4" class="btn dollar-button" [ngClass]="{'btn-primary': minPrice === 4}">$$$$</button>
+		</div>
+	</div>
+	<div class="form-group">
+		<label><p>Max Price:</p></label>
+		<div class="dollars">
+			<button *ngIf="1 >= minPrice" (click)="maxPrice = 1" class="btn dollar-button" [ngClass]="{'btn-primary': maxPrice === 1}">$</button>
+			<button *ngIf="2 >= minPrice" (click)="maxPrice = 2" class="btn dollar-button" [ngClass]="{'btn-primary': maxPrice === 2}">$$</button>
+			<button *ngIf="3 >= minPrice" (click)="maxPrice = 3" class="btn dollar-button" [ngClass]="{'btn-primary': maxPrice === 3}">$$$</button>
+			<button *ngIf="4 >= minPrice" (click)="maxPrice = 4" class="btn dollar-button" [ngClass]="{'btn-primary': maxPrice === 4}">$$$$</button>
+		</div>
+	</div>
 	<div *ngIf="roomId" class="form-group">
 		<label><p>Shareable Room Link:</p></label>
 		<input class="form-control" [(ngModel)]="roomLink" type="text" readonly>

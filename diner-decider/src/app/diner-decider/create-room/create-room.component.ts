@@ -35,6 +35,8 @@ export class CreateRoomComponent implements OnInit {
   roomLink: string = null;
   showZip: boolean = false;
   showCurrentLocation: boolean = false;
+  minPrice: number = 1;
+  maxPrice: number = 4;
 
   constructor(private _markerService: MarkerService, private platformLocation: PlatformLocation, private _locationService: LocationService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
@@ -156,6 +158,8 @@ export class CreateRoomComponent implements OnInit {
 					owner: this.uid,
 					lat: this.lat,
 					long: this.long,
+          minPriceLevel: this.minPrice,
+          maxPriceLevel: this.maxPrice,
 					hungerBucks: this.hungerBucks,
 					radiusMeters: this.convertMilesToMeters(this.radius),
           inProgress: true
@@ -171,6 +175,8 @@ export class CreateRoomComponent implements OnInit {
 					owner: this.uid,
 					lat: this.lat,
 					long: this.long,
+          minPriceLevel: this.minPrice,
+          maxPriceLevel: this.maxPrice,
 					hungerBucks: this.hungerBucks,
 					radiusMeters: this.convertMilesToMeters(this.radius),
           inProgress: true

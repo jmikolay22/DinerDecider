@@ -71,11 +71,13 @@ export class MarkerService {
     this.map.setCenter({ lat: this.lat, lng: this.long });
   }
 
-  public findRestaurants(lat, long, radius): void {
+  public findRestaurants(lat, long, radius, minPriceLevel, maxPriceLevel): void {
   	var queryObject = {
   		lat: lat,
   		long: long,
-  		radius: radius
+  		radius: radius,
+      minPriceLevel: minPriceLevel,
+      maxPriceLevel: maxPriceLevel
   	}
   	this.getRestaurants(queryObject)
   }
@@ -150,6 +152,7 @@ export class MarkerService {
 
   private getRestaurants(query: Object) {
   	this.doneLoading = false;
+    console.log(query);
     var service = new google.maps.places.PlacesService(this.map);
     service.nearbySearch({
       keyword: 'restaurant',

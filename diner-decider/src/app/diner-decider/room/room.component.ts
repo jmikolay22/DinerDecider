@@ -171,7 +171,8 @@ export class RoomComponent implements OnInit {
 
   updateRestaurants() {
   	this._markerService.findRestaurants(
-  		this.room['lat'], this.room['long'], this.room['radiusMeters']);
+  		this.room['lat'], this.room['long'], this.room['radiusMeters'],
+  		this.room['minPriceLevel'], this.room['maxPriceLevel']);
   }
 
   getNextPage() {
