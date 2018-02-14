@@ -71,13 +71,14 @@ export class MarkerService {
     this.map.setCenter({ lat: this.lat, lng: this.long });
   }
 
-  public findRestaurants(lat, long, radius, minPriceLevel, maxPriceLevel): void {
+  public findRestaurants(lat, long, radius, minPriceLevel, maxPriceLevel, category): void {
   	var queryObject = {
   		lat: lat,
   		long: long,
   		radius: radius,
       minPriceLevel: minPriceLevel,
-      maxPriceLevel: maxPriceLevel
+      maxPriceLevel: maxPriceLevel,
+      category: category
   	}
   	this.getRestaurants(queryObject)
   }
@@ -155,13 +156,13 @@ export class MarkerService {
     console.log(query);
     var service = new google.maps.places.PlacesService(this.map);
     service.nearbySearch({
-      keyword: 'restaurant',
+      keyword: query['category'],
       location: {lat: query['lat'] , lng: query['long']},
       radius: query['radius'],
       type: ['restaurant'],
       minPriceLevel: query['minPriceLevel'],
       mmaxPriceLevel: query['maxPriceLevel'],
-      openNow: query['openNow']
+      openNow: true
     }, (restaurants, status, pagination) => {
     	if (status === google.maps.places.PlacesServiceStatus.OK) {
     		const component = this;

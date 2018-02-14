@@ -37,6 +37,7 @@ export class CreateRoomComponent implements OnInit {
   showCurrentLocation: boolean = false;
   minPrice: number = 1;
   maxPrice: number = 4;
+  category: string = "";
 
   constructor(private _markerService: MarkerService, private platformLocation: PlatformLocation, private _locationService: LocationService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
@@ -89,6 +90,10 @@ export class CreateRoomComponent implements OnInit {
           self.radius = newVal;
         }
     });
+
+    $(document).ready(function() {
+      $("#categories").select2();
+    });  
   }
 
   private getZipLatLong() {
@@ -151,6 +156,7 @@ export class CreateRoomComponent implements OnInit {
   }
 
   private submitRoom() {
+    this.setCategories();
     this._markerService.setPosition(this.lat, this.long);
   	const itemRef = this.db.object('rooms');
   	if(this.roomPassword == null){
@@ -161,6 +167,7 @@ export class CreateRoomComponent implements OnInit {
           minPriceLevel: this.minPrice,
           maxPriceLevel: this.maxPrice,
 					hungerBucks: this.hungerBucks,
+          category: this.category,
 					radiusMeters: this.convertMilesToMeters(this.radius),
           inProgress: true
 				}
@@ -178,6 +185,7 @@ export class CreateRoomComponent implements OnInit {
           minPriceLevel: this.minPrice,
           maxPriceLevel: this.maxPrice,
 					hungerBucks: this.hungerBucks,
+          category: this.category,
 					radiusMeters: this.convertMilesToMeters(this.radius),
           inProgress: true
 				}
@@ -206,5 +214,23 @@ export class CreateRoomComponent implements OnInit {
   private resetValidation() {
     this.roomLink = this.href + '/DinerDecider/diner-decider/' + this.roomId.toLowerCase();
   	this.roomAlreadyExists = false;
+  }
+
+  private setCategories() {
+    let categories: Array<Object> = $('#categories').select2('data');
+    this.category = '';
+    for (let i = 0; i < categories.length; i++) {
+      // If "Any" is selected, clear category and stop
+      if (categories[i]['id'] === "Any") {
+        this.category = 'restaurant';
+        return;
+      } else {
+        if (i === categories.length - 1) {
+          this.category += '(' + categories[i]['id'] + ')';
+        } else {
+          this.category += '(' + categories[i]['id'] + ') OR ';
+        }
+      }
+    }
   }
 }

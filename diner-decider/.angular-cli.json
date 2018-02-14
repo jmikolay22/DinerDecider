@@ -23,6 +23,7 @@
         "assets/css/trackpad-scroll-emulator.css",
         "assets/css/explorer.css",
         "../node_modules/bootstrap-slider/dist/css/bootstrap-slider.css",
+        "../node_modules/Select2/select2.css",
         "styles.scss"
       ],
       "scripts": [
@@ -32,7 +33,8 @@
         "assets/js/google-map-markerclusterer.js",
         "assets/js/google-map-richmarker.min.js",
         "../node_modules/bootstrap/dist/js/bootstrap.js",
-        "../node_modules/bootstrap-slider/dist/bootstrap-slider.js"
+        "../node_modules/bootstrap-slider/dist/bootstrap-slider.js",
+        "../node_modules/Select2/select2.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
