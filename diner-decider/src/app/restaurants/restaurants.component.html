@@ -1,0 +1,38 @@
+<div [@slide]>
+	<div class="map-results-content">
+		<ng-container *ngFor="let item of restaurants; let i = index">
+			<div class="listing-row-medium" *ngIf="(displayOrders && getRestaurantHungerBucksTotal(item.place_id) !== 0) || !displayOrders">
+				<div class="listing-row-medium-inner flex-space-between">
+					<div>
+						<div class="listing-row-medium-content">
+	            <div class="listing-row-medium-price">
+	            	<ng-container [@slide] *ngFor="let dollar of getDollarSigns(item.price_level)">{{ dollar }}</ng-container>
+	          	</div>
+							<div class="listing-row-medium-category tag">{{ item.types[0] }}</div>
+
+							<h4 class="listing-row-medium-title"><div>{{ item.name }}</div></h4>
+
+							<div class="listing-row-medium-address">{{ item.vicinity }}</div>
+							<div>
+								<span class="listing-row-medium-rating float-none">
+									<span>({{ item.rating }})</span>
+
+	                <b [innerHTML]="buildRating(item.rating)"></b>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div *ngIf="displaySpending" class="text-right">
+						<button (click)="spendHungerBuck(item)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-plus no-margin" aria-hidden="true"></i></button>
+						<ng-container>
+						<div class="text-center">
+							{{ getRestaurantHungerBucksTotal(item.place_id) }}
+						</div>
+						</ng-container>
+						<button (click)="refundHungerBuck(item)" class="btn btn-lg btn-block btn-list text-white"><i class="fa fa-minus no-margin" aria-hidden="true"></i></button>
+					</div>	
+	    	</div>
+	    </div>
+		</ng-container>
+	</div>
+</div>

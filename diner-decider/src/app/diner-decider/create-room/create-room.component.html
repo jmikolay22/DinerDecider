@@ -1,5 +1,6 @@
-<h3>Create Room</h3>
-<div class="col-12">
+
+<div [ngClass]="{'hide': !showRoomDetails}" class="col-12">
+	<h3>Create Room</h3>
 	<div class="form-group">
 		<label><p>Enter Room Name:</p></label>
 		<input [(ngModel)]="roomId" (ngModelChange)="resetValidation()" class="form-control" type="text" maxlength="10">
@@ -18,19 +19,18 @@
 		</div>
 		<label class="flex"><p id="hunger-bucks-value"><b>{{ hungerBucks }}</b> Hunger Bucks Per Person</p></label>
 	</div>
-	<div class="form-group" *ngIf="!_markerService.isLocationDisabled && !showZip && !showCurrentLocation">
-		<label><p>Limit Restaurants By:</p></label>
-		<button (click)="toggleZip()" type="button" class="btn btn-primary btn-lg btn-block btn-list">
-		Zip Code</button>
-		<button (click)="toggleCurrentLocation()" type="button" class="btn btn-primary btn-lg btn-block btn-list">
-		Current Location</button>
-	</div>
-	<div *ngIf="showZip || _markerService.isLocationDisabled" class="form-group">
-		<label><p>Zip Code:</p></label>
-		<input [(ngModel)]="zipCode" class="form-control" type="text" maxlength="5">
-	</div>
+  <button (click)="enableRoomOptions()" type="button" [disabled]="!canContinue()" class="btn btn-primary btn-lg btn-block btn-list">
+		Continue
+	</button>
+	<button [routerLink]="['..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+	Cancel
+	</button>
+</div>
+
+<div [ngClass]="{'hide': !showRoomOptions}" class="col-12">
+	<h3>Room Options</h3>
 	<div class="form-group">
-		<label><p>Cuisine:</p></label>
+		<label><p>Cuisine(s):</p></label>
 		<select id="categories" multiple="multiple" style="width:100%;">
 			<option value="All">Any</option>
 			<option value="American">American</option>
@@ -48,13 +48,6 @@
 			<option value="Sushi">Sushi</option>
 			<option value="Thai">Thai</option>
 		</select>
-	</div>
-	<div [ngClass]="{'hide' : !validateZip() && !showCurrentLocation}" class="form-group">
-		<div class="col-12 no-pad flex">
-			<p>1&nbsp;&nbsp;&nbsp;&nbsp;</p><input id="radius-slider" class="form-control slider">
-			<p>&nbsp;&nbsp;&nbsp;&nbsp;15</p>
-		</div>
-		<label class="flex"><p>Limit to restaurants within <b>{{ radius }}</b> miles of <ng-container *ngIf="validateZip()">zip: {{zipCode}}.</ng-container><ng-container *ngIf="showCurrentLocation">my current location.</ng-container></p></label>
 	</div>
 	<div class="form-group">
 		<label><p>Min Price:</p></label>
@@ -74,14 +67,45 @@
 			<button *ngIf="4 >= minPrice" (click)="maxPrice = 4" class="btn dollar-button" [ngClass]="{'btn-primary': maxPrice === 4}">$$$$</button>
 		</div>
 	</div>
-	<div *ngIf="roomId" class="form-group">
-		<label><p>Shareable Room Link:</p></label>
-		<input class="form-control" [(ngModel)]="roomLink" type="text" readonly>
+	<div class="form-group" *ngIf="!_markerService.isLocationDisabled && !showZip && !showCurrentLocation">
+		<label><p>Limit Restaurants By:</p></label>
+		<button (click)="toggleZip()" type="button" class="btn btn-primary btn-lg btn-block btn-list">
+		Zip Code</button>
+		<button (click)="toggleCurrentLocation()" type="button" class="btn btn-primary btn-lg btn-block btn-list">
+		Current Location</button>
 	</div>
-  <button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">
-		Enter Your Room
+	<div *ngIf="showZip || _markerService.isLocationDisabled" class="form-group">
+		<label><p>Zip Code:</p></label>
+		<input [(ngModel)]="zipCode" class="form-control" type="text" maxlength="5">
+	</div>
+	<div [ngClass]="{'hide' : !validateZip() && !showCurrentLocation}" class="form-group">
+		<div class="col-12 no-pad flex">
+			<p>1&nbsp;&nbsp;&nbsp;&nbsp;</p><input id="radius-slider" class="form-control slider">
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;15</p>
+		</div>
+		<label class="flex"><p>Limit to restaurants within <b>{{ radius }}</b> miles of <ng-container *ngIf="validateZip()">zip: {{ zipCode }}.</ng-container><ng-container *ngIf="showCurrentLocation">my current location.</ng-container></p></label>
+	</div>
+	<hr class="negative-margins">
+  <button (click)="enablePreviewRestaurants()" type="button" type="button" [disabled]="!canPreviewRestaurants()" class="btn btn-primary btn-lg btn-block btn-list">
+		Preview Restaurants
 	</button>
-	<button [routerLink]="['..']" type="button" class="btn btn-danger btn-lg btn-block btn-list">
-	Cancel
+	<button (click)="enableRoomDetails()" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+	Back to Create Room
 	</button>
+</div>
+
+<div [ngClass]="{'hide': !showRestaurants}" class="col-12 no-pad">
+	<h3>Preview Restaurants ({{ restaurantTotal }})</h3>
+	<button (click)="createRoom()" type="button" [disabled]="!canCreateRoom()" class="btn btn-primary btn-lg btn-block btn-list">
+		Confirm and Create Room
+	</button>
+	<button (click)="enableRoomOptions()" type="button" class="btn btn-danger btn-lg btn-block btn-list">
+	Back to Room Options
+	</button>
+	<div class="preview-restaurants-list tse-scrollable">
+  	<div class="tse-content">
+  		<div *ngIf="showLoading" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+			<app-restaurants [(orders)]="orders" [(hungerBucksRemaining)]="hungerBucksRemaining" *ngIf="showRestaurants" [(restaurants)]="restaurants" [displaySpending]="false"></app-restaurants>
+		</div>
+	</div>
 </div>

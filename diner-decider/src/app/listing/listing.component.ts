@@ -25,7 +25,7 @@ export class ListingComponent implements OnInit  {
   }
 
   ngOnInit() {
-    //$('.map-results-list').TrackpadScrollEmulator();
+    $('.map-results-list').TrackpadScrollEmulator();
   }
 
   toggleResults() {

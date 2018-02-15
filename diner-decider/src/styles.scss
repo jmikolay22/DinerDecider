@@ -26,16 +26,39 @@ h3 {
 	margin: 0px 0px 10px 0px;
 }
 
+.modal {
+	z-index: 99999;
+	background-color: rgba(0, 0, 0, .9);
+}
+
+.modal-content {
+	margin: 2rem;
+}
+
 .restaurants-list {
   background-color: #fff;
   box-shadow: 0 0 5px rgba(50, 50, 50, 0.3);
   box-sizing: border-box;
-  height: calc(100vh - 175px);
+  height: calc(100vh - 180px);
   position: relative;
   width: 420px;
-  z-index: 11; }
-  .fullscreen .map-results-list {
-    height: 100vh; }
+  z-index: 11; 
+}
+
+.preview-restaurants-list {
+	margin-top: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(50, 50, 50, 0.3);
+  box-sizing: border-box;
+  height: calc(100vh - 195px);
+  position: relative;
+  width: 420px;
+  z-index: 11; 
+}
+
+.fullscreen .map-results-list {
+  height: 100vh; 
+}
 
 .listing-row-medium-address {
 	white-space: pre-wrap;
@@ -124,11 +147,11 @@ hr {
 	display: none;
 }
 
-.flip-container:hover .flipper, .flip-container.hover .flipper, .flip-container.flip1 .flipper {
+.flip-container .flipper, .flip-container .flipper, .flip-container.flip1 .flipper {
 	transform: rotateY(1080deg);
 }
 
-.flip-container:hover .flipper, .flip-container.hover .flipper, .flip-container.flip2 .flipper {
+.flip-container .flipper, .flip-container .flipper, .flip-container.flip2 .flipper {
 	transform: rotateY(1980deg);
 }
 

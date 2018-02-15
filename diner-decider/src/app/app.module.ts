@@ -28,6 +28,7 @@ import { ListingComponent } from './listing/listing.component';
 import { DropDropdownDirective } from './navigation/drop-dropdown.directive';
 import { KeysPipe } from './keys.pipe';
 import { MapKeysPipe } from './map-keys.pipe';
+import { RestaurantsComponent } from './restaurants/restaurants.component';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxWgj8AXlnz3C5z0jmJxs3dDd4oiogFmw",
@@ -52,7 +53,8 @@ export const firebaseConfig = {
     RoomComponent,
     DropDropdownDirective,
     KeysPipe,
-    MapKeysPipe
+    MapKeysPipe,
+    RestaurantsComponent
   ],
   imports: [
     CommonModule,

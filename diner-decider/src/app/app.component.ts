@@ -14,6 +14,7 @@ export class AppComponent {
 	listings: Listing[] = [];
   listing_id: number;
   user: Observable<firebase.User>;
+  href: string = window.location.href;
 
   title = 'app';
 

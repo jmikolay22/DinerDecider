@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { PlatformLocation } from '@angular/common';
 import {Router} from '@angular/router';
 
 import { AngularFireDatabase, AngularFireList  } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
+
+import { RestaurantsComponent } from '../../restaurants/restaurants.component';
 
 import { LocationService } from '../../location.service';
 import { MarkerService } from '../../marker.service';
@@ -38,11 +39,16 @@ export class CreateRoomComponent implements OnInit {
   minPrice: number = 1;
   maxPrice: number = 4;
   category: string = "";
+  showRoomDetails: boolean = true;
+  showRoomOptions: boolean = false;
+  showRestaurants: boolean = false;
+  showLoading: boolean = true;
+  restaurants: any[] = [];
+  restaurantTotal: number = 0;
 
-  constructor(private _markerService: MarkerService, private platformLocation: PlatformLocation, private _locationService: LocationService,
+  constructor(public _markerService: MarkerService, private _locationService: LocationService,
   	public afAuth: AngularFireAuth, public db: AngularFireDatabase, private router: Router) {
   	const user = afAuth.authState;
-  	this.href = (platformLocation as any).location.origin;
   	user.subscribe(data => {
   		this.uid = data.uid;
   	});
@@ -52,9 +58,21 @@ export class CreateRoomComponent implements OnInit {
   			this.long = position['coords']['longitude'];
   		});
     _markerService.clearMarkers();
+
+    this._markerService.restaurants.subscribe(
+      value => {
+        if ( this._markerService.doneLoading === true) {
+          this.restaurants = value;
+          this.restaurantTotal = value.length;
+          this.showLoading = false;
+        }
+      }
+    )  
   }
 
   ngOnInit() {
+    $('.preview-restaurants-list').TrackpadScrollEmulator();
+
     this.hungerBucksSlider = $('#hunger-bucks-slider').slider({
       value: 10,
       min: 1,
@@ -112,7 +130,7 @@ export class CreateRoomComponent implements OnInit {
     return deferred.promise();
   }
 
-  private createRoomWithZip() {
+  public createRoomWithZip() {
     var vm = this;
     this.getZipLatLong()
     .then(function(lat, long) {
@@ -124,7 +142,7 @@ export class CreateRoomComponent implements OnInit {
     });
   }
 
-  private createRoom() {
+  public createRoom() {
     if (this.validateZip()) {
       this.createRoomWithZip();
     } else {
@@ -132,7 +150,7 @@ export class CreateRoomComponent implements OnInit {
     }
   }
 
-  private validateZip() {
+  public validateZip() {
     if (this.zipCode !== null) {
       if (this.isNumeric(this.zipCode)) {
         if (this.zipCode.length === 5) {
@@ -156,7 +174,6 @@ export class CreateRoomComponent implements OnInit {
   }
 
   private submitRoom() {
-    this.setCategories();
     this._markerService.setPosition(this.lat, this.long);
   	const itemRef = this.db.object('rooms');
   	if(this.roomPassword == null){
@@ -197,7 +214,7 @@ export class CreateRoomComponent implements OnInit {
   	}
   }
 
-  private canCreateRoom() {
+  public canCreateRoom() {
   	if(this.roomId !== '' && (this.validateZip() === true || (this.lat !== null && this.long !== null))
   		&& this.hungerBucks !== null && this.radius !== null){
   		return true;
@@ -206,12 +223,73 @@ export class CreateRoomComponent implements OnInit {
   	}
   }
 
+  public canPreviewRestaurants() {
+    if(this.roomId !== '' && 
+      ((this.showZip === true && this.validateZip()) || (this.showCurrentLocation === true && this.lat !== null && this.long !== null))
+      && this.hungerBucks !== null && this.radius !== null){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public canContinue() {
+    if(this.roomId !== ''){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public enableRoomOptions() {
+    this._markerService.clearMarkers();
+    this.showRoomDetails = false;
+    this.showRestaurants = false;
+    this.showRoomOptions = true;
+  }
+
+  public enableRoomDetails() {
+    this.showRoomDetails = true;
+    this.showRestaurants = false;
+    this.showRoomOptions = false;
+  }
+
+  public enablePreviewRestaurants() {
+    this.setCategories();
+    this._markerService.clearMarkers();
+    this.showLoading = true;
+    let vm = this;
+    if (this.validateZip()) {
+      this.getZipLatLong()
+      .then(function(lat, long) {
+        vm.lat = lat;
+        vm.long = long;
+        vm._markerService.findRestaurants(
+          vm.lat, vm.long, vm.convertMilesToMeters(vm.radius),
+          vm.minPrice, vm.maxPrice, vm.category);
+        vm.showRoomDetails = false;
+        vm.showRestaurants = true;
+        vm.showRoomOptions = false;
+      }).catch(error => {
+        console.log(error);
+      });
+    } else {
+      this.showRoomDetails = false;
+      this.showRestaurants = true;
+      this.showRoomOptions = false;
+      this._markerService.findRestaurants(
+        this.lat, this.long, this.convertMilesToMeters(this.radius),
+        this.minPrice, this.maxPrice, this.category);
+    }
+    
+  }
+
   private convertMilesToMeters(miles: number) {
   	let metersPerMile: number = 1609.344;
   	return miles * metersPerMile;
   }
 
-  private resetValidation() {
+  public resetValidation() {
     this.roomLink = this.href + '/DinerDecider/diner-decider/' + this.roomId.toLowerCase();
   	this.roomAlreadyExists = false;
   }

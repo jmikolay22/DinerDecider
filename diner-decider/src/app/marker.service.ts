@@ -153,7 +153,6 @@ export class MarkerService {
 
   private getRestaurants(query: Object) {
   	this.doneLoading = false;
-    console.log(query);
     var service = new google.maps.places.PlacesService(this.map);
     service.nearbySearch({
       keyword: query['category'],

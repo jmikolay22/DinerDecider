@@ -13,7 +13,7 @@ declare const google: any;
 export class MapComponent {
   map: any;
 
-  constructor(private _markerService: MarkerService) {
+  constructor(public _markerService: MarkerService) {
     this.map = _markerService.map;
   }
 

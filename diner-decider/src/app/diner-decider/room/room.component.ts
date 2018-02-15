@@ -7,6 +7,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
+import { RestaurantsComponent } from '../../restaurants/restaurants.component';
+
 import { MarkerService } from '../../marker.service';
 
 declare const $: any;
@@ -57,6 +59,7 @@ declare const $: any;
 	  ])
   ]
 })
+
 export class RoomComponent implements OnInit {
 	hungerBucksRemaining: number;
 	roomId: string;
@@ -73,9 +76,11 @@ export class RoomComponent implements OnInit {
 	firstRestaurantLoad: boolean = true;
 	showFlip: boolean = false;
 	showCards: boolean = false;
+	resultsLoaded: boolean = false;
 	displayName: string;
 	room: Object;
 	restaurants: any[];
+	orderRestaurants: any[];
 	restaurantTotal: number = 0;
 	orders: any[] = [];
 	checkedResults: string[] = [];
@@ -99,6 +104,18 @@ export class RoomComponent implements OnInit {
   	$('.restaurants-list').TrackpadScrollEmulator();
   }
 
+  showShareModal() {
+  	$('#shareModal').modal('show');
+  	// Todo: Fix this link so its dynamic based on where the page is hosted.
+  	$('#roomName').val('https://cincyelite22.github.io/DinerDecider/diner-decider/room/' + this.roomId);
+  	if (this.room['password'] === undefined) {
+  		$('#roomPasswordContainer').hide();
+  	} else {
+  		$('#roomPasswordContainer').show();
+  		$('#roomPassword').val(this.room['password']);
+  	}
+  }
+
   checkIfUserHasRoomPermissions() {
   	this.route.params.subscribe(params => {
       this.roomId = params['id'].toLowerCase();
@@ -114,7 +131,7 @@ export class RoomComponent implements OnInit {
 			  			break;
 			  		}
 			  	}
-			  	if (this.firstRestaurantLoad && this.submittedCart === false) {
+			  	if (this.firstRestaurantLoad && this.submittedCart === false && this.inProgress === true) {
 			  		this.hungerBucksRemaining = Object.assign(this.room['hungerBucks']);
 			  		this.updateRestaurants();
 			  		this._markerService.clearMarkers();
@@ -132,9 +149,9 @@ export class RoomComponent implements OnInit {
 				      }
 				    )	
 			  	}
-			  	if (this.inProgress === false && this.uid !== this.room['owner']) {
-			  		this.inProgress = false;
+			  	if (this.inProgress === false) {
 			  		this.showResults(false);
+			  		this.showLoading = false;
 			  	}
   			} else {
   				if (this.firstTimePasswordChecked) {
@@ -193,77 +210,6 @@ export class RoomComponent implements OnInit {
 		return dist.toFixed(2)
 	}
 
-	getDollarSigns(total: number) {
-		if ( total === undefined ) {
-			return ['?'];
-		}
-		var dollarSigns = [];
-		for (var i = 0; i < total; i++) {
-			dollarSigns.push('$');
-		}
-		return dollarSigns;
-	}
-
-	spendHungerBuck(restaurant: Object) {
-		if (this.hungerBucksRemaining === 0) {
-			return;
-		}
-
-		for (var i = 0; i < this.orders.length; i++) {
-			if (this.orders[i].restaurantId === restaurant['place_id']) {
-				this.orders[i].balance++;
-				this.hungerBucksRemaining--;
-				return;
-			}
-		}
-
-		this.orders.push({
-			restaurantId: restaurant['place_id'],
-			restaurant: restaurant,
-			balance: 1
-		})
-		this.hungerBucksRemaining--;
-	}
-
-	refundHungerBuck(restaurant: Object) {
-		for (var i = 0; i < this.orders.length; i++) {
-			if (this.orders[i].restaurantId === restaurant['place_id']) {
-				this.orders[i].balance--;
-				this.hungerBucksRemaining++;
-				if (this.orders[i].balance === 0) {
-					this.orders.splice(i, 1);
-				}
-				return;
-			}
-		}
-
-		return;
-	}
-
-	getRestaurantHungerBucksTotal(id: number) {
-		for (var i = 0; i < this.orders.length; i++) {
-			if (this.orders[i].restaurantId === id) {
-				return this.orders[i].balance;
-			}
-		}
-		return 0;
-	}
-
-	buildRating(rating) {
-    rating = Math.round(rating);
-    let template = '';
-
-    for (let i = 1; i <= rating; i++) {
-      template += '<i class="fa fa-star"></i>';
-    }
-
-    for (let i = rating; i <= 5; i++) {
-      template += '<i class="fa fa-star-o"></i>';
-    }
-
-    return template;
-  }
-
   showCartDiv() {
   	this.showCart = true;
   	this.showRestaurants = false;
@@ -307,12 +253,14 @@ export class RoomComponent implements OnInit {
 			itemRef.update({ ['inProgress']: false })
 			.then(data => {
 				this.inProgress = false;
-				this.calculateResults();
 			}, err => {
 				console.log('error', err);
 			});
   	} else {
-  		this.calculateResults();
+  		if (this.resultsLoaded === false) {
+  			this.calculateResults();
+  			this.submittedCart = true;
+  		}
   	}	
   }
 
@@ -326,6 +274,7 @@ export class RoomComponent implements OnInit {
 		for (var key in this.results) {
 			this._markerService.addMarker(this.results[key]['restaurant']['place_id'], this.results[key]['balance']);
 		}
+		this.resultsLoaded = true;
   }
 
   updateResults(restaurant: Object) {
@@ -426,5 +375,31 @@ export class RoomComponent implements OnInit {
   		}
   	}
   	this.checkedResults.push(place_id);
+  }
+
+  getDollarSigns(total: number) {
+		if ( total === undefined ) {
+			return ['?'];
+		}
+		var dollarSigns = [];
+		for (var i = 0; i < total; i++) {
+			dollarSigns.push('$');
+		}
+		return dollarSigns;
+	}
+
+	buildRating(rating) {
+    rating = Math.round(rating);
+    let template = '';
+
+    for (let i = 1; i <= rating; i++) {
+      template += '<i class="fa fa-star"></i>';
+    }
+
+    for (let i = rating; i <= 5; i++) {
+      template += '<i class="fa fa-star-o"></i>';
+    }
+
+    return template;
   }
 }
