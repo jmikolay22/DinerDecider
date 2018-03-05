@@ -1,6 +1,10 @@
 # Diner Decider
 An app to help you and your friends decide where to get food.
 
+## Demo
+Check it out here!
+https://cincyelite22.github.io/DinerDecider/
+
 ## Login
 The app supports anonymous, facebook, and google login. Anonymous login is a one click login and is the easiest way to access the app. Facebook and Google login will allow you to enter the app after signing into those respective accounts. *Note: Facebook login requires you to be listed as a tester of the app.
 ![](https://github.com/cincyelite22/DinerDecider/blob/master/screenshots/login.png?raw=true)
