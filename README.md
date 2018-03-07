@@ -42,4 +42,4 @@ After submitting the cart, the user will land on the submission view. This view 
 ## Results View
 The results view shows the total hunger bucks that each restaurant got from all users combined. *Note: In the future this view will contain various fun randomized games to come to a final decision on which restaurant is the one that the group should go eat at.
 
-![](https://github.com/cincyelite22/DinerDecider/blob/master/screenshots/roomspend.png?raw=true)
+![](https://github.com/cincyelite22/DinerDecider/blob/master/screenshots/results.png?raw=true)
